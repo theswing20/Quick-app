@@ -10,7 +10,12 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.theswing20.quickapp"
+      "bundleIdentifier": "com.theswing20.quickapp",
+      "associatedDomains": [
+        "applinks:steady-rodent-14.clerk.accounts.dev",
+        "webcredentials:steady-rodent-14.clerk.accounts.dev"
+      ],
+      "appleTeamId": "52R837T34Z"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,6 +34,12 @@
       "bundler": "metro"
     },
     "plugins": [
+      [
+        "expo-web-browser",
+        {
+          "experimentalLauncherActivity": true
+        }
+      ],
       [
         "expo-router",
         {
