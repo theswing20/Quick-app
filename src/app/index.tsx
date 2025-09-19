@@ -1,5 +1,6 @@
 import { Button } from "@/shared/ui/button";
 import { Text } from "@/shared/ui/text";
+import { Link } from "expo-router";
 import { useEffect } from "react";
 import { Dimensions, StatusBar, View } from "react-native";
 import Animated, {
@@ -238,16 +239,18 @@ export default function Index() {
           </View>
 
           {/* Button */}
-          <Button size="lg" className="bg-primary mt-4">
-            <Text>Let's go!</Text>
-          </Button>
+          <Link href="/(auth)/sign-in" asChild>
+            <Button size="lg" className="bg-primary mt-4">
+              <Text>Let&apos;s go!</Text>
+            </Button>
+          </Link>
 
           {/* Legal text */}
 
           <View className="mt-6">
             <Text className="text-xs text-gray-400 text-center leading-tight">
-              By tapping "Let's go!", you accept Terms of Service, Privacy
-              Policy and confirm that you are 18 years old
+              By tapping &ldquo;Let&apos;s go!&rdquo;, you accept Terms of
+              Service, Privacy Policy and confirm that you are 18 years old
             </Text>
           </View>
         </Animated.View>
