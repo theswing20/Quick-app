@@ -137,9 +137,9 @@ export default function Index() {
     <View className="flex-1">
       <StatusBar barStyle="dark-content" backgroundColor="#F5D800" />
 
-      {/* Желтый фон */}
+      {/* Yellow background */}
       <View className="flex-1 bg-primary">
-        {/* Большой логотип QUICK в углу */}
+        {/* Large QUICK logo */}
         <Animated.View
           style={[
             logoAnimatedStyle,
@@ -158,14 +158,14 @@ export default function Index() {
           </Text>
         </Animated.View>
 
-        {/* Главный контент */}
+        {/* Main content */}
         <View className="flex-1 justify-end items-center px-6 pb-20">
-          {/* Powerbank иллюстрация */}
+          {/* Powerbank illustration */}
           <Animated.View style={powerbankAnimatedStyle} className="mb-12">
             <View className="relative">
-              {/* Основной корпус powerbank */}
+              {/* Main powerbank body */}
               <View className="w-32 h-48 bg-white rounded-3xl shadow-xl items-center justify-center border-2 border-gray-100">
-                {/* LED индикаторы с анимацией */}
+                {/* LED indicators with animation */}
                 <View className="flex-row mb-4" style={{ gap: 8 }}>
                   <Animated.View
                     style={led1AnimatedStyle}
@@ -185,22 +185,22 @@ export default function Index() {
                   />
                 </View>
 
-                {/* Логотип QUICK на powerbank */}
+                {/* QUICK logo on powerbank */}
                 <Text className="text-2xl font-black text-gray-800 mb-4">
                   QUICK
                 </Text>
 
-                {/* USB порты */}
+                {/* USB ports */}
                 <View className="w-24 h-3 bg-gray-800 rounded-sm mb-2" />
                 <View className="w-20 h-3 bg-gray-800 rounded-sm" />
 
-                {/* Кнопка питания */}
+                {/* Power button */}
                 <View className="w-8 h-8 bg-gray-700 rounded-full mt-4 items-center justify-center">
                   <View className="w-4 h-4 border-2 border-white rounded-full" />
                 </View>
               </View>
 
-              {/* Кабель */}
+              {/* Cable */}
               <View
                 className="absolute -bottom-8 left-1/2"
                 style={{ transform: [{ translateX: -2 }] }}
@@ -212,7 +212,7 @@ export default function Index() {
                 />
               </View>
 
-              {/* Молния эффект с анимацией */}
+              {/* Lightning effect with animation */}
               <Animated.View
                 style={lightningAnimatedStyle}
                 className="absolute -top-4 -right-4"
@@ -223,31 +223,31 @@ export default function Index() {
           </Animated.View>
         </View>
 
-        {/* Нижняя секция с текстом и кнопкой */}
+        {/* Bottom section with text and button */}
         <Animated.View
           style={[bottomSheetAnimatedStyle, { minHeight: height * 0.4 }]}
           className="bg-white rounded-t-3xl px-6 py-8"
         >
-          {/* Заголовок */}
+          {/* Title */}
           <View className="mb-6">
             <Text className="text-3xl font-black text-gray-900 leading-tight">
-              Быстрая зарядка.{"\n"}
-              Для вас и вашего{"\n"}
-              устройства ⚡
+              Fast charging.{"\n"}
+              For you and your{"\n"}
+              device ⚡
             </Text>
           </View>
 
-          {/* Кнопка без анимации */}
+          {/* Button */}
           <Button size="lg" className="bg-primary mt-4">
-            <Text>Поехали!</Text>
+            <Text>Let's go!</Text>
           </Button>
 
-          {/* Мелкий текст */}
+          {/* Legal text */}
 
           <View className="mt-6">
             <Text className="text-xs text-gray-400 text-center leading-tight">
-              Нажимая «Поехали», вы принимаете Договор присоединения, Политику
-              конфиденциальности и подтверждаете, что вам исполнилось 18 лет
+              By tapping "Let's go!", you accept Terms of Service, Privacy
+              Policy and confirm that you are 18 years old
             </Text>
           </View>
         </Animated.View>
