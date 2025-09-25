@@ -4,7 +4,7 @@
     "slug": "quick-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/images/icon.png",
+    "icon": "./src/shared/assets/images/icon.png",
     "scheme": "quickapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -20,9 +20,9 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./src/assets/images/android-icon-foreground.png",
-        "backgroundImage": "./src/assets/images/android-icon-background.png",
-        "monochromeImage": "./src/assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./src/shared/assets/images/android-icon-foreground.png",
+        "backgroundImage": "./src/shared/assets/images/android-icon-background.png",
+        "monochromeImage": "./src/shared/assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -30,7 +30,7 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./src/assets/images/favicon.png",
+      "favicon": "./src/shared/assets/images/favicon.png",
       "bundler": "metro"
     },
     "plugins": [
@@ -49,7 +49,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./src/assets/images/splash-icon.png",
+          "image": "./src/shared/assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
