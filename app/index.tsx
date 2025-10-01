@@ -1,3 +1,4 @@
+import { SignOutButton } from "@/features/auth/login";
 import { Button } from "@/shared/ui/button";
 import { Text } from "@/shared/ui/text";
 import { Link } from "expo-router";
@@ -154,18 +155,18 @@ export default function Index() {
             },
           ]}
         >
-          <Text className="text-8xl font-black text-black opacity-10">
+          <Text className="font-black text-black text-8xl opacity-10">
             QUICK
           </Text>
         </Animated.View>
 
         {/* Main content */}
-        <View className="flex-1 justify-end items-center px-6 pb-20">
+        <View className="items-center justify-end flex-1 px-6 pb-20">
           {/* Powerbank illustration */}
           <Animated.View style={powerbankAnimatedStyle} className="mb-12">
             <View className="relative">
               {/* Main powerbank body */}
-              <View className="w-32 h-48 bg-white rounded-3xl shadow-xl items-center justify-center border-2 border-gray-100">
+              <View className="items-center justify-center w-32 h-48 bg-white border-2 border-gray-100 shadow-xl rounded-3xl">
                 {/* LED indicators with animation */}
                 <View className="flex-row mb-4" style={{ gap: 8 }}>
                   <Animated.View
@@ -187,16 +188,16 @@ export default function Index() {
                 </View>
 
                 {/* QUICK logo on powerbank */}
-                <Text className="text-2xl font-black text-gray-800 mb-4">
+                <Text className="mb-4 text-2xl font-black text-gray-800">
                   QUICK
                 </Text>
 
                 {/* USB ports */}
-                <View className="w-24 h-3 bg-gray-800 rounded-sm mb-2" />
+                <View className="w-24 h-3 mb-2 bg-gray-800 rounded-sm" />
                 <View className="w-20 h-3 bg-gray-800 rounded-sm" />
 
                 {/* Power button */}
-                <View className="w-8 h-8 bg-gray-700 rounded-full mt-4 items-center justify-center">
+                <View className="items-center justify-center w-8 h-8 mt-4 bg-gray-700 rounded-full">
                   <View className="w-4 h-4 border-2 border-white rounded-full" />
                 </View>
               </View>
@@ -227,11 +228,11 @@ export default function Index() {
         {/* Bottom section with text and button */}
         <Animated.View
           style={[bottomSheetAnimatedStyle, { minHeight: height * 0.4 }]}
-          className="bg-white rounded-t-3xl px-6 py-8"
+          className="px-6 py-8 bg-white rounded-t-3xl"
         >
           {/* Title */}
           <View className="mb-6">
-            <Text className="text-3xl font-black text-gray-900 leading-tight">
+            <Text className="text-3xl font-black leading-tight text-gray-900">
               Fast charging.{"\n"}
               For you and your{"\n"}
               device ⚡
@@ -240,15 +241,17 @@ export default function Index() {
 
           {/* Button */}
           <Link href="/(auth)/sign-in" asChild>
-            <Button size="lg" className="bg-primary mt-4">
+            <Button size="lg" className="mt-4 bg-primary">
               <Text>Let&apos;s go!</Text>
             </Button>
           </Link>
 
+          <SignOutButton />
+
           {/* Legal text */}
 
           <View className="mt-6">
-            <Text className="text-xs text-gray-400 text-center leading-tight">
+            <Text className="text-xs leading-tight text-center text-gray-400">
               By tapping &ldquo;Let&apos;s go!&rdquo;, you accept Terms of
               Service, Privacy Policy and confirm that you are 18 years old
             </Text>
