@@ -4,7 +4,10 @@ import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Redirect } from "expo-router";
 import { Platform, StatusBar, View } from "react-native";
-import { AppleSignInButton } from "../../src/features/auth/login";
+import {
+  AppleSignInButton,
+  GoogleSignInButton,
+} from "../../src/features/auth/login";
 
 export default function SignIn() {
   const { isSignedIn } = useUser();
@@ -29,9 +32,7 @@ export default function SignIn() {
         {/* Apple Sign In Button */}
         <AppleSignInButton />
         {/* Google Sign In Button */}
-        <Button size="lg" variant="outline" className="w-full mb-8">
-          <Text className="font-semibold">Continue with Google</Text>
-        </Button>
+        <GoogleSignInButton />
 
         {/* Back to Home - Android style */}
         {Platform.OS === "android" && (

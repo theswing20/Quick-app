@@ -1,4 +1,3 @@
-import { SignOutButton } from "@/features/auth/login";
 import { Button } from "@/shared/ui/button";
 import { Text } from "@/shared/ui/text";
 import { Link } from "expo-router";
@@ -238,18 +237,14 @@ export default function Index() {
               device ⚡
             </Text>
           </View>
-
           {/* Button */}
           <Link href="/(auth)/sign-in" asChild>
             <Button size="lg" className="mt-4 bg-primary">
               <Text>Let&apos;s go!</Text>
             </Button>
           </Link>
-
-          <SignOutButton />
-
+          {/* <SignOutButton /> */}
           {/* Legal text */}
-
           <View className="mt-6">
             <Text className="text-xs leading-tight text-center text-gray-400">
               By tapping &ldquo;Let&apos;s go!&rdquo;, you accept Terms of

@@ -7,7 +7,8 @@ import { Text } from "@/shared/ui/text";
 import { useSSO } from "@clerk/clerk-expo";
 import * as AuthSession from "expo-auth-session";
 import { useRouter } from "expo-router";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -15,8 +16,12 @@ export const GoogleSignInButton = () => {
   useWarmUpBrowser();
   const { startSSOFlow } = useSSO();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onPress = useCallback(async () => {
+    if (isLoading) return;
+
+    setIsLoading(true);
     try {
       // Start the authentication process by calling `startSSOFlow()`
       const { createdSessionId, setActive } = await startSSOFlow({
@@ -39,7 +44,7 @@ export const GoogleSignInButton = () => {
               return;
             }
 
-            router.push("/");
+            router.replace("/");
           },
         });
       } else {
@@ -56,15 +61,26 @@ export const GoogleSignInButton = () => {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
+    } finally {
+      setIsLoading(false);
     }
-  }, []);
+  }, [isLoading, startSSOFlow, router]);
 
   return (
-    <Button onPress={onPress} size="lg" className="w-full mb-4 bg-blue-600">
-      <Text className="font-semibold text-white">Continue with Google</Text>
+    <Button
+      onPress={onPress}
+      size="lg"
+      className="w-full mb-4 bg-blue-600"
+      disabled={isLoading}
+    >
+      <View className="flex-row items-center justify-center gap-2">
+        {isLoading && <ActivityIndicator size="small" color="white" />}
+        <Text className="font-semibold text-white">
+          {isLoading ? "Signing in..." : "Continue with Google"}
+        </Text>
+      </View>
     </Button>
   );
 };
 
 export default GoogleSignInButton;
-
