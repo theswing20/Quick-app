@@ -1,6 +1,8 @@
+import { SignOutButton } from "@/features/auth/login";
 import { Button } from "@/shared/ui/button";
 import { Text } from "@/shared/ui/text";
-import { Link } from "expo-router";
+import { useUser } from "@clerk/clerk-expo";
+import { Link, Redirect } from "expo-router";
 import { useEffect } from "react";
 import { Dimensions, StatusBar, View } from "react-native";
 import Animated, {
@@ -134,6 +136,13 @@ export default function Index() {
     opacity: led4Opacity.value,
   }));
 
+  const { isSignedIn, user } = useUser();
+  const hasPhoneNumber = (user?.phoneNumbers?.length ?? 0) > 0;
+
+  if (isSignedIn && !hasPhoneNumber) {
+    return <Redirect href="/(auth)/add-phone-number" />;
+  }
+
   return (
     <View className="flex-1">
       <StatusBar barStyle="dark-content" backgroundColor="#F5D800" />
@@ -243,7 +252,7 @@ export default function Index() {
               <Text>Let&apos;s go!</Text>
             </Button>
           </Link>
-          {/* <SignOutButton /> */}
+          <SignOutButton />
           {/* Legal text */}
           <View className="mt-6">
             <Text className="text-xs leading-tight text-center text-gray-400">

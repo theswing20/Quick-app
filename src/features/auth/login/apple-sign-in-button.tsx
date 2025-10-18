@@ -32,6 +32,8 @@ export const AppleSignInButton = () => {
         redirectUrl: AuthSession.makeRedirectUri(),
       });
 
+      console.log("createdSessionId", createdSessionId);
+
       // If sign in was successful, set the active session
       if (createdSessionId) {
         setActive!({
@@ -44,7 +46,16 @@ export const AppleSignInButton = () => {
               return;
             }
 
-            router.replace("/");
+            const hasPhoneNumber =
+              (session?.user?.phoneNumbers?.length ?? 0) > 0;
+
+            console.log(session);
+            console.log("hasPhoneNumber", hasPhoneNumber);
+            if (hasPhoneNumber) {
+              router.replace("/");
+            } else {
+              router.replace("/(auth)/add-phone-number");
+            }
           },
         });
       } else {

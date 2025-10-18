@@ -44,7 +44,15 @@ export const GoogleSignInButton = () => {
               return;
             }
 
-            router.replace("/");
+            const hasPhoneNumber =
+              (session?.user?.phoneNumbers?.length ?? 0) > 0;
+
+            console.log("hasPhoneNumber", hasPhoneNumber);
+            if (hasPhoneNumber) {
+              router.replace("/");
+            } else {
+              router.replace("/(auth)/add-phone-number");
+            }
           },
         });
       } else {
