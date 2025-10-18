@@ -2,7 +2,7 @@ import { ClerkProviderWrapper } from "@/app/providers";
 import { NAV_THEME } from "@/shared/lib/theme";
 import { PortalHost } from "@rn-primitives/portal";
 import { Stack } from "expo-router";
-import "./styles/global.css";
+import "../global.css";
 
 export default function RootLayout() {
   return (
