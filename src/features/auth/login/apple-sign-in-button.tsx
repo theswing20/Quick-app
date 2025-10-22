@@ -46,16 +46,7 @@ export const AppleSignInButton = () => {
               return;
             }
 
-            const hasPhoneNumber =
-              (session?.user?.phoneNumbers?.length ?? 0) > 0;
-
-            console.log(session);
-            console.log("hasPhoneNumber", hasPhoneNumber);
-            if (hasPhoneNumber) {
-              router.replace("/");
-            } else {
-              router.replace("/(auth)/add-phone-number");
-            }
+            router.replace("/");
           },
         });
       } else {

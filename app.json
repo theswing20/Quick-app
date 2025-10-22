@@ -26,7 +26,12 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.theswing20.quickapp"
+      "package": "com.theswing20.quickapp",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyB3grj8kuAcPHjuFd2Caw0BWe_OPWbr3ks"
+        }
+      }
     },
     "web": {
       "output": "static",
@@ -57,11 +62,27 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "expo-maps",
+        {
+          "requestLocationPermission": true,
+          "locationPermission": "Allow $(PRODUCT_NAME) to use your location"
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {
+        "root": "./app"
+      },
+      "eas": {
+        "projectId": "6b0d3559-6fe9-4180-b7a7-ac70d04c0843"
+      }
+    },
+    "owner": "theswing20"
   }
 }

@@ -4,7 +4,7 @@ import { Redirect, Stack } from "expo-router";
 export default function AuthLayout() {
   const { isSignedIn } = useUser();
 
-  if (isSignedIn) {
+  if (!isSignedIn) {
     return <Redirect href="/" />;
   }
 

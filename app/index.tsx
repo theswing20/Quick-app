@@ -136,11 +136,10 @@ export default function Index() {
     opacity: led4Opacity.value,
   }));
 
-  const { isSignedIn, user } = useUser();
-  const hasPhoneNumber = (user?.phoneNumbers?.length ?? 0) > 0;
+  const { isSignedIn } = useUser();
 
-  if (isSignedIn && !hasPhoneNumber) {
-    return <Redirect href="/(auth)/add-phone-number" />;
+  if (isSignedIn) {
+    return <Redirect href="/(app)/home" />;
   }
 
   return (
