@@ -13,9 +13,20 @@
       "bundleIdentifier": "com.theswing20.quickapp",
       "associatedDomains": [
         "applinks:steady-rodent-14.clerk.accounts.dev",
+        "webcredentials:steady-rodent-14.clerk.accounts.dev",
+        "applinks:steady-rodent-14.clerk.accounts.dev",
+        "webcredentials:steady-rodent-14.clerk.accounts.dev",
+        "applinks:steady-rodent-14.clerk.accounts.dev",
+        "webcredentials:steady-rodent-14.clerk.accounts.dev",
+        "applinks:steady-rodent-14.clerk.accounts.dev",
         "webcredentials:steady-rodent-14.clerk.accounts.dev"
       ],
-      "appleTeamId": "52R837T34Z"
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "entitlements": {
+        "aps-environment": "production"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -31,7 +42,13 @@
         "googleMaps": {
           "apiKey": "AIzaSyB3grj8kuAcPHjuFd2Caw0BWe_OPWbr3ks"
         }
-      }
+      },
+      "googleServicesFile": "./google-services.json",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.POST_NOTIFICATIONS"
+      ]
     },
     "web": {
       "output": "static",
@@ -69,6 +86,9 @@
           "requestLocationPermission": true,
           "locationPermission": "Allow $(PRODUCT_NAME) to use your location"
         }
+      ],
+      [
+        "expo-notifications"
       ]
     ],
     "experiments": {

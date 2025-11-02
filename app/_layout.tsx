@@ -1,10 +1,70 @@
 import { ClerkProviderWrapper } from "@/app/providers";
+import { registerForPushNotificationsAsync } from "@/features/notifications";
 import { NAV_THEME } from "@/shared/lib/theme";
 import { PortalHost } from "@rn-primitives/portal";
+import * as Notifications from "expo-notifications";
 import { Stack } from "expo-router";
+import { useEffect, useState } from "react";
 import "../global.css";
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
+
+async function sendPushNotification(expoPushToken: string) {
+  console.log("Sending push notification to", expoPushToken);
+  const message = {
+    to: expoPushToken,
+    sound: "default",
+    title: "Original Title",
+    body: "And here is the body!",
+    data: { someData: "goes here" },
+  };
+
+  await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Accept-encoding": "gzip, deflate",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+}
+
 export default function RootLayout() {
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState<
+    Notifications.Notification | undefined
+  >(undefined);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then((token) => setExpoPushToken(token ?? ""))
+      .catch((error: any) => setExpoPushToken(`${error}`));
+
+    const notificationListener = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification);
+      }
+    );
+
+    const responseListener =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        sendPushNotification(expoPushToken);
+      });
+
+    return () => {
+      notificationListener.remove();
+      responseListener.remove();
+    };
+  }, []);
+
   return (
     <ClerkProviderWrapper>
       <Stack

@@ -46,6 +46,3 @@ app-example
 # generated native folders
 /ios
 /android
-quick-cbb92-firebase-adminsdk-fbsvc-d1a1b1aeef.json
-google-services.json
-.env
