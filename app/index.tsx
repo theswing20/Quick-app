@@ -136,9 +136,15 @@ export default function Index() {
     opacity: led4Opacity.value,
   }));
 
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
 
   if (isSignedIn) {
+    const hasPhoneNumber = (user?.phoneNumbers?.length ?? 0) > 0;
+
+    if (!hasPhoneNumber) {
+      return <Redirect href="/phone-verification" />;
+    }
+
     return <Redirect href="/(app)/home" />;
   }
 

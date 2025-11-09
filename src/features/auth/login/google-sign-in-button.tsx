@@ -47,12 +47,12 @@ export const GoogleSignInButton = () => {
             const hasPhoneNumber =
               (session?.user?.phoneNumbers?.length ?? 0) > 0;
 
-            console.log("hasPhoneNumber", hasPhoneNumber);
-            if (hasPhoneNumber) {
-              router.replace("/");
-            } else {
-              router.replace("/(auth)/add-phone-number");
+            if (!hasPhoneNumber) {
+              router.replace("/phone-verification");
+              return;
             }
+
+            router.replace("/");
           },
         });
       } else {

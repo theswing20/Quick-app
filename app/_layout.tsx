@@ -1,10 +1,12 @@
 import { ClerkProviderWrapper } from "@/app/providers";
 import { registerForPushNotificationsAsync } from "@/features/notifications";
 import { NAV_THEME } from "@/shared/lib/theme";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { PortalHost } from "@rn-primitives/portal";
 import * as Notifications from "expo-notifications";
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
 
 Notifications.setNotificationHandler({
@@ -67,24 +69,34 @@ export default function RootLayout() {
 
   return (
     <ClerkProviderWrapper>
-      <Stack
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: NAV_THEME.light.colors.background,
-          },
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen
-          name="(auth)"
-          options={{
-            presentation: "modal",
-            headerShown: false,
-          }}
-        />
-      </Stack>
-      <PortalHost />
+      <GestureHandlerRootView>
+        <BottomSheetModalProvider>
+          <Stack
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: NAV_THEME.light.colors.background,
+              },
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="index" />
+            <Stack.Screen
+              name="phone-verification"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="(auth)"
+              options={{
+                presentation: "modal",
+                headerShown: false,
+              }}
+            />
+          </Stack>
+          <PortalHost />
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
     </ClerkProviderWrapper>
   );
 }

@@ -39,10 +39,18 @@ export const AppleSignInButton = () => {
         setActive!({
           session: createdSessionId,
           navigate: async ({ session }) => {
+            // Check for tasks and navigate to custom UI to help users resolve them
+            // See https://clerk.com/docs/custom-flows/overview#session-tasks
             if (session?.currentTask) {
-              // Check for tasks and navigate to custom UI to help users resolve them
-              // See https://clerk.com/docs/custom-flows/overview#session-tasks
               console.log(session?.currentTask);
+              return;
+            }
+
+            const hasPhoneNumber =
+              (session?.user?.phoneNumbers?.length ?? 0) > 0;
+
+            if (!hasPhoneNumber) {
+              router.replace("/phone-verification");
               return;
             }
 
