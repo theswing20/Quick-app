@@ -19,6 +19,22 @@ export default function AuthLayout() {
       screenOptions={{
         headerShown: false,
       }}
-    />
+    >
+      <Stack.Screen
+        name="home"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="menu"
+        options={{
+          presentation: "modal",
+          headerShown: false,
+          animation: "slide_from_bottom",
+          gestureEnabled: true,
+        }}
+      />
+    </Stack>
   );
 }

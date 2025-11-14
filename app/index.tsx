@@ -253,7 +253,7 @@ export default function Index() {
           </View>
           {/* Button */}
           <Link href="/(auth)/sign-in" asChild>
-            <Button size="lg" className="mt-4 bg-primary">
+            <Button size="lg" className="mt-4 mb-2 bg-primary">
               <Text>Let&apos;s go!</Text>
             </Button>
           </Link>
