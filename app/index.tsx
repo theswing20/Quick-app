@@ -138,15 +138,16 @@ export default function Index() {
 
   const { isSignedIn, user } = useUser();
 
-  if (isSignedIn) {
-    const hasPhoneNumber = (user?.phoneNumbers?.length ?? 0) > 0;
-
-    if (!hasPhoneNumber) {
-      return <Redirect href="/phone-verification" />;
-    }
-
+  // if (isSignedIn) {
+  //   const hasPhoneNumber = (user?.phoneNumbers?.length ?? 0) > 0;
+  //
+  //   if (!hasPhoneNumber) {
+  //     return <Redirect href="/phone-verification" />;
+  //   }
+  //
+  //   return <Redirect href="/(app)/home" />;
+  // }
     return <Redirect href="/(app)/home" />;
-  }
 
   return (
     <View className="flex-1">

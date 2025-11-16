@@ -1,9 +1,14 @@
 import { TouchableOpacity, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 export const ProfileButton = () => {
-
-    const onPress = () => console.log("Profile pressed");
+    const router = useRouter();
+    const onPress = () => {
+        console.log("Profile pressed");
+        router.dismissAll();
+        router.push('/(profile)/profile');
+    };
 
     return <TouchableOpacity
         key={"profile"}

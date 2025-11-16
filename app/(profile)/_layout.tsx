@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/clerk-expo";
 import { Stack } from "expo-router";
 
-export default function AppLayout() {
+export default function ProfileLayout() {
   const { isSignedIn, user } = useUser();
 
   // if (!isSignedIn) {
@@ -21,25 +21,9 @@ export default function AppLayout() {
       }}
     >
       <Stack.Screen
-        name="home"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="menu"
-        options={{
-          presentation: "modal",
-          headerShown: false,
-          animation: "slide_from_bottom",
-          gestureEnabled: true,
-        }}
-      />
-      <Stack.Screen
         name="profile"
         options={{
           headerShown: false,
-          contentStyle: { backgroundColor: '#F5D800' },
         }}
       />
     </Stack>
