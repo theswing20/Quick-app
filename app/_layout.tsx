@@ -105,6 +105,12 @@ export default function RootLayout() {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="(wallet)"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
           <PortalHost />
         </BottomSheetModalProvider>

@@ -1,10 +1,10 @@
 import { Ionicons } from "@expo/vector-icons"
-import { ProfileBlock } from "./profile-block"
 import { Text, TouchableOpacity, View } from "react-native"
+import { ScreenSection } from "../screen-section"
 
 export const ProfileLegal = () => {
     return (
-        <ProfileBlock roundedBottom={false}>
+        <ScreenSection roundedBottom={false}>
             <Text className="text-xl font-medium flex-1 mb-4">Legal</Text>
             <View className="flex-col items-start justify-between bg-gray-50 rounded-3xl overflow-hidden mb-4">
                 <TouchableOpacity className="w-full flex-row items-center justify-between border-solid border-[1px] border-gray-50 p-4">
@@ -34,6 +34,6 @@ export const ProfileLegal = () => {
                     <Ionicons name={"log-out-outline"} size={24} color="#000000" />
                 </View>
             </TouchableOpacity>
-        </ProfileBlock>
+        </ScreenSection>
     )
 }
