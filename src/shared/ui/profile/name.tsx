@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { ChevronRight } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import {View, Text, TouchableOpacity} from "react-native";
 
@@ -11,7 +11,7 @@ export const ProfileName = ({ name }: { name: string }) => {
             <Text className="text-base text-start">{name}</Text>
             </View>
             <View className="w-10 h-10 flex items-center justify-center rounded-full">
-                <Ionicons name={"arrow-forward"} size={24} color="#000000" />
+                <ChevronRight size={24} color="#000000" />
             </View>
         </TouchableOpacity>
     )

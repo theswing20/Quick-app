@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons"
+import { ArrowLeft, X } from "lucide-react-native"
 import { View, Text, TouchableOpacity } from "react-native"
 import { useRouter } from "expo-router"
 
@@ -16,13 +16,13 @@ export const ScreenTitle = ({ title, backButton = true, closeButton = false }: {
         <View className="w-full flex-row items-center justify-between">
             <View className="w-10 h-10 flex items-center justify-center">
                 {backButton && <TouchableOpacity onPress={onBack}>
-                    <Ionicons name="arrow-back" size={28} color="black" />
+                    <ArrowLeft size={28} color="black" />
                 </TouchableOpacity>}
             </View>
             <Text className="text-xl font-medium text-center">{title}</Text>
             <View className="w-10 h-10 flex items-center justify-center">
                 {closeButton && <TouchableOpacity onPress={onClose}>
-                    <Ionicons name="close" size={28} color="black" />
+                    <X size={28} color="black" />
                 </TouchableOpacity>}
             </View>
         </View>

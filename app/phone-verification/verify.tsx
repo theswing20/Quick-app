@@ -1,7 +1,7 @@
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Text } from "@/shared/ui/text";
-import { useUser } from "@clerk/clerk-expo";
+import { useAuth, useSignUp, useUser } from "@clerk/clerk-expo";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { Alert, View } from "react-native";
@@ -9,11 +9,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 function PhoneVerificationCode() {
   const router = useRouter();
-  const { phone, phoneId } = useLocalSearchParams<{
+  const { phone, phoneId, isSignUp } = useLocalSearchParams<{
     phone?: string;
     phoneId?: string;
+    isSignUp?: string;
   }>();
   const { user, isLoaded } = useUser();
+  const { signUp, isLoaded: isSignUpLoaded } = useSignUp();
+  const { setActive } = useAuth();
 
   const [code, setCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,24 +24,61 @@ function PhoneVerificationCode() {
   const canSubmit = useMemo(() => code.trim().length >= 6, [code]);
 
   const handleVerify = async () => {
-    if (!isLoaded || !user || !phoneId || !canSubmit) {
-      return;
-    }
-
-    const phoneResource = user.phoneNumbers.find((p) => p.id === phoneId);
-    if (!phoneResource) {
-      Alert.alert("Verification", "Phone number not found.");
-      return;
-    }
-
-    if (phoneResource.verification?.status === "verified") {
-      Alert.alert("Verification", "This phone number is already verified.");
-      router.replace("/");
+    if (!canSubmit) {
       return;
     }
 
     setIsSubmitting(true);
     try {
+      // Check if we're in sign-up flow
+      if (isSignUp === "true" && signUp) {
+        if (!isSignUpLoaded) {
+          Alert.alert("Error", "Please wait...");
+          return;
+        }
+
+        // Attempt phone verification for sign-up
+        const result = await signUp.attemptPhoneNumberVerification({ code });
+
+        if (result?.status === "verified") {
+          // Complete the sign-up process
+          const completeResult = await signUp.create();
+          
+          if (completeResult?.createdSessionId && setActive) {
+            // Set the active session
+            await setActive({ session: completeResult.createdSessionId });
+            Alert.alert("Success", "Account created successfully!");
+            router.replace("/");
+          } else {
+            Alert.alert("Error", "Failed to complete registration.");
+          }
+        } else {
+          Alert.alert(
+            "Verification",
+            "The code you entered is invalid. Please try again."
+          );
+        }
+        return;
+      }
+
+      // Existing user flow
+      if (!isLoaded || !user || !phoneId) {
+        Alert.alert("Error", "Please try again.");
+        return;
+      }
+
+      const phoneResource = user.phoneNumbers.find((p) => p.id === phoneId);
+      if (!phoneResource) {
+        Alert.alert("Verification", "Phone number not found.");
+        return;
+      }
+
+      if (phoneResource.verification?.status === "verified") {
+        Alert.alert("Verification", "This phone number is already verified.");
+        router.replace("/");
+        return;
+      }
+
       const result = await (phoneResource as any).attemptVerification({ code });
 
       if (result?.status === "verified") {
@@ -70,24 +110,39 @@ function PhoneVerificationCode() {
   };
 
   const handleResend = async () => {
-    if (!isLoaded || !user || !phoneId) {
-      return;
-    }
-
-    const phoneResource = user.phoneNumbers.find((p) => p.id === phoneId);
-    if (!phoneResource) {
-      Alert.alert("Verification", "Phone number not found.");
-      return;
-    }
-
-    if (phoneResource.verification?.status === "verified") {
-      Alert.alert("Verification", "This phone number is already verified.");
-      router.replace("/");
-      return;
-    }
-
     try {
       setIsSubmitting(true);
+
+      // Check if we're in sign-up flow
+      if (isSignUp === "true" && signUp) {
+        if (!isSignUpLoaded) {
+          Alert.alert("Error", "Please wait...");
+          return;
+        }
+
+        await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
+        Alert.alert("Verification", "A new code has been sent.");
+        return;
+      }
+
+      // Existing user flow
+      if (!isLoaded || !user || !phoneId) {
+        Alert.alert("Error", "Please try again.");
+        return;
+      }
+
+      const phoneResource = user.phoneNumbers.find((p) => p.id === phoneId);
+      if (!phoneResource) {
+        Alert.alert("Verification", "Phone number not found.");
+        return;
+      }
+
+      if (phoneResource.verification?.status === "verified") {
+        Alert.alert("Verification", "This phone number is already verified.");
+        router.replace("/");
+        return;
+      }
+
       await (phoneResource as any).prepareVerification({
         strategy: "phone_code",
       });
@@ -126,7 +181,7 @@ function PhoneVerificationCode() {
           </View>
 
           <Button
-            disabled={!canSubmit || !isLoaded || isSubmitting}
+            disabled={!canSubmit || (!isLoaded && !isSignUpLoaded) || isSubmitting}
             onPress={handleVerify}
             className="mb-3 bg-primary active:bg-primary/90"
           >
@@ -137,7 +192,7 @@ function PhoneVerificationCode() {
 
           <Button
             variant="ghost"
-            disabled={isSubmitting || !isLoaded}
+            disabled={isSubmitting || (!isLoaded && !isSignUpLoaded)}
             onPress={handleResend}
           >
             <Text className="text-base font-semibold text-primary">

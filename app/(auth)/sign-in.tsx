@@ -1,8 +1,8 @@
 import { Button } from "@/shared/ui/button";
 import { Text } from "@/shared/ui/text";
 import { useUser } from "@clerk/clerk-expo";
-import { Ionicons } from "@expo/vector-icons";
 import { Link, Redirect } from "expo-router";
+import { ArrowLeft } from "lucide-react-native";
 import { Platform, StatusBar, View } from "react-native";
 import {
   AppleSignInButton,
@@ -11,7 +11,7 @@ import {
 
 export default function SignIn() {
   const { isSignedIn } = useUser();
-
+  console.log("isSignedIn", isSignedIn);
   if (isSignedIn) {
     return <Redirect href="/" />;
   }
@@ -38,8 +38,7 @@ export default function SignIn() {
         {Platform.OS === "android" && (
           <Link href="/" asChild>
             <Button variant="ghost" className="flex-row items-center">
-              <Ionicons
-                name="arrow-back"
+              <ArrowLeft
                 size={20}
                 style={{ marginRight: 8 }}
               />

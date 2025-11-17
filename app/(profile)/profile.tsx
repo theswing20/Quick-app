@@ -3,7 +3,7 @@ import { ScreenTitle } from "@/shared/ui/screen-title";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Dimensions, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
   const screenHeight = Dimensions.get('window').height;
@@ -15,6 +15,7 @@ export default function Index() {
     const offsetY = event.nativeEvent.contentOffset.y;
     setScrollY(offsetY);
   };
+  const insets = useSafeAreaInsets();
 
   return (
     <SafeAreaView

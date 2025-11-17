@@ -1,12 +1,12 @@
-import { TouchableOpacity, View, Text } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { User } from "lucide-react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export const ProfileButton = () => {
     const router = useRouter();
     const onPress = () => {
         console.log("Profile pressed");
-        router.dismissAll();
+        router.dismiss(1);
         router.push('/(profile)/profile');
     };
 
@@ -26,7 +26,7 @@ export const ProfileButton = () => {
         </View>
         <View className="flex items-center justify-center">
             <View className="h-12 w-12 items-center justify-center rounded-full bg-primary">
-                <Ionicons name={"person-outline"} size={24} color="#000000" />
+                <User size={24} color="#000000" />
             </View>
         </View>
 

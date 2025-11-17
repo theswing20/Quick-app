@@ -1,18 +1,18 @@
 import { useUser } from "@clerk/clerk-expo";
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 
 export default function ProfileLayout() {
   const { isSignedIn, user } = useUser();
 
-  // if (!isSignedIn) {
-  //   return <Redirect href="/" />;
-  // }
-  //
-  // const hasPhoneNumber = (user?.phoneNumbers?.length ?? 0) > 0;
-  //
-  // if (!hasPhoneNumber) {
-  //   return <Redirect href="/phone-verification" />;
-  // }
+  if (!isSignedIn) {
+    return <Redirect href="/" />;
+  }
+  
+  const hasPhoneNumber = (user?.phoneNumbers?.length ?? 0) > 0;
+  
+  if (!hasPhoneNumber) {
+    return <Redirect href="/phone-verification" />;
+  }
 
   return (
     <Stack
@@ -24,6 +24,7 @@ export default function ProfileLayout() {
         name="profile"
         options={{
           headerShown: false,
+          presentation: "fullScreenModal",
         }}
       />
     </Stack>

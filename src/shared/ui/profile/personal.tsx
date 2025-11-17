@@ -1,5 +1,7 @@
 import { Text } from "react-native";
-import { ProfileAvatar, ProfileName, ProfilePhoneNumber } from ".";
+import { ProfileAvatar } from "./avatar";
+import { ProfileName } from "./name";
+import { ProfilePhoneNumber } from "./phone-number";
 import { ScreenSection } from "../screen-section";
 import { ProfileEmail } from "./email";
 
