@@ -1,9 +1,16 @@
-import { TouchableOpacity, View, Text } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { User } from "lucide-react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useUser } from "@clerk/clerk-expo";
 
 export const ProfileButton = () => {
-
-    const onPress = () => console.log("Profile pressed");
+    const router = useRouter();
+    const { user } = useUser();
+    const onPress = () => {
+        console.log("Profile pressed");
+        router.dismiss(1);
+        router.push('/(profile)/profile');
+    };
 
     return <TouchableOpacity
         key={"profile"}
@@ -16,12 +23,12 @@ export const ProfileButton = () => {
                 {"Profile"}
             </Text>
             <Text className="text-[18px] text-gray-500 text-start">
-                {'phone number'}
+                {user?.phoneNumbers?.[0]?.phoneNumber ?? ""}
             </Text>
         </View>
         <View className="flex items-center justify-center">
             <View className="h-12 w-12 items-center justify-center rounded-full bg-primary">
-                <Ionicons name={"person-outline"} size={24} color="#000000" />
+                <User size={24} color="#000000" />
             </View>
         </View>
 

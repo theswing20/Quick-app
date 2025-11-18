@@ -1,0 +1,31 @@
+import { ArrowLeft, X } from "lucide-react-native"
+import { View, Text, TouchableOpacity } from "react-native"
+import { useRouter } from "expo-router"
+import { capitalizeFirstLetter } from "../lib/utils";
+
+export const ScreenTitle = ({ title, backButton = true, closeButton = false }: { title: string, backButton?: boolean, closeButton?: boolean }) => {
+    const router = useRouter();
+    const onBack = () => {
+        if (backButton) {
+            router.back();
+        }
+    }
+    const onClose = () => {
+        router.dismissAll();
+    }
+    return (
+        <View className="w-full flex-row items-center justify-between">
+            <View className="w-10 h-10 flex items-center justify-center">
+                {backButton && <TouchableOpacity onPress={onBack}>
+                    <ArrowLeft size={28} color="black" />
+                </TouchableOpacity>}
+            </View>
+            <Text className="text-xl font-medium text-center">{capitalizeFirstLetter(title) }</Text>
+            <View className="w-10 h-10 flex items-center justify-center">
+                {closeButton && <TouchableOpacity onPress={onClose}>
+                    <X size={28} color="black" />
+                </TouchableOpacity>}
+            </View>
+        </View>
+    )
+}

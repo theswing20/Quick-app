@@ -2,7 +2,7 @@ import { Button } from "@/shared/ui/button";
 import type { PhoneNumberValue } from "@/shared/ui/phone-number";
 import { PhoneNumber } from "@/shared/ui/phone-number";
 import { Text } from "@/shared/ui/text";
-import { useUser } from "@clerk/clerk-expo";
+import { useSignUp, useUser } from "@clerk/clerk-expo";
 import countries from "countries-phone-masks";
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
@@ -20,6 +20,7 @@ function PhoneVerification() {
 
   const router = useRouter();
   const { user, isLoaded: isUserLoaded } = useUser();
+  const { signUp, isLoaded: isSignUpLoaded } = useSignUp();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { control, handleSubmit, watch } = useForm<PhoneVerificationForm>({
@@ -32,10 +33,6 @@ function PhoneVerification() {
   });
 
   const onSubmit = async (data: PhoneVerificationForm) => {
-    if (!isUserLoaded || !user) {
-      return;
-    }
-
     const rawPhone = data.phone.phoneNumber ?? "";
     const formattedPhone = rawPhone.replace(/[^\d+]/g, "");
     const normalizedPhone = formattedPhone.startsWith("+")
@@ -44,6 +41,30 @@ function PhoneVerification() {
 
     setIsSubmitting(true);
     try {
+      // Check if we're in sign-up flow (user doesn't exist yet)
+      if (signUp && signUp.missingFields?.includes("phone_number") && !user) {
+        // Update signUp with phone number
+        await signUp.update({ phoneNumber: normalizedPhone });
+        
+        // Prepare phone verification
+        await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
+
+        router.push({
+          pathname: "/phone-verification/verify",
+          params: { 
+            phone: normalizedPhone, 
+            isSignUp: "true" 
+          },
+        });
+        return;
+      }
+
+      // Existing user flow
+      if (!isUserLoaded || !user) {
+        Alert.alert("Error", "Please try signing in again.");
+        return;
+      }
+
       const existingPhone = user.phoneNumbers.find(
         (phoneNumber) => phoneNumber.phoneNumber === normalizedPhone
       );
@@ -130,7 +151,7 @@ function PhoneVerification() {
 
           {/* Желтая кнопка */}
           <Button
-            disabled={!canSubmit || !isUserLoaded || isSubmitting}
+            disabled={!canSubmit || (!isUserLoaded && !isSignUpLoaded) || isSubmitting}
             onPress={handleSubmit(onSubmit)}
             className="bg-primary active:bg-primary/90"
           >

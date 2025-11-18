@@ -140,11 +140,11 @@ export default function Index() {
 
   if (isSignedIn) {
     const hasPhoneNumber = (user?.phoneNumbers?.length ?? 0) > 0;
-
+  
     if (!hasPhoneNumber) {
       return <Redirect href="/phone-verification" />;
     }
-
+  
     return <Redirect href="/(app)/home" />;
   }
 

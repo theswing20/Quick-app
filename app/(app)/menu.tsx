@@ -1,26 +1,32 @@
 import { BurgerMenuButton } from "@/shared/ui/burger-menu-button";
 import { ProfileButton } from "@/shared/ui/profile-button";
+import { useRouter } from "expo-router";
+import { Clock, CreditCard, WalletMinimal } from "lucide-react-native";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Menu() {
+  const router = useRouter();
   const menuItems = [
     {
       id: "wallet",
       title: "Wallet",
-      icon: "wallet-outline" as const,
-      onPress: () => console.log("Wallet pressed"),
+      icon: WalletMinimal,
+      onPress: () => {
+        router.dismiss(1);
+        router.push("/(wallet)/wallet");
+      },
     },
     {
       id: "history",
       title: "History",
-      icon: "time-outline" as const,
+      icon: Clock,
       onPress: () => console.log("History pressed"),
     },
     {
       id: "payment",
       title: "Payment Method",
-      icon: "card-outline" as const,
+      icon: CreditCard,
       onPress: () => console.log("Payment Method pressed"),
     },
   ];

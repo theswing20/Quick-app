@@ -1,5 +1,5 @@
 import { MapView } from "@/features/maps/map";
-import { Ionicons } from "@expo/vector-icons";
+import { Menu, QrCode, MapPin } from "lucide-react-native";
 import { router } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -28,7 +28,7 @@ function Home() {
             onPress={openMenu}
             className="h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg"
           >
-            <Ionicons name="menu" size={22} color="#101828" />
+            <Menu size={22} color="#101828" />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -36,8 +36,7 @@ function Home() {
             onPress={handleScanQr}
             className="flex-1 flex-row items-center justify-center rounded-3xl bg-primary px-4 py-4 shadow-lg text-primary"
           >
-            <Ionicons
-              name="qr-code-outline"
+            <QrCode
               size={22}
               color="#101828"
               style={{ marginRight: 8 }}
@@ -52,7 +51,7 @@ function Home() {
             onPress={handleLocate}
             className="h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg"
           >
-            <Ionicons name="locate" size={22} color="#101828" />
+            <MapPin size={22} color="#101828" />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
