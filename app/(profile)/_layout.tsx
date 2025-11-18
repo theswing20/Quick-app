@@ -27,6 +27,13 @@ export default function ProfileLayout() {
           presentation: "fullScreenModal",
         }}
       />
+      <Stack.Screen
+        name="edit"
+        options={{
+          headerShown: false,
+          presentation: "fullScreenModal",
+        }}
+      />
     </Stack>
   );
 }

@@ -1,8 +1,33 @@
 import { ChevronRight, Trash2, LogOut } from "lucide-react-native"
-import { Text, TouchableOpacity, View } from "react-native"
+import { Alert, Text, TouchableOpacity, View } from "react-native"
 import { ScreenSection } from "../screen-section"
+import { useAuth } from "@clerk/clerk-expo";
 
 export const ProfileLegal = () => {
+    const { sessionId, signOut } = useAuth();
+
+    const handleLogout = async () => {
+        Alert.alert(
+          "Sign Out",
+          "Are you sure you want to sign out?",
+          [
+            {
+              text: "Cancel",
+              style: "cancel"
+            },
+            {
+              text: "Sign Out",
+              style: "destructive",
+              onPress: async () => {
+                if (sessionId) {
+                  await signOut({ sessionId });
+                }
+              }
+            }
+          ]
+        );
+      };
+      
     return (
         <ScreenSection roundedBottom={false}>
             <Text className="text-xl font-medium flex-1 mb-4">Legal</Text>
@@ -28,7 +53,10 @@ export const ProfileLegal = () => {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-full flex-row items-center justify-between border-solid border-[1px] border-gray-50 p-4 bg-gray-50 rounded-3xl">
+            <TouchableOpacity 
+              className="w-full flex-row items-center justify-between border-solid border-[1px] border-gray-50 p-4 bg-gray-50 rounded-3xl"
+              onPress={handleLogout}
+            >
                 <Text className="text-base ">Sign Out</Text>
                 <View className="w-10 h-10 flex items-center justify-center rounded-full">
                     <LogOut size={24} color="#000000" />
