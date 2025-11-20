@@ -26,6 +26,11 @@
       },
       "entitlements": {
         "aps-environment": "production"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBYrczSLTuX-Dj_K06LSa92Qs7EuBujhvA"
+        }
       }
     },
     "android": {
@@ -81,14 +86,13 @@
         }
       ],
       [
-        "expo-maps",
-        {
-          "requestLocationPermission": true,
-          "locationPermission": "Allow $(PRODUCT_NAME) to use your location"
-        }
+        "expo-notifications"
       ],
       [
-        "expo-notifications"
+        "react-native-maps",
+        {
+          "googleMapsApiKey": "AIzaSyBYrczSLTuX-Dj_K06LSa92Qs7EuBujhvA"
+        }
       ]
     ],
     "experiments": {

@@ -1,10 +1,13 @@
-import { MapView } from "@/features/maps/map";
-import { Menu, QrCode, MapPin } from "lucide-react-native";
+import { MapView, type MapViewRef } from "@/features/maps/map";
 import { router } from "expo-router";
+import { LocateFixed, MapPin, Menu, QrCode } from "lucide-react-native";
+import { useRef } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function Home() {
+  const mapViewRef = useRef<MapViewRef>(null);
+
   const openMenu = () => {
     router.push("/(app)/menu");
   };
@@ -14,12 +17,12 @@ function Home() {
   };
 
   const handleLocate = () => {
-    console.log("Locate pressed");
+    mapViewRef.current?.centerOnUserLocation();
   };
 
   return (
     <View className="flex-1">
-      <MapView />
+      <MapView ref={mapViewRef} />
 
       <SafeAreaView className="absolute inset-x-0 bottom-0 px-4 pb-4">
         <View className="flex-row items-center justify-between gap-3">
@@ -51,7 +54,7 @@ function Home() {
             onPress={handleLocate}
             className="h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg"
           >
-            <MapPin size={22} color="#101828" />
+            <LocateFixed size={22} color="#101828" />
           </TouchableOpacity>
         </View>
       </SafeAreaView>

@@ -7,9 +7,9 @@ export default function AppLayout() {
   if (!isSignedIn) {
     return <Redirect href="/" />;
   }
-  
+
   const hasPhoneNumber = (user?.phoneNumbers?.length ?? 0) > 0;
-  
+
   if (!hasPhoneNumber) {
     return <Redirect href="/phone-verification" />;
   }
@@ -33,6 +33,15 @@ export default function AppLayout() {
           headerShown: false,
           animation: "slide_from_bottom",
           gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="marker-details"
+        options={{
+          headerShown: false,
+          animation: "none",
+          gestureEnabled: false,
+          contentStyle: { backgroundColor: "transparent" },
         }}
       />
     </Stack>
