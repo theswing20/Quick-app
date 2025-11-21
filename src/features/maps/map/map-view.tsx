@@ -1,3 +1,4 @@
+import { markerDetails } from "@/shared/lib/mocks";
 import { Text } from "@/shared/ui/text";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
@@ -33,7 +34,7 @@ interface MapViewProps {
 }
 
 const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref) => {
-  const mapRef = useRef<RNMapView>(null);
+  const mapRef = useRef<MapView>(null);
   const [region, setRegion] = useState<Region>(INITIAL_REGION);
   const router = useRouter();
 
@@ -58,9 +59,9 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
         latitude: 25.2048,
         longitude: 55.2708,
       },
-      title: "Dubai",
-      description: "Location marker",
-      systemImage: "bolt.circle",
+      // title: "Dubai",
+      // description: "Location marker",
+      // systemImage: "bolt.circle",
     },
     {
       id: "2",
@@ -68,10 +69,10 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
         latitude: 37.7851,
         longitude: -122.4061,
       },
-      title: "Test",
-      description: "Location marker",
-      systemImage: "bolt.fill",
-      tintColor: "#000000",
+      // title: "Test",
+      // description: "Location marker",
+      // systemImage: "bolt.fill",
+      // tintColor: "#000000",
     },
     {
       id: "3",
@@ -79,9 +80,9 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
         latitude: 25.2007,
         longitude: 55.2732,
       },
-      title: "Dubai",
-      description: "Location marker",
-      systemImage: "bolt.circle",
+      // title: "Dubai",
+      // description: "Location marker",
+      // systemImage: "bolt.circle",
     },
   ]);
 
@@ -106,9 +107,16 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
           accuracy: Location.Accuracy.Balanced,
         });
 
+        // const userRegion: Region = {
+        //   latitude: location.coords.latitude,
+        //   longitude: location.coords.longitude,
+        //   latitudeDelta: 0.01,
+        //   longitudeDelta: 0.01,
+        // };
+        //dev config 
         const userRegion: Region = {
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
+          latitude: 25.2048,
+          longitude: 55.2708,
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         };
@@ -132,10 +140,26 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
     console.log("Map pressed", event.nativeEvent.coordinate);
   }, []);
 
-  const handleMarkerPress = useCallback((event: any) => {
-    console.log("Marker pressed", event.nativeEvent);
-    router.dismissAll();
-    router.push("/(app)/marker-details");
+  const handleMarkerPress = useCallback((markerId: string) => (event: any) => {
+    const markerCoordinate = event.nativeEvent.coordinate;
+
+
+    // Создаём новую region с координатами маркера и увеличенным зумом
+    const markerRegion: Region = {
+      latitude: markerCoordinate.latitude,
+      longitude: markerCoordinate.longitude,
+      latitudeDelta: 0.01, // Уменьшенный delta = увеличенный зум
+      longitudeDelta: 0.01,
+    };
+
+    // Анимируем карту к маркеру
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(markerRegion, 1000);
+      setRegion(markerRegion);
+    }
+
+    // Опционально: можно оставить переход на другую страницу
+    router.push({ pathname: "/(app)/marker-details", params: { markerId } });
   }, []);
 
   const handleRegionChangeComplete = useCallback((newRegion: Region) => {
@@ -176,10 +200,10 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
 
   return (
     <View style={styles.container}>
-      {/* <MapView
+      <MapView
         ref={mapRef}
         style={styles.map}
-        provider={PROVIDER_GOOGLE}
+        // provider={PROVIDER_GOOGLE}
         region={region}
         showsUserLocation={true}
         showsMyLocationButton={false}
@@ -192,26 +216,11 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
             coordinate={marker.coordinates}
             title={marker.title}
             description={marker.description}
-            onPress={handleMarkerPress}
-            pinColor={marker.tintColor}
+            onPress={handleMarkerPress(marker.id)}
+            pinColor={"#000000"}
+            image={require("@/shared/assets/images/favicon.png")}
           />
         ))}
-      </MapView> */}
-      <MapView
-        style={styles.map}
-        provider={PROVIDER_GOOGLE} // включаем Google Maps вместо Apple Maps
-        initialRegion={{
-          latitude: 53.9,       // пример: Минск
-          longitude: 27.5667,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        }}
-      >
-        <MapMarker
-          coordinate={{ latitude: 53.9, longitude: 27.5667 }}
-          title="Минск"
-          description="Пример маркера на Google Maps (iOS)"
-        />
       </MapView>
 
       <View pointerEvents="box-none" style={styles.controlsWrapper}>

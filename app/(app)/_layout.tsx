@@ -38,10 +38,10 @@ export default function AppLayout() {
       <Stack.Screen
         name="marker-details"
         options={{
+          presentation: "modal",
           headerShown: false,
-          animation: "none",
-          gestureEnabled: false,
-          contentStyle: { backgroundColor: "transparent" },
+          animation: "slide_from_bottom",
+          gestureEnabled: true,
         }}
       />
     </Stack>
