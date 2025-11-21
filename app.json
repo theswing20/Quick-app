@@ -22,10 +22,18 @@
         "webcredentials:steady-rodent-14.clerk.accounts.dev"
       ],
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSLocationWhenInUseUsageDescription": "We need access to your location to show you on the map and provide location-based services",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "We need access to your location to show you on the map and provide location-based services",
+        "NSLocationAlwaysUsageDescription": "We need access to your location to show you on the map and provide location-based services"
       },
       "entitlements": {
         "aps-environment": "production"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "process.env.GOOGLE_MAPS_API_KEY"
+        }
       }
     },
     "android": {
@@ -81,14 +89,18 @@
         }
       ],
       [
-        "expo-maps",
+        "expo-notifications"
+      ],  [
+        "expo-location",
         {
-          "requestLocationPermission": true,
-          "locationPermission": "Allow $(PRODUCT_NAME) to use your location"
+          "locationWhenInUsePermission": "We need access to your location to show you on the map and provide location-based services"
         }
       ],
       [
-        "expo-notifications"
+        "react-native-maps",
+        {
+          "googleMapsApiKey": "AIzaSyBYrczSLTuX-Dj_K06LSa92Qs7EuBujhvA"
+        }
       ]
     ],
     "experiments": {

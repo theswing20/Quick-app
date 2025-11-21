@@ -1,104 +1,227 @@
+import { markerDetails } from "@/shared/lib/mocks";
 import { Text } from "@/shared/ui/text";
 import * as Location from "expo-location";
-import { AppleMaps, CameraPosition, GoogleMaps } from "expo-maps";
-import { useCallback, useEffect, useRef } from "react";
+import { useRouter } from "expo-router";
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { Platform, Pressable, StyleSheet, View } from "react-native";
+import MapView, { Marker as MapMarker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region } from "react-native-maps";
 
-const CAMERA_POSITION: CameraPosition = {
-  coordinates: {
-    latitude: 25.2048,
-    longitude: 55.2708,
-  },
-  zoom: 11,
+const INITIAL_REGION: Region = {
+  latitude: 25.2048,
+  longitude: 55.2708,
+  latitudeDelta: 0.0922,
+  longitudeDelta: 0.0421,
 };
 
-function MapView() {
-  const ref = useRef<AppleMaps.MapView | GoogleMaps.MapView>(null);
-  const lastZoomRef = useRef<number>(CAMERA_POSITION.zoom);
+interface Marker {
+  id: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  title?: string;
+  description?: string;
+  systemImage?: string;
+  tintColor?: string;
+}
 
-  const clampZoom = useCallback((zoom: number) => Math.min(21, Math.max(2, zoom)), []);
+export interface MapViewRef {
+  centerOnUserLocation: () => Promise<void>;
+}
 
-  const changeZoom = useCallback(
-    async (delta: number) => {
-      const map = ref.current;
-      if (!map) {
-        return;
-      }
+interface MapViewProps {
+  ref?: React.Ref<MapViewRef>;
+}
 
-      try {
-        const camera = (await map.getCameraPositionAsync?.()) ?? {
-          ...CAMERA_POSITION,
-          zoom: lastZoomRef.current,
-        };
+const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref) => {
+  const mapRef = useRef<MapView>(null);
+  const [region, setRegion] = useState<Region>(INITIAL_REGION);
+  const router = useRouter();
 
-        const nextZoom = clampZoom((camera.zoom ?? lastZoomRef.current) + delta);
-        lastZoomRef.current = nextZoom;
+  const clampZoom = useCallback((delta: number) => {
+    const currentDelta = region.latitudeDelta;
+    // Уменьшаем delta для увеличения (zoom in), увеличиваем для уменьшения (zoom out)
+    const newDelta = delta > 0
+      ? Math.max(0.001, currentDelta * 0.5)
+      : Math.min(180, currentDelta * 2);
 
-        map.setCameraPosition({
-          ...camera,
-          zoom: nextZoom,
-        });
-      } catch (error) {
-        console.warn("Failed to update zoom level", error);
-      }
+    setRegion(prev => ({
+      ...prev,
+      latitudeDelta: newDelta,
+      longitudeDelta: newDelta * (prev.longitudeDelta / prev.latitudeDelta),
+    }));
+  }, [region.latitudeDelta, region.longitudeDelta]);
+
+  const [markers, setMarkers] = useState<Marker[]>([
+    {
+      id: "1",
+      coordinates: {
+        latitude: 25.2048,
+        longitude: 55.2708,
+      },
+      // title: "Dubai",
+      // description: "Location marker",
+      // systemImage: "bolt.circle",
     },
-    [clampZoom]
-  );
+    {
+      id: "2",
+      coordinates: {
+        latitude: 37.7851,
+        longitude: -122.4061,
+      },
+      // title: "Test",
+      // description: "Location marker",
+      // systemImage: "bolt.fill",
+      // tintColor: "#000000",
+    },
+    {
+      id: "3",
+      coordinates: {
+        latitude: 25.2007,
+        longitude: 55.2732,
+      },
+      // title: "Dubai",
+      // description: "Location marker",
+      // systemImage: "bolt.circle",
+    },
+  ]);
 
   const handleZoomIn = useCallback(() => {
-    changeZoom(1);
-  }, [changeZoom]);
+    clampZoom(1);
+  }, [clampZoom]);
 
   const handleZoomOut = useCallback(() => {
-    changeZoom(-1);
-  }, [changeZoom]);
+    clampZoom(-1);
+  }, [clampZoom]);
 
   useEffect(() => {
     async function getCurrentLocation() {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        return;
-      }
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          // Если разрешение не получено, используем начальную позицию
+          return;
+        }
 
-      const location = await Location.getCurrentPositionAsync({});
-      ref.current?.setCameraPosition({
-        coordinates: {
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        },
-        zoom: 13,
-      });
-      lastZoomRef.current = 13;
+        const location = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Balanced,
+        });
+
+        // const userRegion: Region = {
+        //   latitude: location.coords.latitude,
+        //   longitude: location.coords.longitude,
+        //   latitudeDelta: 0.01,
+        //   longitudeDelta: 0.01,
+        // };
+        //dev config 
+        const userRegion: Region = {
+          latitude: 25.2048,
+          longitude: 55.2708,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        };
+
+        // Устанавливаем начальную позицию на местоположение пользователя
+        setRegion(userRegion);
+
+        // Обновляем позицию камеры программно, если карта уже загружена
+        if (mapRef.current) {
+          mapRef.current.animateToRegion(userRegion, 1000);
+        }
+      } catch (error) {
+        console.warn("Failed to get current location:", error);
+      }
     }
 
     getCurrentLocation();
   }, []);
 
-  const MapComponent =
-    Platform.OS === "ios"
-      ? AppleMaps.View
-      : Platform.OS === "android"
-        ? GoogleMaps.View
-        : null;
+  const handleMapPress = useCallback((event: any) => {
+    console.log("Map pressed", event.nativeEvent.coordinate);
+  }, []);
 
-  if (!MapComponent) {
-    return <Text>Maps are only available on Android and iOS</Text>;
-  }
+  const handleMarkerPress = useCallback((markerId: string) => (event: any) => {
+    const markerCoordinate = event.nativeEvent.coordinate;
+
+
+    // Создаём новую region с координатами маркера и увеличенным зумом
+    const markerRegion: Region = {
+      latitude: markerCoordinate.latitude,
+      longitude: markerCoordinate.longitude,
+      latitudeDelta: 0.01, // Уменьшенный delta = увеличенный зум
+      longitudeDelta: 0.01,
+    };
+
+    // Анимируем карту к маркеру
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(markerRegion, 1000);
+      setRegion(markerRegion);
+    }
+
+    // Опционально: можно оставить переход на другую страницу
+    router.push({ pathname: "/(app)/marker-details", params: { markerId } });
+  }, []);
+
+  const handleRegionChangeComplete = useCallback((newRegion: Region) => {
+    setRegion(newRegion);
+  }, []);
+
+  const centerOnUserLocation = useCallback(async () => {
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.warn("Location permission not granted");
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      });
+
+      const userRegion: Region = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      };
+
+      if (mapRef.current) {
+        mapRef.current.animateToRegion(userRegion, 1000);
+        setRegion(userRegion);
+      }
+    } catch (error) {
+      console.warn("Failed to center on user location:", error);
+    }
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    centerOnUserLocation,
+  }), [centerOnUserLocation]);
 
   return (
     <View style={styles.container}>
-      <MapComponent
-        ref={ref}
+      <MapView
+        ref={mapRef}
         style={styles.map}
-        uiSettings={{
-          myLocationButtonEnabled: false,
-          togglePitchEnabled: false,
-        }}
-        properties={{
-          isMyLocationEnabled: true,
-        }}
-        cameraPosition={CAMERA_POSITION}
-      />
+        // provider={PROVIDER_GOOGLE}
+        region={region}
+        showsUserLocation={true}
+        showsMyLocationButton={false}
+        onPress={handleMapPress}
+        onRegionChangeComplete={handleRegionChangeComplete}
+      >
+        {markers.map((marker) => (
+          <MapMarker
+            key={marker.id}
+            coordinate={marker.coordinates}
+            title={marker.title}
+            description={marker.description}
+            onPress={handleMarkerPress(marker.id)}
+            pinColor={"#000000"}
+            image={require("@/shared/assets/images/favicon.png")}
+          />
+        ))}
+      </MapView>
 
       <View pointerEvents="box-none" style={styles.controlsWrapper}>
         <View style={styles.controlsContainer}>
@@ -112,9 +235,11 @@ function MapView() {
       </View>
     </View>
   );
-}
+});
 
-export default MapView;
+MapViewComponent.displayName = "MapView";
+
+export default MapViewComponent;
 
 const styles = StyleSheet.create({
   container: {
