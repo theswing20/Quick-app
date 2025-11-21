@@ -13,6 +13,9 @@ export default function MarkerDetails() {
     router.back();
   };
   const details = markerDetails.find(marker => marker.id === markerId);
+  const handleScanQr = () => {
+    router.push("/(app)/qr-scanner");
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -176,9 +179,7 @@ export default function MarkerDetails() {
       <View className="px-5 pb-4 absolute bottom-4 left-0 right-0">
         <Button
           className="w-full h-14 rounded-2xl bg-primary"
-          onPress={() => {
-            console.log("Take via QR pressed");
-          }}
+          onPress={handleScanQr}
         >
           <Text className="text-lg font-semibold text-secondary-foreground">
             Take via QR
