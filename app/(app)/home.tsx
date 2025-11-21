@@ -13,7 +13,7 @@ function Home() {
   };
 
   const handleScanQr = () => {
-    console.log("Scan QR pressed");
+    router.push("/(app)/qr-scanner");
   };
 
   const handleLocate = () => {

@@ -1,9 +1,8 @@
-import { markerDetails } from "@/shared/lib/mocks";
 import { Text } from "@/shared/ui/text";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { Platform, Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View, Image } from "react-native";
 import MapView, { Marker as MapMarker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region } from "react-native-maps";
 
 const INITIAL_REGION: Region = {
@@ -218,8 +217,12 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
             description={marker.description}
             onPress={handleMarkerPress(marker.id)}
             pinColor={"#000000"}
-            image={require("@/shared/assets/images/favicon.png")}
-          />
+            // image={require("@/shared/assets/images/favicon.png")}
+          ><Image
+          source={require('../../../shared/assets/images/bolt-icon.png')}
+          style={{ width: 40, height: 40 }}
+          resizeMode="contain"
+        /></MapMarker>
         ))}
       </MapView>
 

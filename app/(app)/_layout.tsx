@@ -44,6 +44,15 @@ export default function AppLayout() {
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="qr-scanner"
+        options={{
+          presentation: "fullScreenModal",
+          headerShown: false,
+          animation: "fade",
+          gestureEnabled: true,
+        }}
+      />
     </Stack>
   );
 }
