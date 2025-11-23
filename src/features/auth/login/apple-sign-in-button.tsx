@@ -24,7 +24,7 @@ export const AppleSignInButton = () => {
     setIsLoading(true);
     try {
       // Start the authentication process by calling `startSSOFlow()`
-      const { createdSessionId, setActive } = await startSSOFlow({
+      const { createdSessionId, setActive, signIn, signUp } = await startSSOFlow({
         strategy: "oauth_apple",
         // For web, defaults to current path
         // For native, you must pass a scheme, like AuthSession.makeRedirectUri({ scheme, path })
@@ -60,6 +60,22 @@ export const AppleSignInButton = () => {
       } else {
         console.log("no createdSessionId");
 
+        // Check if signUp requires phone number
+        if (signUp?.missingFields?.includes("phone_number")) {
+          // signUp object is automatically available via useSignUp() hook
+          // Redirect to phone verification where we'll use signUp.update() and signUp.create()
+          router.replace("/phone-verification");
+          return;
+        }
+
+        // If there is no `createdSessionId`,
+        // there are missing requirements, such as MFA
+        // Use the `signIn` or `signUp` returned from `startSSOFlow`
+        // to handle next steps
+        console.log("Missing requirements:", {
+          signUpMissingFields: signUp?.missingFields,
+          signInError: signIn?.firstFactorVerification?.error,
+        });
         // If there is no `createdSessionId`,
         // there are missing requirements, such as MFA
         // Use the `signIn` or `signUp` returned from `startSSOFlow`

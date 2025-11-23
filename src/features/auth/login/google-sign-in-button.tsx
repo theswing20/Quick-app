@@ -58,7 +58,7 @@ export const GoogleSignInButton = () => {
           },
         });
       } else {
-        console.log("no createdSessionId");
+        console.log("no createdSessionId", signUp);
 
         // Check if signUp requires phone number
         if (signUp?.missingFields?.includes("phone_number")) {
