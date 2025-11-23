@@ -39,8 +39,8 @@ function PhoneVerificationCode() {
 
         // Attempt phone verification for sign-up
         const result = await signUp.attemptPhoneNumberVerification({ code });
-
-        if (result?.status === "verified") {
+    console.log('result status', result?.status);
+        if (result?.status === "complete") {
           // Complete the sign-up process
           const completeResult = await signUp.create();
           
