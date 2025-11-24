@@ -1,4 +1,3 @@
-import { SignOutButton } from "@/features/auth/login";
 import { Button } from "@/shared/ui/button";
 import { Text } from "@/shared/ui/text";
 import { useUser } from "@clerk/clerk-expo";
@@ -140,11 +139,11 @@ export default function Index() {
 
   if (isSignedIn) {
     const hasPhoneNumber = (user?.phoneNumbers?.length ?? 0) > 0;
-  
+
     if (!hasPhoneNumber) {
       return <Redirect href="/phone-verification" />;
     }
-  
+
     return <Redirect href="/(app)/home" />;
   }
 
@@ -257,7 +256,7 @@ export default function Index() {
               <Text>Let&apos;s go!</Text>
             </Button>
           </Link>
-          <SignOutButton />
+          {/* <SignOutButton /> */}
           {/* Legal text */}
           <View className="mt-6">
             <Text className="text-xs leading-tight text-center text-gray-400">

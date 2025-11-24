@@ -1,7 +1,7 @@
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Text } from "@/shared/ui/text";
-import { useAuth, useSignUp, useUser } from "@clerk/clerk-expo";
+import { useClerk, useSignUp, useUser } from "@clerk/clerk-expo";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { Alert, View } from "react-native";
@@ -16,7 +16,7 @@ function PhoneVerificationCode() {
   }>();
   const { user, isLoaded } = useUser();
   const { signUp, isLoaded: isSignUpLoaded } = useSignUp();
-  const { setActive } = useAuth();
+  const { setActive } = useClerk();
 
   const [code, setCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,18 +39,76 @@ function PhoneVerificationCode() {
 
         // Attempt phone verification for sign-up
         const result = await signUp.attemptPhoneNumberVerification({ code });
-    console.log('result status', result?.status);
+        console.log("result status", result?.status);
         if (result?.status === "complete") {
-          // Complete the sign-up process
-          const completeResult = await signUp.create();
-          
-          if (completeResult?.createdSessionId && setActive) {
-            // Set the active session
-            await setActive({ session: completeResult.createdSessionId });
-            Alert.alert("Success", "Account created successfully!");
-            router.replace("/");
+          let sessionId: string | null = null;
+
+          // Check if session already exists before creating
+          if (signUp.createdSessionId) {
+            console.log("Session already exists, using existing session");
+            sessionId = signUp.createdSessionId;
           } else {
-            Alert.alert("Error", "Failed to complete registration.");
+            // Try to create the account and session
+            try {
+              const completeResult = await signUp.create({});
+              console.log("createdSessionId", completeResult?.createdSessionId);
+              console.log("signUp.status", signUp.status);
+              sessionId =
+                completeResult?.createdSessionId || signUp.createdSessionId;
+            } catch (createError: any) {
+              const errorCode = createError?.errors?.[0]?.code;
+              const errorMessage =
+                createError?.errors?.[0]?.message?.toLowerCase() || "";
+
+              // If session already exists, try to use it
+              if (
+                errorCode === "session_exists" ||
+                errorMessage.includes("session already exists") ||
+                errorMessage.includes("session exists")
+              ) {
+                console.log(
+                  "Session already exists error caught, using signUp.createdSessionId"
+                );
+                sessionId = signUp.createdSessionId;
+              } else {
+                throw createError;
+              }
+            }
+          }
+
+          console.log("Final sessionId", sessionId);
+
+          if (sessionId && setActive) {
+            // Set the active session with navigate callback
+            await setActive({
+              session: sessionId,
+              navigate: async ({ session }: { session: any }) => {
+                // Check for tasks and navigate to custom UI to help users resolve them
+                if (session?.currentTask) {
+                  console.log("currentTask", session?.currentTask);
+                  return;
+                }
+
+                const hasPhoneNumber =
+                  (session?.user?.phoneNumbers?.length ?? 0) > 0;
+
+                if (!hasPhoneNumber) {
+                  router.replace("/phone-verification");
+                  return;
+                }
+
+                router.replace("/(app)/home");
+              },
+            });
+            Alert.alert("Success", "Account created successfully!");
+          } else {
+            // If no session ID available, redirect anyway
+            // The index.tsx will handle authentication state check
+            console.log("no createdSessionId, redirecting anyway");
+            // Wait a bit for state to update
+            setTimeout(() => {
+              router.replace("/");
+            }, 500);
           }
         } else {
           Alert.alert(
@@ -75,7 +133,7 @@ function PhoneVerificationCode() {
 
       if (phoneResource.verification?.status === "verified") {
         Alert.alert("Verification", "This phone number is already verified.");
-        router.replace("/");
+        router.replace("/(app)/home");
         return;
       }
 
@@ -83,7 +141,7 @@ function PhoneVerificationCode() {
 
       if (result?.status === "verified") {
         Alert.alert("Verification", "Phone number verified successfully.");
-        router.replace("/");
+        router.replace("/(app)/home");
       } else {
         Alert.alert(
           "Verification",
@@ -92,13 +150,47 @@ function PhoneVerificationCode() {
       }
     } catch (error: any) {
       const clerkError = error?.errors?.[0];
+      const errorCode = clerkError?.code;
+      const errorMessage = clerkError?.message?.toLowerCase() || "";
 
       if (
-        clerkError?.code === "verification_already_attempted" ||
-        clerkError?.message?.toLowerCase().includes("already verified")
+        errorCode === "verification_already_attempted" ||
+        errorMessage.includes("already verified")
       ) {
         Alert.alert("Verification", "This phone number is already verified.");
-        router.replace("/");
+        router.replace("/(app)/home");
+      } else if (
+        errorCode === "session_exists" ||
+        errorMessage.includes("session already exists") ||
+        errorMessage.includes("session exists")
+      ) {
+        // Session already exists - try to use it and redirect
+        console.log("Session exists error, checking for existing session");
+        if (signUp?.createdSessionId && setActive) {
+          try {
+            await setActive({
+              session: signUp.createdSessionId,
+              navigate: async ({ session }: { session: any }) => {
+                const hasPhoneNumber =
+                  (session?.user?.phoneNumbers?.length ?? 0) > 0;
+
+                if (!hasPhoneNumber) {
+                  router.replace("/phone-verification");
+                  return;
+                }
+
+                router.replace("/(app)/home");
+              },
+            });
+          } catch (setActiveError) {
+            console.error("Error setting active session:", setActiveError);
+            // Fallback: redirect anyway
+            router.replace("/");
+          }
+        } else {
+          // No session available, redirect to home page
+          router.replace("/");
+        }
       } else {
         const message =
           clerkError?.message ?? "Failed to verify the code. Please try again.";
@@ -139,7 +231,7 @@ function PhoneVerificationCode() {
 
       if (phoneResource.verification?.status === "verified") {
         Alert.alert("Verification", "This phone number is already verified.");
-        router.replace("/");
+        router.replace("/(app)/home");
         return;
       }
 
@@ -181,7 +273,9 @@ function PhoneVerificationCode() {
           </View>
 
           <Button
-            disabled={!canSubmit || (!isLoaded && !isSignUpLoaded) || isSubmitting}
+            disabled={
+              !canSubmit || (!isLoaded && !isSignUpLoaded) || isSubmitting
+            }
             onPress={handleVerify}
             className="mb-3 bg-primary active:bg-primary/90"
           >
