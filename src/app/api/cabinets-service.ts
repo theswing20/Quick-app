@@ -1,8 +1,9 @@
+import { useMemo } from "react";
 import { useApi } from "./api";
 
 export const useCabinetsService = () => {
     const api = useApi();
-    return {
+    const service = useMemo(() => ({
         getNearestCabinets: async (params: {
             latitude: number;
             longitude: number;
@@ -11,6 +12,7 @@ export const useCabinetsService = () => {
             const response = await api.get('/cabinets/nearest', { params });
             return response.data;
         },
-    };
+    }), [api]);
+    return service;
 }
 

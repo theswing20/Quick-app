@@ -1,8 +1,9 @@
+import { useMemo } from "react";
 import { useApi } from "./api";
 
 export const useWalletService = () => {
     const api = useApi();
-    return {
+    const service = useMemo(() => ({
         getBalance: async () => {
             const response = await api.get('/wallet/balance');
             return response.data;
@@ -15,6 +16,7 @@ export const useWalletService = () => {
             const response = await api.get('/wallet/history', { params });
             return response.data;
         },
-    };
+    }), [api]);
+    return service;
 }
 

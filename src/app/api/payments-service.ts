@@ -1,8 +1,9 @@
+import { useMemo } from "react";
 import { useApi } from "./api";
 
 export const usePaymentsService = () => {
     const api = useApi();
-    return {
+    const service = useMemo(() => ({
         getPaymentsConfig: async () => {
             const response = await api.get('/payments/config');
             return response.data;
@@ -15,5 +16,6 @@ export const usePaymentsService = () => {
             const response = await api.post('/payments/top-up', payload);
             return response.data;
         },
-    };
+    }), [api]);
+    return service;
 }

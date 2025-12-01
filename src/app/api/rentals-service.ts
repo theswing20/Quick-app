@@ -1,8 +1,9 @@
+import { useMemo } from "react";
 import { useApi } from "./api";
 
 export const useRentalsService = () => {
     const api = useApi();
-    return {
+    const service = useMemo(() => ({
         getActiveRental: async () => {
             const response = await api.get('/rentals/active');
             return response.data;
@@ -33,6 +34,7 @@ export const useRentalsService = () => {
             const response = await api.post(`/rentals/${id}/extend`);
             return response.data;
         },
-    };
+    }), [api]);
+    return service;
 }
 

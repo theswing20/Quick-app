@@ -1,8 +1,9 @@
+import { useMemo } from "react";
 import { useApi } from "./api";
 
 export const usePaymentMethodsService = () => {
     const api = useApi();
-    return {
+    const service = useMemo(() => ({
         getAllPaymentMethods: async () => {
             const response = await api.get('/payment-methods/all');
             return response.data;
@@ -32,5 +33,6 @@ export const usePaymentMethodsService = () => {
             const response = await api.delete(`/payment-methods/${id}`);
             return response.data;
         },
-    };
+    }), [api]);
+    return service;
 }
