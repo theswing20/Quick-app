@@ -100,6 +100,7 @@ function PhoneVerificationCode() {
                 router.replace("/(app)/home");
               },
             });
+            // TODO: remove this alert before production
             Alert.alert("Success", "Account created successfully!");
           } else {
             // If no session ID available, redirect anyway
