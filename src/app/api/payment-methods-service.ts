@@ -17,7 +17,6 @@ export const usePaymentMethodsService = () => {
             return response.data;
         },
         confirmPaymentMethod: async (payload: {
-            paymentIntentId: string;
             paymentMethodId?: string | null;
         }) => {
             const response = await api.post('/payment-methods/confirm', payload);

@@ -15,7 +15,7 @@ export const useApi = () => {
     });
 
     instance.interceptors.request.use(async (config) => {
-      const token = await getToken({ template: 'default' });
+      const token = await getToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
