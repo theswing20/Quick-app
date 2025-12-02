@@ -29,7 +29,7 @@ export default function Menu() {
       icon: CreditCard,
       onPress: () => {
         router.dismiss(1);
-        router.push("/(wallet)/add-payment-method");
+        router.push("/(wallet)/payment-methods");
       },
     },
   ];

@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/clerk-expo";
 import { Redirect, Stack } from "expo-router";
 
-export default function WalletLayout() {
+export default function RentLayout() {
   const { isSignedIn, user } = useUser();
 
   if (!isSignedIn) {
@@ -21,35 +21,19 @@ export default function WalletLayout() {
       }}
     >
       <Stack.Screen
-        name="wallet"
+        name="pre-rent-info"
         options={{
           headerShown: false,
-          presentation: "fullScreenModal",
-        }}
-      />
-      <Stack.Screen
-        name="add-payment-method"
-        options={{
-          headerShown: false,
-          presentation: "fullScreenModal",
-        }}
-      />
-      <Stack.Screen
-        name="add-card"
-        options={{
-          headerShown: false,
-          presentation: "fullScreenModal",
-          animation: "slide_from_bottom",
           gestureEnabled: true,
         }}
       />
       <Stack.Screen
-        name="payment-methods"
+        name="rent-request"
         options={{
           headerShown: false,
-          presentation: "fullScreenModal",
-          animation: "slide_from_bottom",
           gestureEnabled: true,
+          presentation: "modal",
+          animation: "slide_from_bottom",
         }}
       />
     </Stack>

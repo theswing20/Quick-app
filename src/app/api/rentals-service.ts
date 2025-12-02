@@ -23,7 +23,7 @@ export const useRentalsService = () => {
             cabinetQRCode: string;
             paymentMethodId?: string | null;
         }) => {
-            const response = await api.post('/rentals/start', payload);
+            const response = await api.post<StartRentalResponse>('/rentals/start', payload);
             return response.data;
         },
         endRental: async (id: string) => {
@@ -38,3 +38,19 @@ export const useRentalsService = () => {
     return service;
 }
 
+export interface StartRentalResponse {
+    rental: {
+        id: string;
+        userId: string;
+        cabinetId: string;
+        orderNumber: string;
+        status: string;
+        startTime: string;
+        currentCost: number;
+        powerBankDeviceId: string;
+    },
+    requiresPaymentConfirmation: boolean;
+    clientSecret: string | null;
+    paymentIntentId: string | null;
+    depositAmount: number;
+}

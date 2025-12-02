@@ -1,3 +1,4 @@
+import { useCabinetsService } from "@/app/api/cabinets-service";
 import { Text } from "@/shared/ui/text";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
@@ -36,6 +37,22 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
   const mapRef = useRef<MapView>(null);
   const [region, setRegion] = useState<Region>(INITIAL_REGION);
   const router = useRouter();
+  const cabinetsService = useCabinetsService();
+
+  const getMarkers = async () =>{
+    const markers = await cabinetsService.getNearestCabinets({
+      latitude: region.latitude,
+      longitude: region.longitude,
+      radiusKm: 10,
+    });
+    return markers;
+  }
+
+  useEffect(()=>{
+    getMarkers().then((markers) => {
+      console.log('markers', markers);
+    });
+  },[region.latitude, region.longitude]);
 
   const clampZoom = useCallback((delta: number) => {
     const currentDelta = region.latitudeDelta;

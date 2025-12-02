@@ -1,12 +1,24 @@
+import { usePaymentMethodsService } from "@/app/api/payment-methods-service";
 import { MapView, type MapViewRef } from "@/features/maps/map";
+import { usePaymentMethodsStore } from "@/shared/stores/payment-methods-store";
 import { router } from "expo-router";
 import { LocateFixed, MapPin, Menu, QrCode } from "lucide-react-native";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function Home() {
   const mapViewRef = useRef<MapViewRef>(null);
+  const paymentMethodsService = usePaymentMethodsService();
+
+  const setPaymentMethods = usePaymentMethodsStore((state) => state.setPaymentMethods);
+  
+  useEffect(() => {
+    paymentMethodsService.getAllPaymentMethods().then((paymentMethods) => {
+      setPaymentMethods(paymentMethods);
+      console.log('paymentMethods', paymentMethods);
+    });
+  }, []);
 
   const openMenu = () => {
     router.push("/(app)/menu");

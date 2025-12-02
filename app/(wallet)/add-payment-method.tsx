@@ -50,12 +50,13 @@ const getSetupIntent = async () => {
                 setIsLoading(false);
                 return;
             }
+console.log('before createPaymentMethod');
+// Создаем PaymentMethod через Stripe
+const { paymentMethod, error: createError } = await createPaymentMethod({
+    paymentMethodType: "Card",
+});
 
-            // Создаем PaymentMethod через Stripe
-            const { paymentMethod, error: createError } = await createPaymentMethod({
-                paymentMethodType: "Card",
-            });
-
+console.log('after createPaymentMethod', paymentMethod, createError);
             if (createError || !paymentMethod) {
                 Alert.alert("Error", createError?.message || "Failed to create payment method");
                 setIsLoading(false);

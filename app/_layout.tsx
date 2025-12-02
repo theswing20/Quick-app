@@ -116,6 +116,13 @@ export default function RootLayout() {
                     gestureEnabled: true,
                   }}
                 />
+                <Stack.Screen
+                  name="(rent)"
+                  options={{
+                    headerShown: false,
+                    gestureEnabled: true,
+                  }}
+                />
               </Stack>
               <PortalHost />
             </BottomSheetModalProvider>
