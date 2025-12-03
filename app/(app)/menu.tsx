@@ -14,14 +14,16 @@ export default function Menu() {
       icon: WalletMinimal,
       onPress: () => {
         router.dismiss(1);
-        router.push("/(wallet)/wallet");
+        router.push("/(app)/(wallet)/wallet");
       },
     },
     {
       id: "history",
       title: "History",
       icon: Clock,
-      onPress: () => console.log("History pressed"),
+      onPress: () => {
+        router.push("/(app)/(history)/history");
+      },
     },
     {
       id: "payment",
@@ -29,7 +31,7 @@ export default function Menu() {
       icon: CreditCard,
       onPress: () => {
         router.dismiss(1);
-        router.push("/(wallet)/payment-methods");
+        router.push("/(app)/(wallet)/payment-methods");
       },
     },
   ];

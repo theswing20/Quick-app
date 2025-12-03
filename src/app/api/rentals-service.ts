@@ -74,3 +74,23 @@ export interface StartRentalResponse {
     paymentIntentId: string | null;
     depositAmount: number;
 }
+
+export interface RentalHistoryItem {
+    id: string;
+    orderNumber: string;
+    startTime: string;
+    endTime: string;
+    durationMinutes: number;
+    cost: number;
+    powerBankDeviceId: string;
+}
+
+export interface RentalHistoryResponse {
+    items: RentalHistoryItem[];
+    totalCount: number;
+    pageNumber: number;
+    pageSize: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  }
