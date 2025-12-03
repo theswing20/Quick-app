@@ -24,12 +24,17 @@ export default function QRScanner() {
         }
     }, [permission]);
 
+    const handleManualEnter = () => {
+        router.push("/(app)/manual-enter");
+    };
+
     const handleBarCodeScanned = ({ data }: { data: string }) => {
         if (scanned) return;
 
         setScanned(true);
 
         // Обработка отсканированного QR-кода
+        // GT042241005801
         console.log("Scanned QR code:", data);
 
         // Здесь можно добавить логику обработки данных
@@ -122,7 +127,15 @@ export default function QRScanner() {
                     </View>
                 </SafeAreaView>
             </CameraView>
-        </View>
+            <SafeAreaView className="absolute bottom-0 left-0 right-0 p-4 w-full items-center pb-12">
+                <TouchableOpacity
+                    onPress={handleManualEnter}
+                    className="flex-1 flex-row items-center justify-center rounded-3xl bg-primary-foreground px-4 py-4 border-[1px] border-primary text-primary w-[50%]"
+                >
+                    <Text className="text-primary text-base bg-primary-foreground font-semibold text-center">Enter Manually</Text>
+                </TouchableOpacity>
+            </SafeAreaView>
+        </View> 
     );
 }
 

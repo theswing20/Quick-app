@@ -1,15 +1,15 @@
 import { useUser } from "@clerk/clerk-expo";
 import { Redirect, Stack } from "expo-router";
 
-export default function WalletLayout() {
+export default function RentLayout() {
   const { isSignedIn, user } = useUser();
 
   if (!isSignedIn) {
     return <Redirect href="/" />;
   }
-  
+
   const hasPhoneNumber = (user?.phoneNumbers?.length ?? 0) > 0;
-  
+
   if (!hasPhoneNumber) {
     return <Redirect href="/phone-verification" />;
   }
@@ -21,10 +21,19 @@ export default function WalletLayout() {
       }}
     >
       <Stack.Screen
-        name="wallet"
+        name="pre-rent-info"
         options={{
           headerShown: false,
-          presentation: "fullScreenModal",
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="rent-request"
+        options={{
+          headerShown: false,
+          gestureEnabled: true,
+          presentation: "modal",
+          animation: "slide_from_bottom",
         }}
       />
     </Stack>

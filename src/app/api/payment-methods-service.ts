@@ -1,10 +1,11 @@
+import { useMemo } from "react";
 import { useApi } from "./api";
 
 export const usePaymentMethodsService = () => {
     const api = useApi();
-    return {
+    const service = useMemo(() => ({
         getAllPaymentMethods: async () => {
-            const response = await api.get('/payment-methods/all');
+            const response = await api.get<PaymentMethod[]>('/payment-methods/all');
             return response.data;
         },
         getCards: async () => {
@@ -16,7 +17,6 @@ export const usePaymentMethodsService = () => {
             return response.data;
         },
         confirmPaymentMethod: async (payload: {
-            paymentIntentId: string;
             paymentMethodId?: string | null;
         }) => {
             const response = await api.post('/payment-methods/confirm', payload);
@@ -32,5 +32,22 @@ export const usePaymentMethodsService = () => {
             const response = await api.delete(`/payment-methods/${id}`);
             return response.data;
         },
-    };
+    }), [api]);
+    return service;
+}
+
+export interface PaymentMethod {
+    balance: number | null;
+    brand: string | null;
+    cardholderName: string | null;
+    createdAt: string;
+    currency: string | null;
+    displayName: string;
+    expMonth: string | null;
+    expYear: string | null;
+    id: string | null;
+    isDefault: boolean;
+    last4: string;
+    lastUsedAt: string | null;
+    type: string;
 }

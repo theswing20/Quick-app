@@ -20,6 +20,12 @@ export interface MarkerDetails {
         return: number;
     };
 }
+export const PRICE = {
+    firstHour: 449,
+    remaining23Hours: 749,
+    nextDay: 1198,
+
+} as const;
 
 export const markerDetails: MarkerDetails[] = [
     {
@@ -28,17 +34,13 @@ export const markerDetails: MarkerDetails[] = [
         name: "Arena Cyber Club",
         details: "Computer Club",
         address: "Some Avenue, 12/2",
-        powerbankPosition:"Bar Counter",
+        powerbankPosition: "Bar Counter",
         hours: {
             open: "10:00",
             close: "22:00",
         },
         images: [],
-        price: {
-            firstHour: 449,
-            remaining23Hours: 749,
-            nextDay: 1198,
-        },
+        price: PRICE,
         availability: {
             take: 7,
             return: 1,
@@ -50,7 +52,7 @@ export const markerDetails: MarkerDetails[] = [
         name: "City Library",
         details: "Library",
         address: "Next Avenue, 12/2",
-        powerbankPosition:"Main Entrance",
+        powerbankPosition: "Main Entrance",
         hours: {
             open: "10:00",
             close: "21:00",
@@ -72,7 +74,7 @@ export const markerDetails: MarkerDetails[] = [
         name: "City Hall",
         details: "City Hall",
         address: "Main square, 1",
-        powerbankPosition:"Main Entrance",
+        powerbankPosition: "Main Entrance",
         hours: {
             open: "10:00",
             close: "19:00",

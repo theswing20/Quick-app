@@ -53,6 +53,45 @@ export default function AppLayout() {
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="manual-enter"
+        options={{
+          headerShown: false,
+          presentation: "fullScreenModal",
+          animation: "slide_from_bottom",
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="rental-info"
+        options={{
+          presentation: "modal",
+          animation: "slide_from_bottom",
+          headerShown: false,
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="(profile)"
+        options={{
+          headerShown: false,
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="(wallet)"
+        options={{
+          headerShown: false,
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="(rent)"
+        options={{
+          headerShown: false,
+          gestureEnabled: true,
+        }}
+      />
     </Stack>
   );
 }

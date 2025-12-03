@@ -1,10 +1,11 @@
+import { useMemo } from "react";
 import { useApi } from "./api";
 
 export const useRentalsService = () => {
     const api = useApi();
-    return {
+    const service = useMemo(() => ({
         getActiveRental: async () => {
-            const response = await api.get('/rentals/active');
+            const response = await api.get<Rental>('/rentals/active');
             return response.data;
         },
         getRentalById: async (id: string) => {
@@ -22,7 +23,8 @@ export const useRentalsService = () => {
             cabinetQRCode: string;
             paymentMethodId?: string | null;
         }) => {
-            const response = await api.post('/rentals/start', payload);
+            console.log('startRental payload', payload);            
+            const response = await api.post<StartRentalResponse>('/rentals/start', payload);
             return response.data;
         },
         endRental: async (id: string) => {
@@ -33,6 +35,42 @@ export const useRentalsService = () => {
             const response = await api.post(`/rentals/${id}/extend`);
             return response.data;
         },
-    };
+    }), [api]);
+    return service;
 }
 
+export interface StartRentalResponse {
+    rental: {
+        id: string;
+        userId: string;
+        cabinetId: string;
+        orderNumber: string;
+        status: string;
+        startTime: string;
+        currentCost: number;
+        powerBankDeviceId: string;
+    },
+    requiresPaymentConfirmation: boolean;
+    clientSecret: string | null;
+    paymentIntentId: string | null;
+    depositAmount: number;
+}
+
+export interface Rental {
+    id: string;
+    userId: string;
+    cabinetId: string;
+    orderNumber: string;
+    status: string;
+    startTime: string;
+    currentCost: number;
+    powerBankDeviceId: string;
+}
+
+export interface StartRentalResponse {
+    rental: Rental,
+    requiresPaymentConfirmation: boolean;
+    clientSecret: string | null;
+    paymentIntentId: string | null;
+    depositAmount: number;
+}

@@ -27,7 +27,10 @@ export default function Menu() {
       id: "payment",
       title: "Payment Method",
       icon: CreditCard,
-      onPress: () => console.log("Payment Method pressed"),
+      onPress: () => {
+        router.dismiss(1);
+        router.push("/(wallet)/payment-methods");
+      },
     },
   ];
 
@@ -35,9 +38,9 @@ export default function Menu() {
   return (
     <SafeAreaView className="bg-gray-50 px-5 pt-8 pb-10 h-full flex-col ">
       <View className="flex-row flex-wrap gap-4 w-full justify-between">
-        <ProfileButton/>
+        <ProfileButton />
         {menuItems.map((item) => (
-          <BurgerMenuButton item={item} key={item.id}/>
+          <BurgerMenuButton item={item} key={item.id} />
         ))}
       </View>
     </SafeAreaView>
