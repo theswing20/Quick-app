@@ -84,14 +84,21 @@ export default function AppLayout() {
           headerShown: false,
           gestureEnabled: true,
         }}
-      />
-      <Stack.Screen
-        name="(rent)"
-        options={{
-          headerShown: false,
-          gestureEnabled: true,
-        }}
-      />
+        />
+        <Stack.Screen
+          name="(rent)"
+          options={{
+            headerShown: false,
+            gestureEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="(history)"
+          options={{
+            headerShown: false,
+            gestureEnabled: false,
+          }}
+        />
     </Stack>
   );
 }
