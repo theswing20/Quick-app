@@ -5,7 +5,7 @@ export const usePaymentMethodsService = () => {
     const api = useApi();
     const service = useMemo(() => ({
         getAllPaymentMethods: async () => {
-            const response = await api.get('/payment-methods/all');
+            const response = await api.get<PaymentMethod[]>('/payment-methods/all');
             return response.data;
         },
         getCards: async () => {
@@ -34,4 +34,20 @@ export const usePaymentMethodsService = () => {
         },
     }), [api]);
     return service;
+}
+
+export interface PaymentMethod {
+    balance: number | null;
+    brand: string | null;
+    cardholderName: string | null;
+    createdAt: string;
+    currency: string | null;
+    displayName: string;
+    expMonth: string | null;
+    expYear: string | null;
+    id: string | null;
+    isDefault: boolean;
+    last4: string;
+    lastUsedAt: string | null;
+    type: string;
 }

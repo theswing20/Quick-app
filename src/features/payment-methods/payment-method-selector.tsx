@@ -20,7 +20,7 @@ export default function PaymentMethodSelector() {
 
     const openPaymentMethods = () => {
         router.push({
-            pathname: '/(wallet)/payment-methods',
+            pathname: '/(app)/(wallet)/payment-methods',
         });
     }
 

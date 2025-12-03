@@ -14,7 +14,7 @@ export default function PreRentInfo() {
 
   const startRent = () => {
     console.log("startRent");
-    router.push("/(rent)/rent-request");
+    router.push("/(app)/(rent)/rent-request");
   };
 
   return (

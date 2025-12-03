@@ -71,6 +71,27 @@ export default function AppLayout() {
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="(profile)"
+        options={{
+          headerShown: false,
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="(wallet)"
+        options={{
+          headerShown: false,
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="(rent)"
+        options={{
+          headerShown: false,
+          gestureEnabled: true,
+        }}
+      />
     </Stack>
   );
 }

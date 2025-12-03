@@ -24,7 +24,7 @@ export default function ManualEnter() {
             if(cabinetInfo.id){
                 setCabinetInfo(cabinetInfo);
                 router.dismissAll();
-                router.push("/(rent)/pre-rent-info");
+                router.push("/(app)/(rent)/pre-rent-info");
             }
         } catch (error) {
             if(error instanceof AxiosError) {

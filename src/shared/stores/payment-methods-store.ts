@@ -1,20 +1,5 @@
+import { PaymentMethod } from "@/app/api/payment-methods-service";
 import { create } from "zustand";
-
-interface PaymentMethod {
-    balance: number | null;
-    brand: string | null;
-    cardholderName: string | null;
-    createdAt: string;
-    currency: string | null;
-    displayName: string;
-    expMonth: string | null;
-    expYear: string | null;
-    id: string | null;
-    isDefault: boolean;
-    last4: string;
-    lastUsedAt: string | null;
-    type: string;
-}
 
 interface PaymentMethodsStore {
     paymentMethods: PaymentMethod[];

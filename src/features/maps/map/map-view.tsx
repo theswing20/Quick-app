@@ -43,7 +43,7 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
     const markers = await cabinetsService.getNearestCabinets({
       latitude: region.latitude,
       longitude: region.longitude,
-      radiusKm: 10,
+      radiusKm: 50,
     });
     return markers;
   }

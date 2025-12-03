@@ -47,6 +47,8 @@ export default function RentRequest() {
         if(rentalResponse.rental.status === "Active") {
             // TODO: Redirect to active rental screen
             setRental(rentalResponse.rental);
+            router.dismissAll();
+            router.push("/(app)/rental-info");
         }
     } catch (error) {
         console.log("error", error);
