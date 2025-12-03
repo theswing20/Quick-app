@@ -3,21 +3,38 @@ import { Input } from "@/shared/ui/input";
 import { ScreenTitle } from "@/shared/ui/screen-title";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useCabinetsService } from "@/app/api/cabinets-service";
+import { AxiosError } from "axios";
+import { useNewRentStore } from "@/shared/stores/new-rent-store";
 
 export default function ManualEnter() {
     const [value, setValue] = useState("");
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-
+    const cabinetsService = useCabinetsService();
+    const { setCabinetInfo } = useNewRentStore();
+    
     const handleSave = async () => {
         setIsLoading(true);
-        setTimeout(() => {
+        try {
+            const cabinetInfo = await cabinetsService.getCabinetInfo(value);
+            console.log("cabinetInfo", cabinetInfo);
+            if(cabinetInfo.id){
+                setCabinetInfo(cabinetInfo);
+                router.dismissAll();
+                router.push("/(rent)/pre-rent-info");
+            }
+        } catch (error) {
+            if(error instanceof AxiosError) {
+                Alert.alert("Check the QR code", "The QR code is not valid");
+            } else {
+                Alert.alert("Something went wrong", "Please try again later");
+            }
+        } finally {
             setIsLoading(false);
-            router.dismissAll();
-            router.push("/(rent)/pre-rent-info");
-        }, 1000);
+        }
     }
 
 

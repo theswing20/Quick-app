@@ -1,4 +1,4 @@
-import { markerDetails } from "@/shared/lib/mocks";
+import { markerDetails, PRICE } from "@/shared/lib/mocks";
 import { Button } from "@/shared/ui/button";
 import { ScreenTitle } from "@/shared/ui/screen-title";
 import { useRouter } from "expo-router";
@@ -6,12 +6,12 @@ import { Clock, Home, QrCode, Smartphone, SmartphoneCharging, X, Zap } from "luc
 import { ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PaymentMethodSelector from "@/features/payment-methods/payment-method-selector";
+import { useNewRentStore } from "@/shared/stores/new-rent-store";
 
 export default function PreRentInfo() {
   const router = useRouter();
+  const cabinetInfo = useNewRentStore((state) => state.cabinetInfo);
 
-
-  const details = markerDetails[0];
   const startRent = () => {
     console.log("startRent");
     router.push("/(rent)/rent-request");
@@ -26,16 +26,16 @@ export default function PreRentInfo() {
         <ScreenTitle title="Check station number" />
         <View className="w-full items-center justify-center">
           <View className="w-[75%] items-center justify-center border-[1px] border-gray-200 rounded-3xl p-2 flex-row gap-2 my-4">
-            <QrCode /><Text className="text-xl font-bold text-gray-900 mb-1">{details?.serialNumber}</Text>
+            <QrCode /><Text className="text-xl font-bold text-gray-900 mb-1">{cabinetInfo?.qrCode}</Text>
           </View>
         </View>
         {/* Название места */}
         <View className="px-5 py-2">
           <Text className="text-2xl font-bold text-gray-900 mb-1">
-            {details?.name}
+            {cabinetInfo?.modelName}
           </Text>
           <Text className="text-base text-gray-700 mb-2">
-            {details?.address}
+            {cabinetInfo?.address}
           </Text>
         </View>
 
@@ -54,7 +54,7 @@ export default function PreRentInfo() {
                 </Text>
               </View>
               <Text className="text-base font-semibold text-gray-900">
-                {details?.price.firstHour} 〒
+                {PRICE.firstHour} 〒
               </Text>
             </View>
             <View className="flex-row justify-between items-center py-4 border-b border-gray-200">
@@ -69,10 +69,10 @@ export default function PreRentInfo() {
                 </Text>
               </View>
               <Text className="text-base font-semibold text-gray-900">
-                {details?.price.remaining23Hours} 〒
+                {PRICE.remaining23Hours} 〒
               </Text>
             </View>
-            <View className="flex-row justify-between items-center py-4 pb-2 border-gray-200">
+            <View className="flex-row justify-between items-center py-4 border-gray-200">
               <View className="flex-row items-center justify-center gap-2">
                 <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
                   <Text className="font-medium text-gray-900">
@@ -84,7 +84,7 @@ export default function PreRentInfo() {
                 </Text>
               </View>
               <Text className="text-base font-semibold text-gray-900">
-                {details?.price.nextDay} 〒
+                {PRICE.nextDay} 〒
               </Text>
             </View>
            <PaymentMethodSelector />

@@ -62,6 +62,15 @@ export default function AppLayout() {
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="rental-info"
+        options={{
+          presentation: "modal",
+          animation: "slide_from_bottom",
+          headerShown: false,
+          gestureEnabled: true,
+        }}
+      />
     </Stack>
   );
 }

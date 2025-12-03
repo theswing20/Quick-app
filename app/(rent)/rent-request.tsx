@@ -6,23 +6,30 @@ import { useEffect, useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PaymentIntent, useStripe } from "@stripe/stripe-react-native";
+import { usePaymentMethodsStore } from "@/shared/stores/payment-methods-store";
+import { useRentStore } from "@/shared/stores/rent-store";
 
 export default function RentRequest() {
-    const { paymentMethodId, cabinetQRCode, reset } = useNewRentStore();
+    const { cabinetInfo, reset } = useNewRentStore();
+    const paymentMethodId = usePaymentMethodsStore((state) => state.selectedPaymentMethod?.id);
     const [isLoading, setIsLoading] = useState(false);
     const rentalsService = useRentalsService();
     const stripe = useStripe();
     const {confirmPayment } = stripe;
-
+    const setRental  = useRentStore(state => state.setRental);
+    
     const startRent = async () => {
-        if (!paymentMethodId || !cabinetQRCode) {
+        console.log('paymentMethodId', paymentMethodId);
+        console.log('cabinetInfo', cabinetInfo);
+
+        if (!paymentMethodId || !cabinetInfo?.qrCode) {
             return;
         }
         try{
         setIsLoading(true);
-        console.log("startRent");
+        console.log("startRent", cabinetInfo?.qrCode, paymentMethodId);
         const rentalResponse = await rentalsService.startRental({
-            cabinetQRCode: cabinetQRCode,
+            cabinetQRCode: cabinetInfo?.qrCode,
             paymentMethodId: paymentMethodId,
         });
         console.log("rentalResponse", rentalResponse);
@@ -37,7 +44,10 @@ export default function RentRequest() {
                 Alert.alert("Error", confirmResult.error.message);
             }
         }
-        setIsLoading(false);
+        if(rentalResponse.rental.status === "Active") {
+            // TODO: Redirect to active rental screen
+            setRental(rentalResponse.rental);
+        }
     } catch (error) {
         console.log("error", error);
     } finally {
@@ -55,7 +65,7 @@ export default function RentRequest() {
     return (
         <SafeAreaView className="flex-1 bg-white">
             <View className="flex-1 flex-col items-center justify-center">
-                <Loader />
+                {isLoading && <Loader />}
                 <Text className="text-lg font-bold text-primary-foreground mt-10">Connecting to station</Text>
             </View>
         </SafeAreaView>

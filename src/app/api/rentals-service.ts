@@ -5,7 +5,7 @@ export const useRentalsService = () => {
     const api = useApi();
     const service = useMemo(() => ({
         getActiveRental: async () => {
-            const response = await api.get('/rentals/active');
+            const response = await api.get<Rental>('/rentals/active');
             return response.data;
         },
         getRentalById: async (id: string) => {
@@ -23,6 +23,7 @@ export const useRentalsService = () => {
             cabinetQRCode: string;
             paymentMethodId?: string | null;
         }) => {
+            console.log('startRental payload', payload);            
             const response = await api.post<StartRentalResponse>('/rentals/start', payload);
             return response.data;
         },
@@ -49,6 +50,25 @@ export interface StartRentalResponse {
         currentCost: number;
         powerBankDeviceId: string;
     },
+    requiresPaymentConfirmation: boolean;
+    clientSecret: string | null;
+    paymentIntentId: string | null;
+    depositAmount: number;
+}
+
+export interface Rental {
+    id: string;
+    userId: string;
+    cabinetId: string;
+    orderNumber: string;
+    status: string;
+    startTime: string;
+    currentCost: number;
+    powerBankDeviceId: string;
+}
+
+export interface StartRentalResponse {
+    rental: Rental,
     requiresPaymentConfirmation: boolean;
     clientSecret: string | null;
     paymentIntentId: string | null;

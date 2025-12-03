@@ -47,7 +47,7 @@ export default function WalletLayout() {
         name="payment-methods"
         options={{
           headerShown: false,
-          presentation: "fullScreenModal",
+          presentation: "modal",
           animation: "slide_from_bottom",
           gestureEnabled: true,
         }}
