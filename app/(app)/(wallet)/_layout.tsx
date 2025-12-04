@@ -1,5 +1,6 @@
 import { useUser } from "@clerk/clerk-expo";
 import { Redirect, Stack } from "expo-router";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function WalletLayout() {
   const { isSignedIn, user } = useUser();
@@ -15,6 +16,7 @@ export default function WalletLayout() {
   }
 
   return (
+    <SafeAreaProvider>
     <Stack
       screenOptions={{
         headerShown: false,
@@ -24,7 +26,7 @@ export default function WalletLayout() {
         name="wallet"
         options={{
           headerShown: false,
-          presentation: "fullScreenModal",
+          gestureEnabled: true,
         }}
       />
       <Stack.Screen
@@ -38,7 +40,7 @@ export default function WalletLayout() {
         name="add-card"
         options={{
           headerShown: false,
-          presentation: "fullScreenModal",
+          presentation: "modal",
           animation: "slide_from_bottom",
           gestureEnabled: true,
         }}
@@ -56,7 +58,7 @@ export default function WalletLayout() {
         name="account-replenishment"
         options={{
           headerShown: false,
-          presentation: "fullScreenModal",
+          presentation: "modal",
           animation: "slide_from_bottom",
           gestureEnabled: true,
         }}
@@ -74,11 +76,21 @@ export default function WalletLayout() {
         name="payment-method-options"
         options={{
           headerShown: false,
-          presentation: "transparentModal",
+          presentation: "modal",
           animation: "slide_from_bottom",
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="replenishment-success"
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          animation: "slide_from_bottom",
+          gestureEnabled: false,
+        }}
+      />
     </Stack>
+    </SafeAreaProvider>
   );
 }

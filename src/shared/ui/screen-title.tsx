@@ -14,7 +14,7 @@ export const ScreenTitle = ({ title, backButton = true, closeButton = false }: {
         router.dismissAll();
     }
     return (
-        <View className="w-full flex-row items-center justify-between">
+        <View className="w-full flex-row items-center justify-between my-4">
             <View className="w-10 h-10 flex items-center justify-center">
                 {backButton && <TouchableOpacity onPress={onBack}>
                     <ArrowLeft size={28} color="black" />

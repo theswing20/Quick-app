@@ -1,0 +1,1 @@
+export {default as WalletHistoryComponent} from "./wallet-history";

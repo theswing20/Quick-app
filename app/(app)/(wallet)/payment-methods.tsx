@@ -62,9 +62,13 @@ export default function PaymentMethods() {
         }
     }
     const updatePamentMethods = async () => {
-        const response = await paymentMethodsService.getAllPaymentMethods();
-        if (response && response.length > 0) {
-            setPaymentMethods(response);
+        try {
+            const response = await paymentMethodsService.getAllPaymentMethods();
+            if (response && response.length > 0) {
+                setPaymentMethods(response);
+            }
+        } catch (error) {
+            console.error(error);
         }
     };
 
