@@ -34,7 +34,7 @@ export default function PaymentMethodSelector() {
                 </View>
             </ScrollView>
             <View className="p-4">
-                <Button onPress={() => router.push("/add-card")} className="rounded-3xl h-12">
+                <Button onPress={() => router.push("/(app)/(wallet)/add-card")} className="rounded-3xl h-12">
                     <Text className="text-[18px]">Add Payment Method</Text>
                 </Button>
             </View>

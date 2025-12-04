@@ -39,23 +39,6 @@ export const useRentalsService = () => {
     return service;
 }
 
-export interface StartRentalResponse {
-    rental: {
-        id: string;
-        userId: string;
-        cabinetId: string;
-        orderNumber: string;
-        status: string;
-        startTime: string;
-        currentCost: number;
-        powerBankDeviceId: string;
-    },
-    requiresPaymentConfirmation: boolean;
-    clientSecret: string | null;
-    paymentIntentId: string | null;
-    depositAmount: number;
-}
-
 export interface Rental {
     id: string;
     userId: string;

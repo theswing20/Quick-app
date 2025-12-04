@@ -1,9 +1,15 @@
 import { useAuth } from '@clerk/clerk-expo';
 import axios from 'axios';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 export const useApi = () => {
   const { getToken } = useAuth();
+  const getTokenRef = useRef(getToken);
+
+  // Обновляем ref при изменении getToken, но не пересоздаем axios instance
+  useEffect(() => {
+    getTokenRef.current = getToken;
+  }, [getToken]);
 
   const api = useMemo(() => {
     const instance = axios.create({
@@ -15,7 +21,8 @@ export const useApi = () => {
     });
 
     instance.interceptors.request.use(async (config) => {
-      const token = await getToken();
+      // Используем ref для получения актуального getToken без пересоздания instance
+      const token = await getTokenRef.current();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -23,7 +30,7 @@ export const useApi = () => {
     });
 
     return instance;
-  }, [getToken]);
+  }, []); // Убрали getToken из зависимостей - instance создается только один раз
 
   return api;
 };

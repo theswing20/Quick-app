@@ -1,4 +1,5 @@
 import { usePaymentMethodsService } from '@/app/api/payment-methods-service';
+import { usePaymentMethodsStore } from '@/shared/stores/payment-methods-store';
 import { Button } from "@/shared/ui/button";
 import { ScreenSection } from '@/shared/ui/screen-section';
 import { ScreenTitle } from '@/shared/ui/screen-title';
@@ -20,10 +21,22 @@ export default function AddPaymentMethodScreen() {
     const { createPaymentMethod, confirmSetupIntent } = stripe;
     const paymentMethodsService = usePaymentMethodsService();
     const router = useRouter();
-    // Получаем SetupIntent при загрузке компонента
+    const setPaymentMethods = usePaymentMethodsStore(state => state.setPaymentMethods);
+
     useEffect(() => {
         fetchSetupIntent();
     }, []);
+
+    const updatePamentMethods = async () => {
+      try {
+          const response = await paymentMethodsService.getAllPaymentMethods();
+          if (response && response.length > 0) {
+              setPaymentMethods(response);
+          }
+      } catch (error) {
+          console.error(error);
+      }
+  };
 
     const fetchSetupIntent = async () => {
         try {
@@ -68,7 +81,7 @@ export default function AddPaymentMethodScreen() {
               });
               console.log('response', response);
               if(response.success) {
-                Alert.alert('Success', 'Card added successfully');
+                void updatePamentMethods();
                 router.back();
               }
             }

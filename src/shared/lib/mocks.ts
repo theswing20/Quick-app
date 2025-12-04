@@ -21,10 +21,9 @@ export interface MarkerDetails {
     };
 }
 export const PRICE = {
-    firstHour: 449,
-    remaining23Hours: 749,
-    nextDay: 1198,
-
+    firstHour: 5,
+    remaining23Hours: 10,
+    nextDay: 15,
 } as const;
 
 export const markerDetails: MarkerDetails[] = [
