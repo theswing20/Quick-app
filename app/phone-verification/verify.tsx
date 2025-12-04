@@ -6,6 +6,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { Alert, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDeviceRegistration } from "@/features/notifications/use-device-registration";
 
 function PhoneVerificationCode() {
   const router = useRouter();
@@ -17,6 +18,7 @@ function PhoneVerificationCode() {
   const { user, isLoaded } = useUser();
   const { signUp, isLoaded: isSignUpLoaded } = useSignUp();
   const { setActive } = useClerk();
+  const { registerDevice } = useDeviceRegistration();
 
   const [code, setCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -97,6 +99,13 @@ function PhoneVerificationCode() {
                   return;
                 }
 
+                // Регистрируем устройство после успешной верификации
+                try {
+                  await registerDevice();
+                } catch (error) {
+                  console.error("Failed to register device:", error);
+                }
+
                 router.replace("/(app)/home");
               },
             });
@@ -140,6 +149,12 @@ function PhoneVerificationCode() {
       const result = await (phoneResource as any).attemptVerification({ code });
 
       if (result?.status === "verified") {
+        // Регистрируем устройство после успешной верификации
+        try {
+          await registerDevice();
+        } catch (error) {
+          console.error("Failed to register device:", error);
+        }
         Alert.alert("Verification", "Phone number verified successfully.");
         router.replace("/(app)/home");
       } else {
@@ -177,6 +192,13 @@ function PhoneVerificationCode() {
                 if (!hasPhoneNumber) {
                   router.replace("/phone-verification");
                   return;
+                }
+
+                // Регистрируем устройство после успешной верификации
+                try {
+                  await registerDevice();
+                } catch (error) {
+                  console.error("Failed to register device:", error);
                 }
 
                 router.replace("/(app)/home");
