@@ -6,11 +6,17 @@ import { capitalizeFirstLetter } from "@/shared/lib/utils";
 import { THEME } from "@/shared/lib/theme";
 import { router } from "expo-router";
 
-export default function PaymentMethodSelector() {
+export default function PaymentMethodSelectorButton() {
     const paymentMethods = usePaymentMethodsStore((state) => state.paymentMethods);
     const defaultPaymentMethod = usePaymentMethodsStore((state) => state.defaultPaymentMethod);
     const selectedPaymentMethod = usePaymentMethodsStore((state) => state.selectedPaymentMethod);
     const setSelectedPaymentMethod = usePaymentMethodsStore((state) => state.setSelectedPaymentMethod);
+
+    useEffect(() => {
+        return () =>{
+            setSelectedPaymentMethod(null);
+        }
+    }, []);
 
     useEffect(() => {
         if (!selectedPaymentMethod) {
@@ -20,7 +26,7 @@ export default function PaymentMethodSelector() {
 
     const openPaymentMethods = () => {
         router.push({
-            pathname: '/(app)/(wallet)/payment-methods',
+            pathname: '/(app)/(wallet)/payment-method-selector',
         });
     }
 
