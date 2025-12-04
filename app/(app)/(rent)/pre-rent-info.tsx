@@ -1,12 +1,12 @@
-import { markerDetails, PRICE } from "@/shared/lib/mocks";
+import {PaymentMethodSelectorButton} from "@/features/payment-methods";
+import { PRICE } from "@/shared/lib/mocks";
+import { useNewRentStore } from "@/shared/stores/new-rent-store";
 import { Button } from "@/shared/ui/button";
 import { ScreenTitle } from "@/shared/ui/screen-title";
 import { useRouter } from "expo-router";
-import { Clock, Home, QrCode, Smartphone, SmartphoneCharging, X, Zap } from "lucide-react-native";
-import { ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Clock, Home, QrCode, Zap } from "lucide-react-native";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import PaymentMethodSelector from "@/features/payment-methods/payment-method-selector";
-import { useNewRentStore } from "@/shared/stores/new-rent-store";
 
 export default function PreRentInfo() {
   const router = useRouter();
@@ -87,7 +87,7 @@ export default function PreRentInfo() {
                 {PRICE.nextDay} 〒
               </Text>
             </View>
-           <PaymentMethodSelector />
+            <PaymentMethodSelectorButton />
           </View>
         </View>
 

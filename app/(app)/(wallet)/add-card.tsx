@@ -3,6 +3,7 @@ import { Button } from "@/shared/ui/button";
 import { ScreenSection } from '@/shared/ui/screen-section';
 import { ScreenTitle } from '@/shared/ui/screen-title';
 import { CardField, useStripe } from '@stripe/stripe-react-native';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,7 +19,7 @@ export default function AddPaymentMethodScreen() {
     const stripe = useStripe();
     const { createPaymentMethod, confirmSetupIntent } = stripe;
     const paymentMethodsService = usePaymentMethodsService();
-
+    const router = useRouter();
     // Получаем SetupIntent при загрузке компонента
     useEffect(() => {
         fetchSetupIntent();
@@ -61,12 +62,15 @@ export default function AddPaymentMethodScreen() {
           if (error) {
             Alert.alert('Ошибка', error.message);
           } else if (setupIntent) {
-            Alert.alert('Успех', 'Карта успешно добавлена!');
-            // Обработка успешного сохранения (например, навигация назад)
             if(setupIntent.paymentMethod?.id) {
-              paymentMethodsService.confirmPaymentMethod({
+              const response =await paymentMethodsService.confirmPaymentMethod({
                 paymentMethodId: setupIntent.paymentMethod.id,
               });
+              console.log('response', response);
+              if(response.success) {
+                Alert.alert('Success', 'Card added successfully');
+                router.back();
+              }
             }
           }
         } catch (error) {

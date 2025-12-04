@@ -1,1 +1,1 @@
-export {default as PaymentMethodSelector} from "./payment-method-selector";
+export { default as PaymentMethodSelectorButton } from "./payment-method-selector-button";

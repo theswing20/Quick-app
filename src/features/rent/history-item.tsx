@@ -10,7 +10,7 @@ import { Image } from 'expo-image';
 export default function HistoryItem({ item }: { item: RentalHistoryItem }) {
     return (
         <View
-            className="w-full h-20 flex-row items-center justify-between rounded-3xl bg-white p-4 border-[1px] border-gray-300"
+            className="w-full h-20 flex-row items-center justify-between rounded-3xl bg-white p-4 border-[1px] border-gray-300 mb-4"
         >
             <View className="flex-row items-center justify-start gap-4">
                 <Zap color={THEME.light.primary} size={28} /><View>
