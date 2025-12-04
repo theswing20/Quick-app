@@ -1,3 +1,4 @@
+import { useDeviceRegistration } from "@/features/notifications/use-device-registration";
 import {
   useWarmUpBrowser,
   WebBrowser,
@@ -17,6 +18,7 @@ export const GoogleSignInButton = () => {
   const { startSSOFlow } = useSSO();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { registerDevice } = useDeviceRegistration();
 
   const onPress = useCallback(async () => {
     if (isLoading) return;
@@ -54,6 +56,13 @@ export const GoogleSignInButton = () => {
               return;
             }
 
+            // Регистрируем устройство после успешной авторизации
+            try {
+              await registerDevice();
+            } catch (error) {
+              console.error("Failed to register device:", error);
+            }
+
             router.replace("/");
           },
         });
@@ -86,7 +95,7 @@ export const GoogleSignInButton = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, startSSOFlow, router]);
+  }, [isLoading, startSSOFlow, router, registerDevice]);
 
   return (
     <Button

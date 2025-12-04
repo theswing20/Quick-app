@@ -1,8 +1,20 @@
 import { useUser } from "@clerk/clerk-expo";
 import { Redirect, Stack } from "expo-router";
+import { useEffect } from "react";
+import { useDeviceRegistration } from "@/features/notifications/use-device-registration";
 
 export default function AppLayout() {
   const { isSignedIn, user } = useUser();
+  const { registerDevice, deviceId } = useDeviceRegistration();
+
+  // Регистрируем устройство при входе пользователя (если еще не зарегистрировано)
+  useEffect(() => {
+    if (isSignedIn && user && (user?.phoneNumbers?.length ?? 0) > 0 && !deviceId) {
+      registerDevice().catch((error) => {
+        console.error("Failed to register device on app mount:", error);
+      });
+    }
+  }, [isSignedIn, user, deviceId, registerDevice]);
 
   if (!isSignedIn) {
     return <Redirect href="/" />;
