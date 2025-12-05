@@ -5,10 +5,10 @@ import { create } from "zustand";
 
 interface RentStore {
     rental: Rental | null;
-    setRental: (rental: Rental) => void;
+    setRental: (rental: Rental | null) => void;
 };
 
 export const useRentStore = create<RentStore>((set) => ({
     rental: null,
-    setRental: (rental: Rental) => set({ rental }),
+    setRental: (rental: Rental | null) => set({ rental }),
 }));
