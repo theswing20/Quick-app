@@ -15,9 +15,9 @@ export default function RentRequest() {
     const [isLoading, setIsLoading] = useState(false);
     const rentalsService = useRentalsService();
     const stripe = useStripe();
-    const {confirmPayment } = stripe;
-    const setRental  = useRentStore(state => state.setRental);
-    
+    const { confirmPayment } = stripe;
+    const setRental = useRentStore(state => state.setRental);
+
     const startRent = async () => {
         console.log('paymentMethodId', paymentMethodId);
         console.log('cabinetInfo', cabinetInfo);
@@ -25,50 +25,49 @@ export default function RentRequest() {
         if (!paymentMethodId || !cabinetInfo?.qrCode) {
             return;
         }
-        try{
-        setIsLoading(true);
-        console.log("startRent", cabinetInfo?.qrCode, paymentMethodId);
-        const rentalResponse = await rentalsService.startRental({
-            cabinetQRCode: cabinetInfo?.qrCode,
-            paymentMethodId: paymentMethodId,
-        });
-        console.log("rentalResponse", rentalResponse);
-        if (rentalResponse.requiresPaymentConfirmation && rentalResponse.clientSecret) {
-            const confirmResult = await confirmPayment(rentalResponse.clientSecret);
-            console.log("confirmResult", confirmResult);
-            if(confirmResult.paymentIntent?.status === PaymentIntent.Status.Succeeded) {
-                // router.push("/(rent)/rent-success");
-                Alert.alert("Success", "Payment confirmed successfully");
+        try {
+            setIsLoading(true);
+            console.log("startRent", cabinetInfo?.qrCode, paymentMethodId);
+            const rentalResponse = await rentalsService.startRental({
+                cabinetQRCode: cabinetInfo?.qrCode,
+                paymentMethodId: paymentMethodId,
+            });
+            console.log("rentalResponse", rentalResponse);
+            if (rentalResponse.requiresPaymentConfirmation && rentalResponse.clientSecret) {
+                const confirmResult = await confirmPayment(rentalResponse.clientSecret);
+                console.log("confirmResult", confirmResult);
+                if (confirmResult.paymentIntent?.status === PaymentIntent.Status.Succeeded) {
+                    setRental(rentalResponse.rental);
+                    router.dismissAll();
+                    router.push("/(app)/rental-info");
+                    return;
+                }
+                if (confirmResult.error) {
+                    Alert.alert("Error", confirmResult.error.message);
+                }
             }
-            if(confirmResult.error){
-                Alert.alert("Error", confirmResult.error.message);
+            if (rentalResponse.rental.status === "Active") {
+                // TODO: Redirect to active rental screen
+                setRental(rentalResponse.rental);
+                router.dismissAll();
+                router.push("/(app)/rental-info");
             }
+        } catch (error) {
+            console.log("error", error);
+        } finally {
+            setIsLoading(false);
         }
-        if(rentalResponse.rental.status === "Active") {
-            // TODO: Redirect to active rental screen
-            setRental(rentalResponse.rental);
-            router.dismissAll();
-            router.push("/(app)/rental-info");
-        }
-    } catch (error) {
-        console.log("error", error);
-    } finally {
-        setIsLoading(false);
-    }
     }
 
     useEffect(() => {
         startRent();
-        return () => {
-            // reset();
-        }
     }, []);
 
     return (
         <SafeAreaView className="flex-1 bg-white">
-            <View className="flex-1 flex-col items-center justify-center">
+            <View className="flex-1 flex-col items-center justify-center px-4">
                 {isLoading && <Loader />}
-                <Text className="text-lg font-bold text-primary-foreground mt-10">Connecting to station</Text>
+                <Text className="text-lg font-semibold text-gray-900 mt-10">Connecting to station</Text>
             </View>
         </SafeAreaView>
     )

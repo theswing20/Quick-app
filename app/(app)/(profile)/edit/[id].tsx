@@ -37,7 +37,7 @@ export default function Edit() {
     return (
         <SafeAreaView className="flex-1 bg-white">
             <ScreenTitle title={id} />
-            <View className="flex-1 flex-col items-center justify-center px-6">
+            <View className="flex-1 flex-col items-center justify-center px-4">
                 <Input
                     placeholder="Enter your name"
                     className="border-0 shadow-none text-center text-2xl font-bold"
@@ -46,9 +46,9 @@ export default function Edit() {
                     onChangeText={setValue}
                 />
             </View>
-            <View className="flex p-6">
-                <Button className="h-14 rounded-xl" onPress={handleSave}>
-                    <Text className="text-xl font-semibold text-primary-foreground">Save</Text>
+            <View className="px-4 pb-6">
+                <Button className="h-14 rounded-2xl" onPress={handleSave}>
+                    <Text className="text-lg font-semibold text-primary-foreground">Save</Text>
                 </Button>
             </View>
         </SafeAreaView>

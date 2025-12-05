@@ -86,9 +86,9 @@ export default function AccountReplenishment() {
                     </ScrollView>
                 </ScreenSection>
             </View>
-            <View className="p-4">
-                <Button className="h-14 rounded-xl" onPress={() => { handleAddMoney() }} disabled={isLoading}>
-                    <Text className="text-xl font-semibold text-primary-foreground">Add money</Text>
+            <View className="px-4 pb-6">
+                <Button className="h-14 rounded-2xl" onPress={() => { handleAddMoney() }} disabled={isLoading}>
+                    <Text className="text-lg font-semibold text-primary-foreground">Add money</Text>
                 </Button>
             </View>
         </SafeAreaView>

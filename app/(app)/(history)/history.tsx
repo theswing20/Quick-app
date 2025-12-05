@@ -2,7 +2,8 @@ import { RentalHistoryItem, useRentalsService } from "@/app/api/rentals-service"
 import { THEME } from "@/shared/lib/theme";
 import { Loader } from "@/shared/ui/loader";
 import { ScreenTitle } from "@/shared/ui/screen-title";
-import { Image } from "expo-image";
+import { Card, CardContent } from "@/shared/ui/card";
+import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { router } from "expo-router";
 import { QrCode, Zap } from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -131,53 +132,45 @@ export default function History() {
             <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => handleItemPress(item)}
-                className="bg-white rounded-2xl p-4 mb-3 shadow-sm"
-                style={{
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 1 },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 2,
-                    elevation: 2,
-                }}
+                className="mb-3"
             >
-                <View className="flex-row items-center justify-between">
-                    <View className="flex-row items-center flex-1">
-                        {/* Icon */}
-                        <View className="mr-4">
-                            <Zap
-                                size={24}
-                                color={THEME.light.primary}
+                <Card variant="elevated">
+                    <CardContent>
+                        <View className="flex-row items-center justify-between">
+                            <View className="flex-row items-center flex-1">
+                                {/* Icon */}
+                                <View className="mr-4">
+                                    <Zap
+                                        size={24}
+                                        color={THEME.light.primary}
+                                    />
+                                </View>
+
+                                {/* Date and Identifier */}
+                                <View className="flex-1">
+                                    <Text className="text-base font-medium text-gray-900 mb-1">
+                                        {displayDate}
+                                    </Text>
+                                    <View className="flex-row items-center gap-2">
+                                        <Text className="text-sm text-gray-500">
+                                            {identifier}
+                                        </Text>
+                                        {item.powerBankDeviceId && (
+                                            <QrCode size={12} color="#9CA3AF" />
+                                        )}
+                                    </View>
+                                </View>
+                            </View>
+
+                            {/* Amount */}
+                            <CurrencyAmount
+                                amount={item.cost}
+                                size="sm"
+                                className="ml-4"
                             />
                         </View>
-
-                        {/* Date and Identifier */}
-                        <View className="flex-1">
-                            <Text className="text-base font-medium text-gray-900 mb-1">
-                                {displayDate}
-                            </Text>
-                            <View className="flex-row items-center gap-2">
-                                <Text className="text-sm text-gray-500">
-                                    {identifier}
-                                </Text>
-                                {item.powerBankDeviceId && (
-                                    <QrCode size={12} color="#9CA3AF" />
-                                )}
-                            </View>
-                        </View>
-                    </View>
-
-                    {/* Amount */}
-                    <View className="flex-row items-center ml-4">
-                        <Text className="text-base font-medium text-gray-900">
-                            {item.cost}
-                        </Text>
-                        <Image
-                            source={require('@/shared/assets/images/dirham-icon.png')}
-                            style={{ width: 12, height: 12, marginLeft: 4 }}
-                            contentFit="contain"
-                        />
-                    </View>
-                </View>
+                    </CardContent>
+                </Card>
             </TouchableOpacity>
         );
     };

@@ -13,7 +13,7 @@ export const useApi = () => {
 
   const api = useMemo(() => {
     const instance = axios.create({
-      baseURL: 'https://serriform-noncleistogamic-olen.ngrok-free.dev/api',
+      baseURL: 'https://quick.runasp.net/api',
       timeout: 30_000,
       headers: {
         'Content-Type': 'application/json',

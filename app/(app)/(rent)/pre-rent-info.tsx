@@ -2,6 +2,8 @@ import {PaymentMethodSelectorButton} from "@/features/payment-methods";
 import { PRICE } from "@/shared/lib/mocks";
 import { useNewRentStore } from "@/shared/stores/new-rent-store";
 import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardRow } from "@/shared/ui/card";
+import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { ScreenTitle } from "@/shared/ui/screen-title";
 import { useRouter } from "expo-router";
 import { Clock, Home, QrCode, Zap } from "lucide-react-native";
@@ -30,7 +32,7 @@ export default function PreRentInfo() {
           </View>
         </View>
         {/* Название места */}
-        <View className="px-5 py-2">
+        <View className="px-4 py-2">
           <Text className="text-2xl font-bold text-gray-900 mb-1">
             {cabinetInfo?.modelName}
           </Text>
@@ -40,100 +42,100 @@ export default function PreRentInfo() {
         </View>
 
         {/* Таблица цен */}
-        <View className="px-5 pb-4">
-          <View className="bg-gray-50 rounded-2xl p-4">
-            <View className="flex-row justify-between items-center py-4 pt-2 border-b border-gray-200">
-              <View className="flex-row items-center justify-center gap-2">
-                <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
-                  <Text className="font-medium text-gray-900">
-                    1
+        <View className="px-4 pb-4">
+          <Card variant="elevated" className="bg-gray-50">
+            <CardContent className="p-0">
+              <CardRow withBorder>
+                <View className="flex-row items-center gap-2">
+                  <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
+                    <Text className="text-xs font-medium text-gray-900">1</Text>
+                  </View>
+                  <Text className="text-base font-medium text-gray-900">
+                    First hour
                   </Text>
                 </View>
-                <Text className="text-base font-medium text-gray-900">
-                  First hour
-                </Text>
-              </View>
-              <Text className="text-base font-semibold text-gray-900">
-                {PRICE.firstHour} 〒
-              </Text>
-            </View>
-            <View className="flex-row justify-between items-center py-4 border-b border-gray-200">
-              <View className="flex-row items-center justify-center gap-2">
-                <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
-                  <Text className="font-medium text-gray-900">
-                    2
+                <CurrencyAmount amount={PRICE.firstHour} size="sm" />
+              </CardRow>
+              <CardRow withBorder>
+                <View className="flex-row items-center gap-2">
+                  <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
+                    <Text className="text-xs font-medium text-gray-900">2</Text>
+                  </View>
+                  <Text className="text-base font-medium text-gray-900">
+                    Remaining 23 hours
                   </Text>
                 </View>
-                <Text className="text-base font-medium text-gray-900">
-                  Remaining 23 hours
-                </Text>
-              </View>
-              <Text className="text-base font-semibold text-gray-900">
-                {PRICE.remaining23Hours} 〒
-              </Text>
-            </View>
-            <View className="flex-row justify-between items-center py-4 border-gray-200">
-              <View className="flex-row items-center justify-center gap-2">
-                <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
-                  <Text className="font-medium text-gray-900">
-                    3
+                <CurrencyAmount amount={PRICE.remaining23Hours} size="sm" />
+              </CardRow>
+              <CardRow>
+                <View className="flex-row items-center gap-2">
+                  <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
+                    <Text className="text-xs font-medium text-gray-900">3</Text>
+                  </View>
+                  <Text className="text-base font-medium text-gray-900">
+                    Next day
                   </Text>
                 </View>
-                <Text className="text-base font-medium text-gray-900">
-                  Next day
-                </Text>
+                <CurrencyAmount amount={PRICE.nextDay} size="sm" />
+              </CardRow>
+              <View className="px-4 pb-4 pt-2">
+                <PaymentMethodSelectorButton />
               </View>
-              <Text className="text-base font-semibold text-gray-900">
-                {PRICE.nextDay} 〒
-              </Text>
-            </View>
-            <PaymentMethodSelectorButton />
-          </View>
+            </CardContent>
+          </Card>
         </View>
 
         {/* Как это работает */}
-        <View className="px-5 pb-4">
+        <View className="px-4 pb-4">
           <Text className="text-lg font-semibold text-gray-900 mb-4">
             How to return?
           </Text>
 
-          <View className="flex-row items-start gap-3 mb-4">
-            <View className="w-10 h-10 bg-primary rounded-full items-center justify-center mt-1">
-              <Zap size={20} color="#000000" />
-            </View>
-            <View className="flex-1">
-              <Text className="text-base text-gray-700 leading-6">
-                Find any nearby station on the map - they're marked with special icons
-              </Text>
-            </View>
-          </View>
+          <Card variant="default">
+            <CardContent className="p-0">
+              <View className="flex-row items-start gap-3 px-4 py-4 border-b border-gray-200">
+                <View className="w-10 h-10 bg-primary rounded-full items-center justify-center mt-1">
+                  <Zap size={20} color="#000000" />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-base text-gray-700 leading-6">
+                    Find any nearby station on the map - they're marked with special icons
+                  </Text>
+                </View>
+              </View>
 
-          <View className="flex-row items-start gap-3 mb-4">
-            <View className="w-10 h-10 bg-primary rounded-full items-center justify-center mt-1">
-              <Clock size={20} color="#000000" />
-            </View>
-            <View className="flex-1">
-              <Text className="text-base text-gray-700 leading-6">
-                Make sure the station is active and has available slots
-              </Text>
-            </View>
-          </View>
+              <View className="flex-row items-start gap-3 px-4 py-4 border-b border-gray-200">
+                <View className="w-10 h-10 bg-primary rounded-full items-center justify-center mt-1">
+                  <Clock size={20} color="#000000" />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-base text-gray-700 leading-6">
+                    Make sure the station is active and has available slots
+                  </Text>
+                </View>
+              </View>
 
-          <View className="flex-row items-start gap-3">
-            <View className="w-10 h-10 bg-primary rounded-full items-center justify-center mt-1">
-              <Home size={20} color="#000000" />
-            </View>
-            <View className="flex-1">
-              <Text className="text-base text-gray-700 leading-6">
-                Insert the power bank into one of the empty slots
-              </Text>
-            </View>
+              <View className="flex-row items-start gap-3 px-4 py-4">
+                <View className="w-10 h-10 bg-primary rounded-full items-center justify-center mt-1">
+                  <Home size={20} color="#000000" />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-base text-gray-700 leading-6">
+                    Insert the power bank into one of the empty slots
+                  </Text>
+                </View>
+              </View>
+            </CardContent>
+          </Card>
+          <View className="mt-6">
+            <Text className="text-gray-500 text-sm">
+              By tapping "Take", you agree to the <Text className="underline">Terms of Use</Text> and the <Text className="underline">Adhesion Agreement</Text>.
+            </Text>
           </View>
-          <View className="mt-6"><Text className="text-gray-400 text-sm">By tapping “Take”, you agree to the <Text className="underline">Terms of Use</Text> and the <Text className="underline">Adhesion Agreement</Text>.</Text></View>
         </View>
         <View className="h-10"></View>
       </ScrollView>
-      <View className="px-5 pb-4 absolute bottom-4 left-0 right-0">
+      <View className="px-4 pb-4 absolute bottom-4 left-0 right-0">
         <Button
           className="w-full h-14 rounded-2xl bg-primary"
           onPress={startRent}

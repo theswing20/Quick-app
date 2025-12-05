@@ -162,7 +162,7 @@ export default function WalletHistoryComponent() {
 
     const renderSectionHeader = ({ section }: { section: GroupedHistorySection }) => (
         <View className="bg-gray-50 px-4 py-2">
-            <Text className="text-sm font-semibold text-gray-600">{section.title}</Text>
+            <Text className="text-sm font-semibold text-gray-700">{section.title}</Text>
         </View>
     );
 
@@ -173,24 +173,26 @@ export default function WalletHistoryComponent() {
     return (
         <View className={cn("flex-col flex-1", !allItems.length && 'items-center justify-center')}>
 
-            <View className="w-full flex-row mb-4">
-                <Button className={cn('bg-primary/25 mr-4', filter.replenishment && 'bg-primary')} onPress={() => {
+            <View className="w-full flex-row mb-4 px-4 gap-3">
+                <Button className={cn('flex-1 h-12 rounded-2xl bg-primary/25', filter.replenishment && 'bg-primary')} onPress={() => {
                     changeFilter('replenishment')
                 }}>
-                    <Text>Replenishment</Text>
+                    <Text className={cn('text-base font-semibold', filter.replenishment ? 'text-primary-foreground' : 'text-gray-900')}>Replenishment</Text>
                 </Button>
-                <Button className={cn('bg-primary/25 mr-4', filter.writeOff && 'bg-primary')} onPress={() => {
+                <Button className={cn('flex-1 h-12 rounded-2xl bg-primary/25', filter.writeOff && 'bg-primary')} onPress={() => {
                     changeFilter('writeOff')
                 }}>
-                    <Text>Write-off</Text>
+                    <Text className={cn('text-base font-semibold', filter.writeOff ? 'text-primary-foreground' : 'text-gray-900')}>Write-off</Text>
                 </Button>
             </View>
 
             <View className="w-full flex-1">
                 {!allItems.length && !isLoading && (
-                    <Text className="text-base text-gray-500 text-center flex-1">
-                        Here you will find the history of deposits and withdrawals.
-                    </Text>
+                    <View className="flex-1 items-center justify-center px-4">
+                        <Text className="text-base text-gray-500 text-center">
+                            Here you will find the history of deposits and withdrawals.
+                        </Text>
+                    </View>
                 )}
                 {!!allItems.length && !isLoading && <SectionList
                     sections={groupedSections}

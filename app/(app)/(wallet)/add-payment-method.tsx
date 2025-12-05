@@ -100,13 +100,13 @@ console.log('after createPaymentMethod', paymentMethod, createError);
 
     return (
         <SafeAreaView className="bg-white flex-1">
-            <View className="px-5 pt-4 pb-4">
+            <View className="px-4 pt-4 pb-4">
                 <ScreenTitle title="Add Payment Method" />
             </View>
             <View className="bg-gray-50 flex-1">
                 <ScreenSection roundedTop={false} className="mt-2">
-                    <View className="mb-6">
-                        <Text className="text-base font-medium mb-4">Card Information</Text>
+                    <View className="mb-6 px-4">
+                        <Text className="text-base font-medium mb-4 text-gray-900">Card Information</Text>
                         <View className="border border-gray-200 rounded-xl overflow-hidden bg-white">
                             <CardField
                                 postalCodeEnabled={false}
@@ -130,17 +130,19 @@ console.log('after createPaymentMethod', paymentMethod, createError);
                         </View>
                     </View>
 
-                    <Button
-                        onPress={handleAddCard}
-                        disabled={!cardDetails?.complete || isLoading}
-                        className="w-full"
-                    >
-                        {isLoading ? (
-                            <ActivityIndicator color="white" />
-                        ) : (
-                            <Text className="text-white font-medium">Add Card</Text>
-                        )}
-                    </Button>
+                    <View className="px-4 pb-6">
+                        <Button
+                            onPress={handleAddCard}
+                            disabled={!cardDetails?.complete || isLoading}
+                            className="w-full h-14 rounded-2xl"
+                        >
+                            {isLoading ? (
+                                <ActivityIndicator color="white" />
+                            ) : (
+                                <Text className="text-lg font-semibold text-primary-foreground">Add Card</Text>
+                            )}
+                        </Button>
+                    </View>
                 </ScreenSection>
             </View>
         </SafeAreaView>

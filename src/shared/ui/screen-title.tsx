@@ -11,7 +11,11 @@ export const ScreenTitle = ({ title, backButton = true, closeButton = false }: {
         }
     }
     const onClose = () => {
-        router.dismissAll();
+        if (router.canGoBack()) {
+            router.back();
+        } else {
+            router.replace("/(app)/home");
+        }
     }
     return (
         <View className="w-full flex-row items-center justify-between my-4">

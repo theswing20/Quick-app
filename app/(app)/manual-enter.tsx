@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useCabinetsService } from "@/app/api/cabinets-service";
 import { AxiosError } from "axios";
 import { useNewRentStore } from "@/shared/stores/new-rent-store";
+import { THEME } from "@/shared/lib/theme";
 
 export default function ManualEnter() {
     const [value, setValue] = useState("");
@@ -42,7 +43,7 @@ export default function ManualEnter() {
 
         <SafeAreaView className="flex-1 bg-white">
             <ScreenTitle title="Manual Enter" />
-            <View className="flex-1 flex-col items-center justify-center px-6">
+            <View className="flex-1 flex-col items-center justify-center px-4">
                 <Input
                     placeholder="Enter station number"
                     className="border-0 shadow-none text-center text-2xl font-bold"
@@ -51,10 +52,14 @@ export default function ManualEnter() {
                     onChangeText={setValue}
                 />
             </View>
-            {isLoading && <ActivityIndicator size="large" color="#0000ff" />}
-            <View className="flex p-6">
-                <Button className="h-14 rounded-xl" onPress={handleSave} disabled={!value}>
-                    <Text className="text-xl font-semibold text-primary-foreground">Find</Text>
+            {isLoading && (
+                <View className="absolute top-1/2">
+                    <ActivityIndicator size="large" color={THEME.light.primary} />
+                </View>
+            )}
+            <View className="px-4 pb-6">
+                <Button className="h-14 rounded-2xl" onPress={handleSave} disabled={!value}>
+                    <Text className="text-lg font-semibold text-primary-foreground">Find</Text>
                 </Button>
             </View>
         </SafeAreaView>

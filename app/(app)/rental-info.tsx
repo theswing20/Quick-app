@@ -2,6 +2,8 @@ import { Rental, useRentalsService } from "@/app/api/rentals-service";
 import { PRICE } from "@/shared/lib/mocks";
 import { useRentStore } from "@/shared/stores/rent-store";
 import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardRow } from "@/shared/ui/card";
+import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { Loader } from "@/shared/ui/loader";
 import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
@@ -116,14 +118,13 @@ export default function RentalInfo() {
 
                 {/* Current status/time */}
                 <View className="flex-row items-center justify-between px-6 pb-6">
-                    <View className="flex-row items-center gap-2 justify-center">
-                        <Text className="text-3xl font-bold text-gray-900">
-                            <Image
-                                source={require('@/shared/assets/images/dirham-icon.png')}
-                                style={{ width: 24, height: 24 }}
-                                contentFit="contain" />
-                            &nbsp;{rental.currentCost || 0}
-                        </Text>
+                    <View className="flex-row items-center gap-2">
+                        <CurrencyAmount
+                            amount={rental.currentCost || 0}
+                            size="lg"
+                            variant="bold"
+                            className="text-3xl"
+                        />
                     </View>
                     <View className="items-end">
                         <Text className="text-3xl font-bold text-gray-900">
@@ -134,70 +135,56 @@ export default function RentalInfo() {
 
                 {/* Pricing details */}
                 <View className="px-6 pb-6">
-                    <View className="bg-gray-50 rounded-2xl p-4">
-                        <View className="flex-row justify-between items-center py-4 pt-2 border-b border-gray-200">
-                            <View className="flex-row items-center gap-2">
-                                <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
-                                    <Text className="text-xs font-medium text-gray-900">1</Text>
+                    <Card variant="elevated" className="bg-gray-50">
+                        <CardContent className="p-0">
+                            <CardRow withBorder>
+                                <View className="flex-row items-center gap-2">
+                                    <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
+                                        <Text className="text-xs font-medium text-gray-900">1</Text>
+                                    </View>
+                                    <Text className="text-base font-medium text-gray-900">
+                                        First hour
+                                    </Text>
                                 </View>
-                                <Text className="text-base font-medium text-gray-900">
-                                    First hour
-                                </Text>
-                            </View>
-                            <Text className="text-base font-semibold text-gray-900">
-                                <Image
-                                    source={require('@/shared/assets/images/dirham-icon.png')}
-                                    style={{ width: 12, height: 12 }}
-                                    contentFit="contain" />
-                                &nbsp;{PRICE.firstHour}
-                            </Text>
-                        </View>
-                        <View className="flex-row justify-between items-center py-4 border-b border-gray-200">
-                            <View className="flex-row items-center gap-2">
-                                <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
-                                    <Text className="text-xs font-medium text-gray-900">2</Text>
+                                <CurrencyAmount amount={PRICE.firstHour} size="sm" />
+                            </CardRow>
+                            <CardRow withBorder>
+                                <View className="flex-row items-center gap-2">
+                                    <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
+                                        <Text className="text-xs font-medium text-gray-900">2</Text>
+                                    </View>
+                                    <Text className="text-base font-medium text-gray-900">
+                                        Remaining 23 hours
+                                    </Text>
                                 </View>
-                                <Text className="text-base font-medium text-gray-900">
-                                    Remaining 23 hours
-                                </Text>
-                            </View>
-                            <Text className="text-base font-semibold text-gray-900">
-                                <Image
-                                    source={require('@/shared/assets/images/dirham-icon.png')}
-                                    style={{ width: 12, height: 12 }}
-                                    contentFit="contain" />
-                                &nbsp;{PRICE.remaining23Hours}
-                            </Text>
-                        </View>
-                        <View className="flex-row justify-between items-center py-4 border-gray-200">
-                            <View className="flex-row items-center gap-2">
-                                <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
-                                    <Text className="text-xs font-medium text-gray-900">3</Text>
+                                <CurrencyAmount amount={PRICE.remaining23Hours} size="sm" />
+                            </CardRow>
+                            <CardRow>
+                                <View className="flex-row items-center gap-2">
+                                    <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
+                                        <Text className="text-xs font-medium text-gray-900">3</Text>
+                                    </View>
+                                    <Text className="text-base font-medium text-gray-900">
+                                        Next day
+                                    </Text>
                                 </View>
-                                <Text className="text-base font-medium text-gray-900">
-                                    Next day
-                                </Text>
-                            </View>
-                            <Text className="text-base font-semibold text-gray-900">
-                                <Image
-                                    source={require('@/shared/assets/images/dirham-icon.png')}
-                                    style={{ width: 12, height: 12 }}
-                                    contentFit="contain" />
-                                &nbsp;{PRICE.nextDay}
-                            </Text>
-                        </View>
-                    </View>
+                                <CurrencyAmount amount={PRICE.nextDay} size="sm" />
+                            </CardRow>
+                        </CardContent>
+                    </Card>
                 </View>
 
                 {/* Deposit information */}
                 <View className="px-6 pb-6">
-                    <Text className="text-sm text-gray-600 leading-6">
-                        Initially <Image
-                            source={require('@/shared/assets/images/dirham-icon.png')}
-                            style={{ width: 12, height: 12 }}
-                            contentFit="contain" />
-                        &nbsp;{depositAmount.toLocaleString()} will be frozen — this is a deposit.
-                    </Text>
+                    <View className="flex-row flex-wrap items-center">
+                        <Text className="text-sm text-gray-600 leading-6">
+                            Initially{" "}
+                        </Text>
+                        <CurrencyAmount amount={depositAmount.toLocaleString()} size="sm" />
+                        <Text className="text-sm text-gray-600 leading-6">
+                            {" "}will be frozen — this is a deposit.
+                        </Text>
+                    </View>
                     <Text className="text-sm text-gray-600 leading-6 mt-2">
                         After returning the power bank, excess money will be returned.
                     </Text>

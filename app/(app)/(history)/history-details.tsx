@@ -2,8 +2,9 @@ import { RentalHistoryItem, useRentalsService } from "@/app/api/rentals-service"
 import { PRICE } from "@/shared/lib/mocks";
 import { THEME } from "@/shared/lib/theme";
 import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardRow } from "@/shared/ui/card";
+import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { Loader } from "@/shared/ui/loader";
-import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
 import { Zap } from "lucide-react-native";
 import { useEffect, useState } from "react";
@@ -112,162 +113,106 @@ export default function HistoryDetails() {
                     className="flex-1"
                 >
                     {/* Summary Card */}
-                    <View className="mx-4 mt-4 mb-4 bg-white rounded-2xl p-4 shadow-sm"
-                        style={{
-                            shadowColor: '#000',
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: 0.1,
-                            shadowRadius: 4,
-                            elevation: 3,
-                        }}
-                    >
-                        <View className="flex-row items-center justify-between">
-                            <View className="flex-row items-center flex-1">
-                                {/* Icon */}
-                                <View className="mr-4">
-                                    <Zap
-                                        size={24}
-                                        color={THEME.light.primary}
-                                    />
+                    <Card variant="elevated" className="mx-4 mt-4 mb-4">
+                        <CardContent>
+                            <View className="flex-row items-center justify-between">
+                                <View className="flex-row items-center flex-1">
+                                    {/* Icon */}
+                                    <View className="mr-4">
+                                        <Zap
+                                            size={24}
+                                            color={THEME.light.primary}
+                                        />
+                                    </View>
+
+                                    {/* Date and Identifier */}
+                                    <View className="flex-1">
+                                        <Text className="text-base font-medium text-gray-900 mb-1">
+                                            {displayDate}
+                                        </Text>
+                                        <Text className="text-sm text-gray-500">
+                                            {identifier}
+                                        </Text>
+                                    </View>
                                 </View>
 
-                                {/* Date and Identifier */}
-                                <View className="flex-1">
-                                    <Text className="text-base font-medium text-gray-900 mb-1">
-                                        {displayDate}
-                                    </Text>
-                                    <Text className="text-sm text-gray-500">
-                                        {identifier}
-                                    </Text>
-                                </View>
-                            </View>
-
-                            {/* Amount */}
-                            <View className="flex-row items-center ml-4">
-                                <Text className="text-lg font-bold text-gray-900">
-                                    {totalCost}
-                                </Text>
-                                <Image
-                                    source={require('@/shared/assets/images/dirham-icon.png')}
-                                    style={{ width: 14, height: 14, marginLeft: 4 }}
-                                    contentFit="contain"
+                                {/* Amount */}
+                                <CurrencyAmount
+                                    amount={totalCost}
+                                    size="md"
+                                    variant="bold"
+                                    className="ml-4"
                                 />
                             </View>
-                        </View>
-                    </View>
+                        </CardContent>
+                    </Card>
 
                     {/* Detailed Breakdown Card */}
-                    <View className="mx-4 mb-4 bg-white rounded-2xl p-4 shadow-sm"
-                        style={{
-                            shadowColor: '#000',
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: 0.1,
-                            shadowRadius: 4,
-                            elevation: 3,
-                        }}
-                    >
-                        {/* Start/Completion Times */}
-                        <View className="mb-4 pb-4 border-b border-gray-200">
-                            <View className="flex-row justify-between items-center py-2">
-                                <Text className="text-base font-medium text-gray-700">
-                                    Start
-                                </Text>
-                                <Text className="text-base font-medium text-gray-900">
-                                    {startTime}
-                                </Text>
+                    <Card variant="elevated" className="mx-4 mb-4">
+                        <CardContent className="p-0">
+                            {/* Start/Completion Times */}
+                            <View className="px-4 pt-4 pb-4 border-b border-gray-200">
+                                <CardRow className="py-2 px-0">
+                                    <Text className="text-base font-medium text-gray-700">
+                                        Start
+                                    </Text>
+                                    <Text className="text-base font-medium text-gray-900">
+                                        {startTime}
+                                    </Text>
+                                </CardRow>
+                                <CardRow className="py-2 px-0 border-0">
+                                    <Text className="text-base font-medium text-gray-700">
+                                        Completion
+                                    </Text>
+                                    <Text className="text-base font-medium text-gray-900">
+                                        {endTime}
+                                    </Text>
+                                </CardRow>
                             </View>
-                            <View className="flex-row justify-between items-center py-2">
-                                <Text className="text-base font-medium text-gray-700">
-                                    Completion
-                                </Text>
-                                <Text className="text-base font-medium text-gray-900">
-                                    {endTime}
-                                </Text>
-                            </View>
-                        </View>
 
-                        {/* Pricing Breakdown */}
-                        <View className="mb-4 pb-4 border-b border-gray-200">
-                            <View className="flex-row justify-between items-center py-2">
-                                <Text className="text-base font-medium text-gray-700">
-                                    First hour
-                                </Text>
-                                <View className="flex-row items-center">
-                                    <Image
-                                        source={require('@/shared/assets/images/dirham-icon.png')}
-                                        style={{ width: 12, height: 12 }}
-                                        contentFit="contain" />
-                                    <Text className="text-base font-medium text-gray-900 ml-1">
-                                        {firstHourCost}
+                            {/* Pricing Breakdown */}
+                            <View className="px-4 py-4 border-b border-gray-200">
+                                <CardRow className="py-2 px-0">
+                                    <Text className="text-base font-medium text-gray-700">
+                                        First hour
                                     </Text>
-                                </View>
-                            </View>
-                            <View className="flex-row justify-between items-center py-2">
-                                <Text className="text-base font-medium text-gray-700">
-                                    Remaining 23 hours
-                                </Text>
-                                <View className="flex-row items-center">
-                                    <Image
-                                        source={require('@/shared/assets/images/dirham-icon.png')}
-                                        style={{ width: 12, height: 12 }}
-                                        contentFit="contain" />
-                                    <Text className="text-base font-medium text-gray-900 ml-1">
-                                        {remainingHoursCost}
+                                    <CurrencyAmount amount={firstHourCost} size="sm" />
+                                </CardRow>
+                                <CardRow className="py-2 px-0 border-0">
+                                    <Text className="text-base font-medium text-gray-700">
+                                        Remaining 23 hours
                                     </Text>
-                                </View>
+                                    <CurrencyAmount amount={remainingHoursCost} size="sm" />
+                                </CardRow>
                             </View>
-                        </View>
 
-                        {/* Total */}
-                        <View className="mb-4 pb-4 border-b border-gray-200">
-                            <View className="flex-row justify-between items-center py-2">
-                                <Text className="text-base font-bold text-gray-900">
-                                    Total
-                                </Text>
-                                <View className="flex-row items-center">
-                                    <Image
-                                        source={require('@/shared/assets/images/dirham-icon.png')}
-                                        style={{ width: 12, height: 12 }}
-                                        contentFit="contain" />
-                                    <Text className="text-lg font-bold text-gray-900 ml-1">
-                                        {totalCost}
+                            {/* Total */}
+                            <View className="px-4 py-4 border-b border-gray-200">
+                                <CardRow className="py-2 px-0 border-0">
+                                    <Text className="text-base font-bold text-gray-900">
+                                        Total
                                     </Text>
-                                </View>
+                                    <CurrencyAmount amount={totalCost} size="md" variant="bold" />
+                                </CardRow>
                             </View>
-                        </View>
 
-                        {/* Payment Details */}
-                        <View>
-                            <View className="flex-row justify-between items-center py-2">
-                                <Text className="text-base font-medium text-gray-700">
-                                    Paid with bonuses
-                                </Text>
-                                <View className="flex-row items-center">
-                                    <Image
-                                        source={require('@/shared/assets/images/dirham-icon.png')}
-                                        style={{ width: 12, height: 12 }}
-                                        contentFit="contain" />
-                                    <Text className="text-base font-medium text-gray-900 ml-1">
-                                        {paidWithBonuses}
+                            {/* Payment Details */}
+                            <View className="px-4 pt-4 pb-4">
+                                <CardRow className="py-2 px-0">
+                                    <Text className="text-base font-medium text-gray-700">
+                                        Paid with bonuses
                                     </Text>
-                                </View>
-                            </View>
-                            <View className="flex-row justify-between items-center py-2">
-                                <Text className="text-base font-medium text-gray-700">
-                                    Paid with card
-                                </Text>
-                                <View className="flex-row items-center">
-                                    <Image
-                                        source={require('@/shared/assets/images/dirham-icon.png')}
-                                        style={{ width: 12, height: 12 }}
-                                        contentFit="contain" />
-                                    <Text className="text-base font-medium text-gray-900 ml-1">
-                                        {paidWithCard}
+                                    <CurrencyAmount amount={paidWithBonuses} size="sm" />
+                                </CardRow>
+                                <CardRow className="py-2 px-0 border-0">
+                                    <Text className="text-base font-medium text-gray-700">
+                                        Paid with card
                                     </Text>
-                                </View>
+                                    <CurrencyAmount amount={paidWithCard} size="sm" />
+                                </CardRow>
                             </View>
-                        </View>
-                    </View>
+                        </CardContent>
+                    </Card>
                 </ScrollView>
 
                 {/* Close Button */}

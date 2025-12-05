@@ -55,9 +55,9 @@ export default function ActiveRentButton() {
         return null;
     }
     return (
-        <TouchableOpacity onPress={handlePress}>
+        <TouchableOpacity onPress={handlePress} activeOpacity={0.7}>
             <View className="bg-primary-foreground/70 text-primary p-4 rounded-2xl flex-row items-center justify-between">
-                <Text className="opacity-100 text-primary font-bold">{rental.powerBankDeviceId}</Text>
+                <Text className="opacity-100 text-primary font-semibold text-base">{rental.powerBankDeviceId}</Text>
             </View>
         </TouchableOpacity>
     )

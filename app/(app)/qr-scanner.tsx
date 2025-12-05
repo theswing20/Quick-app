@@ -1,13 +1,20 @@
+import { useCabinetsService } from "@/app/api/cabinets-service";
+import { useNewRentStore } from "@/shared/stores/new-rent-store";
+import { Loader } from "@/shared/ui/loader";
+import { AxiosError } from "axios";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { router } from "expo-router";
 import { X } from "lucide-react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function QRScanner() {
     const [permission, requestPermission] = useCameraPermissions();
-    const [scanned, setScanned] = useState(false);
+    const scannedRef = useRef(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const cabinetsService = useCabinetsService();
+    const { setCabinetInfo } = useNewRentStore();
 
     useEffect(() => {
         if (permission && !permission.granted && !permission.canAskAgain) {
@@ -27,33 +34,32 @@ export default function QRScanner() {
     const handleManualEnter = () => {
         router.push("/(app)/manual-enter");
     };
+    const handleSave = async (data: string) => {
+        setIsLoading(true);
+        try {
+            const cabinetInfo = await cabinetsService.getCabinetInfo(data);
+            console.log("cabinetInfo", cabinetInfo);
+            if (cabinetInfo.id) {
+                setCabinetInfo(cabinetInfo);
+                router.dismissAll();
+                router.push("/(app)/(rent)/pre-rent-info");
+            }
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                Alert.alert("Check the QR code", "The QR code is not valid");
+            } else {
+                Alert.alert("Something went wrong", "Please try again later");
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     const handleBarCodeScanned = ({ data }: { data: string }) => {
-        if (scanned) return;
-
-        setScanned(true);
-
-        // Обработка отсканированного QR-кода
-        // GT042241005801
+        if (scannedRef.current) return;
+        scannedRef.current = true;
         console.log("Scanned QR code:", data);
-
-        // Здесь можно добавить логику обработки данных
-        // Например, проверка формата URL, обработка специальных кодов и т.д.
-
-        Alert.alert(
-            "QR Code Scanned",
-            `Data: ${data}`,
-            [
-                {
-                    text: "Scan Again",
-                    onPress: () => setScanned(false),
-                },
-                {
-                    text: "Close",
-                    onPress: () => router.back(),
-                },
-            ]
-        );
+        handleSave(data);
     };
 
     const handleClose = () => {
@@ -91,11 +97,14 @@ export default function QRScanner() {
     }
 
     return (
-        <View className="flex-1 bg-black">
-            <CameraView
+        <View className="flex-1 bg-black relative">
+            {isLoading && <View className="absolute top-0 left-0 right-0 bottom-0 z-50 flex-1 items-center justify-center bg-gray-900/50">
+                <Loader />
+            </View>}
+            {!isLoading && <CameraView
                 style={{ flex: 1 }}
                 facing="back"
-                onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+                onBarcodeScanned={scannedRef.current ? undefined : handleBarCodeScanned}
                 barcodeScannerSettings={{
                     barcodeTypes: ["qr"],
                 }}
@@ -126,7 +135,7 @@ export default function QRScanner() {
                         </TouchableOpacity>
                     </View>
                 </SafeAreaView>
-            </CameraView>
+            </CameraView>}
             <SafeAreaView className="absolute bottom-0 left-0 right-0 p-4 w-full items-center pb-12">
                 <TouchableOpacity
                     onPress={handleManualEnter}
@@ -135,7 +144,7 @@ export default function QRScanner() {
                     <Text className="text-primary text-base bg-primary-foreground font-semibold text-center">Enter Manually</Text>
                 </TouchableOpacity>
             </SafeAreaView>
-        </View> 
+        </View>
     );
 }
 

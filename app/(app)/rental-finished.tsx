@@ -1,8 +1,9 @@
 import { RentalHistoryItem, useRentalsService } from "@/app/api/rentals-service";
 import { PRICE } from "@/shared/lib/mocks";
 import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardRow } from "@/shared/ui/card";
+import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { Loader } from "@/shared/ui/loader";
-import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
@@ -93,75 +94,42 @@ export default function RentalFinished() {
 
                 {/* Charge Summary */}
                 <View className="px-6 pb-6">
-                    <View className="bg-gray-50 rounded-2xl p-4">
-                        {/* First hour */}
-                        <View className="flex-row justify-between items-center py-4 pt-2 border-b border-gray-200">
-                            <Text className="text-base font-medium text-gray-900">
-                                First hour
-                            </Text>
-                            <View className="flex-row items-center">
-                                <Image
-                                    source={require('@/shared/assets/images/dirham-icon.png')}
-                                    style={{ width: 12, height: 12 }}
-                                    contentFit="contain" />
-                                <Text className="text-base font-semibold text-gray-900 ml-1">
-                                    {firstHourCost}
+                    <Card variant="elevated" className="bg-gray-50">
+                        <CardContent className="p-0">
+                            <CardRow withBorder>
+                                <Text className="text-base font-medium text-gray-900">
+                                    First hour
                                 </Text>
-                            </View>
-                        </View>
-
-                        {/* Remaining 23 hours */}
-                        <View className="flex-row justify-between items-center py-4 border-b border-gray-200">
-                            <Text className="text-base font-medium text-gray-900">
-                                Remaining 23 hours
-                            </Text>
-                            <View className="flex-row items-center">
-                                <Image
-                                    source={require('@/shared/assets/images/dirham-icon.png')}
-                                    style={{ width: 12, height: 12 }}
-                                    contentFit="contain" />
-                                <Text className="text-base font-semibold text-gray-900 ml-1">
-                                    {remainingHoursCost}
+                                <CurrencyAmount amount={firstHourCost} size="sm" />
+                            </CardRow>
+                            <CardRow withBorder>
+                                <Text className="text-base font-medium text-gray-900">
+                                    Remaining 23 hours
                                 </Text>
-                            </View>
-                        </View>
-
-                        {/* Total */}
-                        <View className="flex-row justify-between items-center py-4 border-gray-200">
-                            <Text className="text-base font-bold text-gray-900">
-                                Total
-                            </Text>
-                            <View className="flex-row items-center">
-                                <Image
-                                    source={require('@/shared/assets/images/dirham-icon.png')}
-                                    style={{ width: 12, height: 12 }}
-                                    contentFit="contain" />
-                                <Text className="text-base font-bold text-gray-900 ml-1">
-                                    {totalCost}
+                                <CurrencyAmount amount={remainingHoursCost} size="sm" />
+                            </CardRow>
+                            <CardRow>
+                                <Text className="text-base font-bold text-gray-900">
+                                    Total
                                 </Text>
-                            </View>
-                        </View>
-                    </View>
+                                <CurrencyAmount amount={totalCost} size="sm" variant="bold" />
+                            </CardRow>
+                        </CardContent>
+                    </Card>
                 </View>
 
                 {/* Payment Details */}
                 <View className="px-6 pb-6">
-                    <View className="bg-gray-50 rounded-2xl p-4">
-                        <View className="flex-row justify-between items-center py-4">
-                            <Text className="text-base font-medium text-gray-900">
-                                Paid with bonuses
-                            </Text>
-                            <View className="flex-row items-center">
-                                <Image
-                                    source={require('@/shared/assets/images/dirham-icon.png')}
-                                    style={{ width: 12, height: 12 }}
-                                    contentFit="contain" />
-                                <Text className="text-base font-semibold text-gray-900 ml-1">
-                                    {paidWithBonuses}
+                    <Card variant="elevated" className="bg-gray-50">
+                        <CardContent className="p-0">
+                            <CardRow>
+                                <Text className="text-base font-medium text-gray-900">
+                                    Paid with bonuses
                                 </Text>
-                            </View>
-                        </View>
-                    </View>
+                                <CurrencyAmount amount={paidWithBonuses} size="sm" />
+                            </CardRow>
+                        </CardContent>
+                    </Card>
                 </View>
 
                 <View className="h-4" />

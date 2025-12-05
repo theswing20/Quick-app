@@ -1,4 +1,5 @@
 import { Button } from "@/shared/ui/button";
+import { Card, CardContent } from "@/shared/ui/card";
 import { router } from "expo-router";
 import { Clock, Home, X, Zap } from "lucide-react-native";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -47,41 +48,45 @@ export default function HowToReturn() {
 
                 {/* Instructions */}
                 <View className="px-6 pb-6">
-                    {/* Instruction 1 */}
-                    <View className="flex-row items-start gap-3 mb-6">
-                        <View className="w-10 h-10 bg-gray-100 rounded-full items-center justify-center mt-1">
-                            <Zap size={20} color="#000000" />
-                        </View>
-                        <View className="flex-1">
-                            <Text className="text-base text-gray-700 leading-6">
-                                Find any station on the map, they are marked with corresponding icons
-                            </Text>
-                        </View>
-                    </View>
+                    <Card variant="default">
+                        <CardContent className="p-0">
+                            {/* Instruction 1 */}
+                            <View className="flex-row items-start gap-3 px-4 py-4 border-b border-gray-200">
+                                <View className="w-10 h-10 bg-gray-100 rounded-full items-center justify-center mt-1">
+                                    <Zap size={20} color="#000000" />
+                                </View>
+                                <View className="flex-1">
+                                    <Text className="text-base text-gray-700 leading-6">
+                                        Find any station on the map, they are marked with corresponding icons
+                                    </Text>
+                                </View>
+                            </View>
 
-                    {/* Instruction 2 */}
-                    <View className="flex-row items-start gap-3 mb-6">
-                        <View className="w-10 h-10 bg-gray-100 rounded-full items-center justify-center mt-1">
-                            <Clock size={20} color="#000000" />
-                        </View>
-                        <View className="flex-1">
-                            <Text className="text-base text-gray-700 leading-6">
-                                Make sure the station is working and has free slots
-                            </Text>
-                        </View>
-                    </View>
+                            {/* Instruction 2 */}
+                            <View className="flex-row items-start gap-3 px-4 py-4 border-b border-gray-200">
+                                <View className="w-10 h-10 bg-gray-100 rounded-full items-center justify-center mt-1">
+                                    <Clock size={20} color="#000000" />
+                                </View>
+                                <View className="flex-1">
+                                    <Text className="text-base text-gray-700 leading-6">
+                                        Make sure the station is working and has free slots
+                                    </Text>
+                                </View>
+                            </View>
 
-                    {/* Instruction 3 */}
-                    <View className="flex-row items-start gap-3 mb-8">
-                        <View className="w-10 h-10 bg-gray-100 rounded-full items-center justify-center mt-1">
-                            <Home size={20} color="#000000" />
-                        </View>
-                        <View className="flex-1">
-                            <Text className="text-base text-gray-700 leading-6">
-                                Insert the power bank into one of the station's free slots
-                            </Text>
-                        </View>
-                    </View>
+                            {/* Instruction 3 */}
+                            <View className="flex-row items-start gap-3 px-4 py-4">
+                                <View className="w-10 h-10 bg-gray-100 rounded-full items-center justify-center mt-1">
+                                    <Home size={20} color="#000000" />
+                                </View>
+                                <View className="flex-1">
+                                    <Text className="text-base text-gray-700 leading-6">
+                                        Insert the power bank into one of the station's free slots
+                                    </Text>
+                                </View>
+                            </View>
+                        </CardContent>
+                    </Card>
                 </View>
             </ScrollView>
 

@@ -39,36 +39,37 @@ export const ProfileLegal = () => {
 
   return (
     <ScreenSection roundedBottom={false}>
-      <Text className="text-xl font-medium flex-1 mb-4">Legal</Text>
-      <View className="flex-col items-start justify-between bg-gray-50 rounded-3xl overflow-hidden mb-4">
-        <TouchableOpacity className="w-full flex-row items-center justify-between border-solid border-[1px] border-gray-50 p-4">
-          <Text className="text-base ">Terms of Service</Text>
-          <View className="w-10 h-10 flex items-center justify-center rounded-full">
-            <ChevronRight size={24} color="#000000" />
+      <Text className="text-xl font-medium flex-1 mb-4 text-gray-900">Legal</Text>
+      <View className="flex-col items-start justify-between bg-gray-50 rounded-2xl overflow-hidden mb-4">
+        <TouchableOpacity className="w-full flex-row items-center justify-between border-b border-gray-200 p-4" activeOpacity={0.7}>
+          <Text className="text-base font-medium text-gray-900">Terms of Service</Text>
+          <View className="w-8 h-8 flex items-center justify-center rounded-full">
+            <ChevronRight size={20} color="#000000" />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity className="w-full flex-row items-center justify-between border-solid border-[1px] border-gray-50 p-4">
-          <Text className="text-base ">Privacy Policy</Text>
-          <View className="w-10 h-10 flex items-center justify-center rounded-full">
-            <ChevronRight size={24} color="#000000" />
+        <TouchableOpacity className="w-full flex-row items-center justify-between p-4" activeOpacity={0.7}>
+          <Text className="text-base font-medium text-gray-900">Privacy Policy</Text>
+          <View className="w-8 h-8 flex items-center justify-center rounded-full">
+            <ChevronRight size={20} color="#000000" />
           </View>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity className="w-full flex-row items-center justify-between border-solid border-[1px] border-gray-50 p-4 bg-gray-50 mb-4 rounded-3xl">
-        <Text className="text-base text-[#FF0000]">Delete Account</Text>
-        <View className="w-10 h-10 flex items-center justify-center rounded-full">
-          <Trash2 size={24} color="#FF0000" />
+      <TouchableOpacity className="w-full flex-row items-center justify-between border border-gray-200 p-4 bg-gray-50 mb-4 rounded-2xl" activeOpacity={0.7}>
+        <Text className="text-base font-medium text-[#FF0000]">Delete Account</Text>
+        <View className="w-8 h-8 flex items-center justify-center rounded-full">
+          <Trash2 size={20} color="#FF0000" />
         </View>
       </TouchableOpacity>
 
       <TouchableOpacity
-        className="w-full flex-row items-center justify-between border-solid border-[1px] border-gray-50 p-4 bg-gray-50 rounded-3xl"
+        className="w-full flex-row items-center justify-between border border-gray-200 p-4 bg-gray-50 rounded-2xl"
         onPress={handleLogout}
+        activeOpacity={0.7}
       >
-        <Text className="text-base ">Sign Out</Text>
-        <View className="w-10 h-10 flex items-center justify-center rounded-full">
-          <LogOut size={24} color="#000000" />
+        <Text className="text-base font-medium text-gray-900">Sign Out</Text>
+        <View className="w-8 h-8 flex items-center justify-center rounded-full">
+          <LogOut size={20} color="#000000" />
         </View>
       </TouchableOpacity>
     </ScreenSection>
