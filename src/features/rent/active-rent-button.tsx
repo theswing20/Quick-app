@@ -21,7 +21,7 @@ export default function ActiveRentButton() {
                 if (error.response?.status === 404) {
                     if (rental) {
                         router.push({
-                            pathname: "/(app)/rental-info",
+                            pathname: "/(app)/rental-finished",
                             params: {
                                 rentalId: rental.id
                             }

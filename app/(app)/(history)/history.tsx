@@ -1,12 +1,21 @@
 import { RentalHistoryItem, useRentalsService } from "@/app/api/rentals-service";
-import { RentalHistoryComponent } from "@/features/rent";
+import { THEME } from "@/shared/lib/theme";
 import { Loader } from "@/shared/ui/loader";
 import { ScreenTitle } from "@/shared/ui/screen-title";
-import { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import { QrCode, Zap } from "lucide-react-native";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const PAGE_SIZE = 20;
+
+interface GroupedHistorySection {
+    month: string;
+    year: number;
+    data: RentalHistoryItem[];
+}
 
 export default function History() {
     const rentalsService = useRentalsService();
@@ -60,11 +69,135 @@ export default function History() {
         }
     }, [hasNextPage, isLoadingMore, isLoading, pageNumber, rentalsService]);
 
+    // Group history by month
+    const groupedHistory = useMemo(() => {
+        const groups: { [key: string]: RentalHistoryItem[] } = {};
+
+        history.forEach(item => {
+            const date = new Date(item.endTime || item.startTime);
+            const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
+
+            if (!groups[monthKey]) {
+                groups[monthKey] = [];
+            }
+            groups[monthKey].push(item);
+        });
+
+        // Convert to array and sort by date (newest first)
+        const sections: GroupedHistorySection[] = Object.entries(groups)
+            .map(([key, items]) => {
+                const [year, month] = key.split('-').map(Number);
+                return {
+                    month: new Date(year, month).toLocaleString('en-US', { month: 'long' }),
+                    year,
+                    data: items.sort((a, b) => {
+                        const dateA = new Date(b.endTime || b.startTime);
+                        const dateB = new Date(a.endTime || a.startTime);
+                        return dateA.getTime() - dateB.getTime();
+                    })
+                };
+            })
+            .sort((a, b) => {
+                if (a.year !== b.year) return b.year - a.year;
+                const monthA = new Date(a.year, new Date(`${a.month} 1, ${a.year}`).getMonth());
+                const monthB = new Date(b.year, new Date(`${b.month} 1, ${b.year}`).getMonth());
+                return monthB.getTime() - monthA.getTime();
+            });
+
+        return sections;
+    }, [history]);
+
+    const formatHistoryDate = (isoDate: string): string => {
+        const date = new Date(isoDate);
+        const day = date.getDate();
+        const month = date.toLocaleString('en-US', { month: 'short' });
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${day} ${month}, ${hours}:${minutes}`;
+    };
+
+    const handleItemPress = (item: RentalHistoryItem) => {
+        router.push({
+            pathname: "/(app)/(history)/history-details",
+            params: { rentalId: item.id }
+        });
+    };
+
+    const renderHistoryItem = ({ item }: { item: RentalHistoryItem }) => {
+        const displayDate = formatHistoryDate(item.endTime || item.startTime);
+        const identifier = item.orderNumber || `# ${item.powerBankDeviceId}`;
+
+        return (
+            <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => handleItemPress(item)}
+                className="bg-white rounded-2xl p-4 mb-3 shadow-sm"
+                style={{
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 2,
+                    elevation: 2,
+                }}
+            >
+                <View className="flex-row items-center justify-between">
+                    <View className="flex-row items-center flex-1">
+                        {/* Icon */}
+                        <View className="mr-4">
+                            <Zap
+                                size={24}
+                                color={THEME.light.primary}
+                            />
+                        </View>
+
+                        {/* Date and Identifier */}
+                        <View className="flex-1">
+                            <Text className="text-base font-medium text-gray-900 mb-1">
+                                {displayDate}
+                            </Text>
+                            <View className="flex-row items-center gap-2">
+                                <Text className="text-sm text-gray-500">
+                                    {identifier}
+                                </Text>
+                                {item.powerBankDeviceId && (
+                                    <QrCode size={12} color="#9CA3AF" />
+                                )}
+                            </View>
+                        </View>
+                    </View>
+
+                    {/* Amount */}
+                    <View className="flex-row items-center ml-4">
+                        <Text className="text-base font-medium text-gray-900">
+                            {item.cost}
+                        </Text>
+                        <Image
+                            source={require('@/shared/assets/images/dirham-icon.png')}
+                            style={{ width: 12, height: 12, marginLeft: 4 }}
+                            contentFit="contain"
+                        />
+                    </View>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
+    const renderSectionHeader = ({ section }: { section: GroupedHistorySection }) => {
+        const capitalizedMonth = section.month.charAt(0).toUpperCase() + section.month.slice(1);
+        return (
+            <View className="px-4 py-3 bg-white">
+                <Text className="text-sm font-medium text-gray-500">
+                    {capitalizedMonth}
+                </Text>
+            </View>
+        );
+    };
+
     const renderFooter = () => {
         if (!isLoadingMore) return null;
         return (
             <View className="py-4 items-center">
-                <ActivityIndicator size="small" color="#0000ff" />
+                <ActivityIndicator size="small" color={THEME.light.primary} />
             </View>
         );
     };
@@ -78,19 +211,60 @@ export default function History() {
         );
     };
 
+    // Flatten grouped data for FlatList
+    const flatData = useMemo(() => {
+        const result: Array<{ type: 'header' | 'item'; section?: GroupedHistorySection; item?: RentalHistoryItem }> = [];
+
+        groupedHistory.forEach(section => {
+            result.push({ type: 'header', section });
+            section.data.forEach(item => {
+                result.push({ type: 'item', section, item });
+            });
+        });
+
+        return result;
+    }, [groupedHistory]);
+
+    const renderItem = ({ item }: { item: typeof flatData[0] }) => {
+        if (item.type === 'header' && item.section) {
+            const capitalizedMonth = item.section.month.charAt(0).toUpperCase() + item.section.month.slice(1);
+            return (
+                <View className="px-4 py-3 bg-white">
+                    <Text className="text-sm font-medium text-gray-500">
+                        {capitalizedMonth}
+                    </Text>
+                </View>
+            );
+        }
+
+        if (item.type === 'item' && item.item) {
+            return renderHistoryItem({ item: item.item });
+        }
+
+        return null;
+    };
+
     return (
-        <SafeAreaView className="flex-1 bg-white pt-4 items-center justify-start">
-            <ScreenTitle title="History" />
+        <SafeAreaView className="flex-1 bg-white">
+            <View className="px-4 pt-4">
+                <ScreenTitle title="History" />
+            </View>
+
             {isLoading && history.length === 0 ? (
                 <View className="flex-1 items-center justify-center">
                     <Loader />
                 </View>
             ) : (
-                <View className="w-full h-full p-4">
+                <View className="flex-1 px-4">
                     <FlatList
-                        data={history}
-                        renderItem={({ item }) => <RentalHistoryComponent item={item} />}
-                        keyExtractor={(item) => item.id}
+                        data={flatData}
+                        renderItem={renderItem}
+                        keyExtractor={(item, index) => {
+                            if (item.type === 'header') {
+                                return `header-${item.section?.month}-${item.section?.year}`;
+                            }
+                            return `item-${item.item?.id}-${index}`;
+                        }}
                         onEndReached={loadMore}
                         onEndReachedThreshold={0.5}
                         ListFooterComponent={renderFooter}
@@ -99,7 +273,8 @@ export default function History() {
                         maxToRenderPerBatch={10}
                         windowSize={5}
                         initialNumToRender={10}
-                        contentContainerStyle={history.length === 0 ? { flex: 1 } : undefined}
+                        contentContainerStyle={history.length === 0 ? { flex: 1 } : { paddingBottom: 20 }}
+                        showsVerticalScrollIndicator={false}
                     />
                 </View>
             )}

@@ -29,6 +29,15 @@ export default function HistoryLayout() {
           gestureEnabled: true,
         }}
       />
+      <Stack.Screen
+        name="history-details"
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          animation: "slide_from_bottom",
+          gestureEnabled: true,
+        }}
+      />
     </Stack>
   );
 }

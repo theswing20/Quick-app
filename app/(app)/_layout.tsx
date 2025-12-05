@@ -93,6 +93,15 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
+        name="rental-finished"
+        options={{
+          presentation: "modal",
+          animation: "slide_from_bottom",
+          headerShown: false,
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
         name="(profile)"
         options={{
           headerShown: false,
