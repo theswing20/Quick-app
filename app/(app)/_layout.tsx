@@ -1,7 +1,7 @@
+import { useDeviceRegistration } from "@/features/notifications/use-device-registration";
 import { useUser } from "@clerk/clerk-expo";
 import { Redirect, Stack } from "expo-router";
 import { useEffect } from "react";
-import { useDeviceRegistration } from "@/features/notifications/use-device-registration";
 
 export default function AppLayout() {
   const { isSignedIn, user } = useUser();
@@ -84,6 +84,15 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
+        name="how-to-return"
+        options={{
+          presentation: "modal",
+          animation: "slide_from_bottom",
+          headerShown: false,
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
         name="(profile)"
         options={{
           headerShown: false,
@@ -96,21 +105,21 @@ export default function AppLayout() {
           headerShown: false,
           gestureEnabled: true,
         }}
-        />
-        <Stack.Screen
-          name="(rent)"
-          options={{
-            headerShown: false,
-            gestureEnabled: true,
-          }}
-        />
-        <Stack.Screen
-          name="(history)"
-          options={{
-            headerShown: false,
-            gestureEnabled: false,
-          }}
-        />
+      />
+      <Stack.Screen
+        name="(rent)"
+        options={{
+          headerShown: false,
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="(history)"
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
     </Stack>
   );
 }

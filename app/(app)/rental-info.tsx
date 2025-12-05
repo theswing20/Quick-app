@@ -3,8 +3,8 @@ import { PRICE } from "@/shared/lib/mocks";
 import { useRentStore } from "@/shared/stores/rent-store";
 import { Button } from "@/shared/ui/button";
 import { Loader } from "@/shared/ui/loader";
-import { router, useLocalSearchParams } from "expo-router";
 import { Image } from "expo-image";
+import { router, useLocalSearchParams } from "expo-router";
 import { X } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -73,8 +73,7 @@ export default function RentalInfo() {
     };
 
     const handleHowToReturn = () => {
-        // Navigate to instructions or show modal
-        router.push("/(app)/home");
+        router.push("/(app)/how-to-return");
     };
 
     if (isLoading || !rental) {
@@ -119,10 +118,10 @@ export default function RentalInfo() {
                 <View className="flex-row items-center justify-between px-6 pb-6">
                     <View className="flex-row items-center gap-2 justify-center">
                         <Text className="text-3xl font-bold text-gray-900">
-                            <Image 
-                            source={require('@/shared/assets/images/dirham-icon.png')} 
-                            style={{ width: 24, height: 24 }} 
-                            contentFit="contain" />
+                            <Image
+                                source={require('@/shared/assets/images/dirham-icon.png')}
+                                style={{ width: 24, height: 24 }}
+                                contentFit="contain" />
                             &nbsp;{rental.currentCost || 0}
                         </Text>
                     </View>
@@ -146,10 +145,10 @@ export default function RentalInfo() {
                                 </Text>
                             </View>
                             <Text className="text-base font-semibold text-gray-900">
-                                <Image 
-                                source={require('@/shared/assets/images/dirham-icon.png')} 
-                                style={{ width: 12, height: 12 }} 
-                                contentFit="contain" />
+                                <Image
+                                    source={require('@/shared/assets/images/dirham-icon.png')}
+                                    style={{ width: 12, height: 12 }}
+                                    contentFit="contain" />
                                 &nbsp;{PRICE.firstHour}
                             </Text>
                         </View>
@@ -163,10 +162,10 @@ export default function RentalInfo() {
                                 </Text>
                             </View>
                             <Text className="text-base font-semibold text-gray-900">
-                            <Image 
-                                source={require('@/shared/assets/images/dirham-icon.png')} 
-                                style={{ width: 12, height: 12 }} 
-                                contentFit="contain" />
+                                <Image
+                                    source={require('@/shared/assets/images/dirham-icon.png')}
+                                    style={{ width: 12, height: 12 }}
+                                    contentFit="contain" />
                                 &nbsp;{PRICE.remaining23Hours}
                             </Text>
                         </View>
@@ -180,10 +179,10 @@ export default function RentalInfo() {
                                 </Text>
                             </View>
                             <Text className="text-base font-semibold text-gray-900">
-                            <Image 
-                                source={require('@/shared/assets/images/dirham-icon.png')} 
-                                style={{ width: 12, height: 12 }} 
-                                contentFit="contain" />
+                                <Image
+                                    source={require('@/shared/assets/images/dirham-icon.png')}
+                                    style={{ width: 12, height: 12 }}
+                                    contentFit="contain" />
                                 &nbsp;{PRICE.nextDay}
                             </Text>
                         </View>
@@ -193,10 +192,10 @@ export default function RentalInfo() {
                 {/* Deposit information */}
                 <View className="px-6 pb-6">
                     <Text className="text-sm text-gray-600 leading-6">
-                        Initially <Image 
-                        source={require('@/shared/assets/images/dirham-icon.png')} 
-                        style={{ width: 12, height: 12 }} 
-                        contentFit="contain" />
+                        Initially <Image
+                            source={require('@/shared/assets/images/dirham-icon.png')}
+                            style={{ width: 12, height: 12 }}
+                            contentFit="contain" />
                         &nbsp;{depositAmount.toLocaleString()} will be frozen — this is a deposit.
                     </Text>
                     <Text className="text-sm text-gray-600 leading-6 mt-2">
@@ -230,6 +229,7 @@ export default function RentalInfo() {
                     </Text>
                 </Button>
             </View>
+
         </SafeAreaView>
     );
 }
