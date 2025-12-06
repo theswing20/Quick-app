@@ -11,8 +11,11 @@ export default function ReplenishmentSuccess() {
     const { amount } = useLocalSearchParams<{ amount: string }>();
 
     const handleDone = () => {
-        router.dismissAll();
-        router.back();
+        if (router.canGoBack()) {
+            router.back();
+        } else {
+            router.dismissAll();
+        }
     };
 
     return (
@@ -25,10 +28,9 @@ export default function ReplenishmentSuccess() {
 
                 {/* Amount Text */}
                 <View className="flex-row items-center justify-center mb-2">
-                    <Text className="text-3xl font-bold text-gray-900">+</Text>
                     <CurrencyAmount
                         amount={parseFloat(amount || "0")}
-                        size="lg"
+                        size="xl"
                         variant="bold"
                         className="text-3xl"
                     />

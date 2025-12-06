@@ -14,7 +14,9 @@ export default function Menu() {
       icon: WalletMinimal,
       onPress: () => {
         router.dismiss(1);
-        router.push("/(app)/(wallet)/wallet");
+        setTimeout(() => {
+          router.push("/(app)/(wallet)/wallet");
+        }, 100);
       },
     },
     {
@@ -22,7 +24,10 @@ export default function Menu() {
       title: "History",
       icon: Clock,
       onPress: () => {
-        router.push("/(app)/(history)/history");
+        router.dismiss(1);
+        setTimeout(() => {
+          router.push("/(app)/(history)/history");
+        }, 100);
       },
     },
     {
@@ -31,7 +36,9 @@ export default function Menu() {
       icon: CreditCard,
       onPress: () => {
         router.dismiss(1);
-        router.push("/(app)/(wallet)/payment-methods");
+        setTimeout(() => {
+          router.push("/(app)/(wallet)/payment-methods");
+        }, 100);
       },
     },
   ];

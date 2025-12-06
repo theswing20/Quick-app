@@ -6,7 +6,7 @@ import { ChevronRight, CreditCard } from "lucide-react-native";
 import { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
-export default function PaymentMethodSelectorButton() {
+export default function PaymentMethodSelectorButton({ hideBalanceButton = false }: { hideBalanceButton?: boolean }) {
     const paymentMethods = usePaymentMethodsStore((state) => state.paymentMethods);
     const defaultPaymentMethod = usePaymentMethodsStore((state) => state.defaultPaymentMethod);
     const selectedPaymentMethod = usePaymentMethodsStore((state) => state.selectedPaymentMethod);
@@ -20,13 +20,20 @@ export default function PaymentMethodSelectorButton() {
 
     useEffect(() => {
         if (!selectedPaymentMethod) {
-            setSelectedPaymentMethod(defaultPaymentMethod);
+            const isDefaultBalance = defaultPaymentMethod?.id === null;
+            console.log('isDefaultBalance', isDefaultBalance);
+            
+            const selectedPaymentMethod = isDefaultBalance && hideBalanceButton ? paymentMethods.filter((method) => method.id !== null)[0] : defaultPaymentMethod;
+            setSelectedPaymentMethod(selectedPaymentMethod);
         }
     }, [defaultPaymentMethod, selectedPaymentMethod]);
 
     const openPaymentMethods = () => {
         router.push({
             pathname: '/(app)/(wallet)/payment-method-selector',
+            params: {
+                hideBalanceButton: hideBalanceButton.toString(),
+            },
         });
     }
 

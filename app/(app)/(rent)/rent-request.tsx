@@ -54,6 +54,10 @@ export default function RentRequest() {
             }
         } catch (error) {
             console.log("error", error);
+            Alert.alert("Error", "Something went wrong while starting the rental. Please try again later.", [
+                { text: "OK", style: "default", onPress: () => { } },
+            ]);
+            router.back();
         } finally {
             setIsLoading(false);
         }

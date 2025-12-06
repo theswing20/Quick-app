@@ -9,7 +9,7 @@ import { ScreenSection } from "@/shared/ui/screen-section";
 import { ScreenTitle } from "@/shared/ui/screen-title";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -69,7 +69,7 @@ export default function AccountReplenishment() {
             <View className="bg-gray-50 flex-1">
                 <ScreenSection roundedTop={false} className="px-0">
                     <View className="px-4">
-                        <PaymentMethodSelectorButton />
+                        <PaymentMethodSelectorButton hideBalanceButton={true} />
                         <Input
                             placeholder="Enter amount"
                             className="border-0 border-b-[1px] bordfer-b-yellow-500 shadow-none text-center text-2xl font-bold mt-10 mb-10"
@@ -87,8 +87,16 @@ export default function AccountReplenishment() {
                 </ScreenSection>
             </View>
             <View className="px-4 pb-6">
-                <Button className="h-14 rounded-2xl" onPress={() => { handleAddMoney() }} disabled={isLoading}>
-                    <Text className="text-lg font-semibold text-primary-foreground">Add money</Text>
+                <Button
+                    className="h-14 rounded-2xl"
+                    onPress={() => { handleAddMoney() }}
+                    disabled={isLoading || !selectedPaymentMethod || !value || parseFloat(value) <= 0}
+                    >
+                    {isLoading ? (
+                        <ActivityIndicator color="black" />
+                    ) : (
+                        <Text className="text-lg font-semibold text-primary-foreground">Add money</Text>
+                    )}
                 </Button>
             </View>
         </SafeAreaView>

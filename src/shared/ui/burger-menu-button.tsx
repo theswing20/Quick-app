@@ -19,7 +19,7 @@ export const BurgerMenuButton = (props: { item: ItemProps }) => {
     activeOpacity={0.7}
     onPress={item.onPress}
     style={{ maxWidth: computedWidth }}
-    className={"w-full justify-center rounded-2xl bg-white p-6 h-[160px] flex-col gap-6"}
+    className={"w-full justify-center rounded-2xl bg-white p-6 h-[160px] flex-col gap-6 shadow-sm"}
   >
     <View className="mb-2 h-10 w-10 items-center justify-center rounded-full bg-primary">
       <IconComponent size={20} color="#000000" />

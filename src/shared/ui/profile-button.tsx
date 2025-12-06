@@ -9,14 +9,16 @@ export const ProfileButton = () => {
     const onPress = () => {
         console.log("Profile pressed");
         router.dismiss(1);
-        router.push('/(profile)/profile');
+        setTimeout(() => {
+            router.push("/(app)/(profile)/profile");
+        }, 100);
     };
 
     return <TouchableOpacity
         key={"profile"}
         activeOpacity={0.7}
         onPress={onPress}
-        className={"w-full rounded-2xl bg-white p-6 min-h-[80px] flex-row justify-between items-center"}
+        className={"w-full rounded-2xl bg-white p-6 min-h-[80px] flex-row justify-between items-center shadow-sm"}
     >
         <View className="flex-col justify-between gap-2 flex-1">
             <Text className="text-lg font-semibold text-gray-900 text-start">

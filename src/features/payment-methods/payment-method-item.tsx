@@ -20,7 +20,7 @@ export default function PaymentMethodItem(props: { method: PaymentMethod, onTap?
 
     return (
         <TouchableOpacity onPress={onTap} disabled={!onTap} activeOpacity={0.7}>
-            <View className="w-full p-4 rounded-2xl flex-row items-center justify-between gap-4 bg-gray-50 mb-3">
+            <View className="mx-1 p-4 rounded-2xl flex-row items-center justify-between gap-4 bg-gray-50 mb-3 shadow-sm">
                 <View className="flex-row items-center gap-3 flex-1">
                     <View className="w-10 h-10 bg-primary/50 rounded-xl items-center justify-center">
                         {!iconPath

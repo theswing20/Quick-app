@@ -134,7 +134,7 @@ export default function History() {
                 onPress={() => handleItemPress(item)}
                 className="mb-3"
             >
-                <Card variant="elevated">
+                <Card variant="elevated" className="mx-1">
                     <CardContent>
                         <View className="flex-row items-center justify-between">
                             <View className="flex-row items-center flex-1">

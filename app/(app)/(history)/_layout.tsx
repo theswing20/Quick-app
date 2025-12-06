@@ -24,8 +24,6 @@ export default function HistoryLayout() {
         name="history"
         options={{
           headerShown: false,
-          presentation: "modal",
-          animation: "slide_from_bottom",
           gestureEnabled: true,
         }}
       />

@@ -1,16 +1,23 @@
 import { WalletHistoryComponent } from "@/features/wallet";
+import { useUpdateBalance } from "@/shared/hooks/useUpdateBalance";
 import { useWalletStore } from "@/shared/stores/wallet-store";
 import { Button } from "@/shared/ui/button";
 import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { ScreenSection } from "@/shared/ui/screen-section";
 import { ScreenTitle } from "@/shared/ui/screen-title";
 import { useRouter } from "expo-router";
+import { useEffect } from "react";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Wallet() {
     const router = useRouter();
     const balance = useWalletStore((state) => state.balance);
+    const updateBalance = useUpdateBalance();
+    
+    useEffect(() => {
+        updateBalance();    
+    }, []);
 
     return (
         <SafeAreaView className="bg-white flex-1">

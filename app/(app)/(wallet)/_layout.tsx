@@ -30,13 +30,6 @@ export default function WalletLayout() {
         }}
       />
       <Stack.Screen
-        name="add-payment-method"
-        options={{
-          headerShown: false,
-          presentation: "fullScreenModal",
-        }}
-      />
-      <Stack.Screen
         name="add-card"
         options={{
           headerShown: false,

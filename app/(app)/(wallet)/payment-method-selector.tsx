@@ -4,6 +4,7 @@ import { usePaymentMethodsStore } from "@/shared/stores/payment-methods-store";
 import { Button } from "@/shared/ui/button";
 import { ScreenTitle } from "@/shared/ui/screen-title";
 import { router } from "expo-router";
+import { useSearchParams } from "expo-router/build/hooks";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -11,8 +12,9 @@ export default function PaymentMethodSelector() {
     const paymentMethods = usePaymentMethodsStore((state) => state.paymentMethods);
     const setSelectedPaymentMethod = usePaymentMethodsStore((state) => state.setSelectedPaymentMethod);
     const selectedPaymentMethod = usePaymentMethodsStore((state) => state.selectedPaymentMethod);
+    const hideBalanceButton = useSearchParams().get('hideBalanceButton') === 'true';
 
-    const renderItems = paymentMethods;
+    const renderItems = hideBalanceButton ? paymentMethods.filter((method) => method.id !== null) : paymentMethods;
     const onPaymentMethodTap = (method: PaymentMethod) => {
         setSelectedPaymentMethod(method);
         router.back();
