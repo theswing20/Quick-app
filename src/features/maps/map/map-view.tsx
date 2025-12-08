@@ -1,4 +1,5 @@
 import { useCabinetsService } from "@/app/api/cabinets-service";
+import { useCabinetStore } from "@/shared/stores/cabinet-store";
 import { Text } from "@/shared/ui/text";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
@@ -6,23 +7,32 @@ import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } 
 import { Pressable, StyleSheet, View, Image } from "react-native";
 import MapView, { Marker as MapMarker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region } from "react-native-maps";
 
+// const INITIAL_REGION: Region = {
+//   latitude: 25.2048,
+//   longitude: 55.2708,
+//   latitudeDelta: 0.0922,
+//   longitudeDelta: 0.0421,
+// };
+
 const INITIAL_REGION: Region = {
-  latitude: 25.2048,
-  longitude: 55.2708,
+  latitude: 43.230786,
+  longitude: 76.797626,
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 };
 
 interface Marker {
+  address: string | null;
+  availableSlots: number;
+  cabinetId: string;
+  distanceKm: number | null;
   id: string;
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
-  title?: string;
-  description?: string;
-  systemImage?: string;
-  tintColor?: string;
+  latitude: number;
+  longitude: number;
+  modelName: string;
+  occupiedSlots: number;
+  qrCode: string;
+  status: string;
 }
 
 export interface MapViewRef {
@@ -38,6 +48,7 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
   const [region, setRegion] = useState<Region>(INITIAL_REGION);
   const router = useRouter();
   const cabinetsService = useCabinetsService();
+  const { nearestCabinets, setNearestCabinets } = useCabinetStore();
 
   const getMarkers = async () =>{
     const markers = await cabinetsService.getNearestCabinets({
@@ -49,8 +60,9 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
   }
 
   useEffect(()=>{
-    getMarkers().then((markers) => {
-      console.log('markers', markers);
+    getMarkers().then((cabinets) => {
+      console.log('markers', cabinets);
+      setNearestCabinets(cabinets);
     });
   },[region.latitude, region.longitude]);
 
@@ -68,40 +80,7 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
     }));
   }, [region.latitudeDelta, region.longitudeDelta]);
 
-  const [markers, setMarkers] = useState<Marker[]>([
-    {
-      id: "1",
-      coordinates: {
-        latitude: 25.2048,
-        longitude: 55.2708,
-      },
-      // title: "Dubai",
-      // description: "Location marker",
-      // systemImage: "bolt.circle",
-    },
-    {
-      id: "2",
-      coordinates: {
-        latitude: 37.7851,
-        longitude: -122.4061,
-      },
-      // title: "Test",
-      // description: "Location marker",
-      // systemImage: "bolt.fill",
-      // tintColor: "#000000",
-    },
-    {
-      id: "3",
-      coordinates: {
-        latitude: 25.2007,
-        longitude: 55.2732,
-      },
-      // title: "Dubai",
-      // description: "Location marker",
-      // systemImage: "bolt.circle",
-    },
-  ]);
-
+  
   const handleZoomIn = useCallback(() => {
     clampZoom(1);
   }, [clampZoom]);
@@ -123,6 +102,7 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
           accuracy: Location.Accuracy.Balanced,
         });
 
+        // TODO: Uncomment this before production
         // const userRegion: Region = {
         //   latitude: location.coords.latitude,
         //   longitude: location.coords.longitude,
@@ -130,12 +110,7 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
         //   longitudeDelta: 0.01,
         // };
         //dev config 
-        const userRegion: Region = {
-          latitude: 25.2048,
-          longitude: 55.2708,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        };
+        const userRegion: Region = INITIAL_REGION;
 
         // Устанавливаем начальную позицию на местоположение пользователя
         setRegion(userRegion);
@@ -156,7 +131,7 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
     console.log("Map pressed", event.nativeEvent.coordinate);
   }, []);
 
-  const handleMarkerPress = useCallback((markerId: string) => (event: any) => {
+  const handleMarkerPress = useCallback((cabinetId: string) => (event: any) => {
     const markerCoordinate = event.nativeEvent.coordinate;
 
 
@@ -175,7 +150,7 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
     }
 
     // Опционально: можно оставить переход на другую страницу
-    router.push({ pathname: "/(app)/marker-details", params: { markerId } });
+    router.push({ pathname: "/(app)/marker-details", params: { cabinetId } });
   }, []);
 
   const handleRegionChangeComplete = useCallback((newRegion: Region) => {
@@ -226,15 +201,12 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
         onPress={handleMapPress}
         onRegionChangeComplete={handleRegionChangeComplete}
       >
-        {markers.map((marker) => (
+        {nearestCabinets.map((marker) => (
           <MapMarker
             key={marker.id}
-            coordinate={marker.coordinates}
-            title={marker.title}
-            description={marker.description}
+            coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
             onPress={handleMarkerPress(marker.id)}
             pinColor={"#000000"}
-            // image={require("@/shared/assets/images/favicon.png")}
           ><Image
           source={require('../../../shared/assets/images/bolt-icon.png')}
           style={{ width: 40, height: 40 }}

@@ -103,7 +103,7 @@ export default function RentalInfo() {
                 {/* Header with logo and close button */}
                 <View className="flex-row items-center justify-between px-6 pb-6">
                     <View className="flex-1" />
-                    <Text className="text-2xl font-bold text-primary flex-1 text-center">
+                    <Text className="flex-2 text-2xl font-bold text-primary text-center">
                         Quick-app
                     </Text>
                     <View className="flex-1 items-end">

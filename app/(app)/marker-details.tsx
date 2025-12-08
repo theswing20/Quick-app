@@ -1,4 +1,6 @@
-import { markerDetails } from "@/shared/lib/mocks";
+import { PRICE } from "@/shared/lib/mocks";
+import { cn } from "@/shared/lib/utils";
+import { useCabinetStore } from "@/shared/stores/cabinet-store";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardRow } from "@/shared/ui/card";
 import { CurrencyAmount } from "@/shared/ui/currency-amount";
@@ -9,12 +11,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MarkerDetails() {
   const router = useRouter();
-  const { markerId } = useLocalSearchParams<{ markerId: string }>();
+  const { cabinetId } = useLocalSearchParams<{ cabinetId: string }>();
+  const nearestCabinets = useCabinetStore((state) => state.nearestCabinets);
 
   const handleClose = () => {
     router.back();
   };
-  const details = markerDetails.find(marker => marker.id === markerId);
+  const details = nearestCabinets.find(marker => marker.id === cabinetId);
   const handleScanQr = () => {
     router.push("/(app)/qr-scanner");
   };
@@ -29,9 +32,9 @@ export default function MarkerDetails() {
         {/* Заголовок с кнопкой закрытия */}
         <View className="flex-row items-center justify-between px-4 pt-4 pb-4">
           <View className="flex-row items-center gap-2">
-            <QrCode size={20} color="#000000" />
+            
             <Text className="text-base font-medium text-gray-900">
-              {details?.serialNumber} • Powerbank Station
+              Powerbank Station
             </Text>
           </View>
           <TouchableOpacity
@@ -44,18 +47,21 @@ export default function MarkerDetails() {
 
         {/* Название места */}
         <View className="px-4 pb-2">
+          <View className="flex-row items-center gap-2">
+          <QrCode size={20} color="#000000" />
           <Text className="text-2xl font-bold text-gray-900 mb-1">
-            {details?.name}
+            {details?.qrCode}
           </Text>
-          <Text className="text-base text-gray-600 mb-2">
-            {details?.details}
-          </Text>
+          </View>
+          {/* <Text className="text-base text-gray-600 mb-2">
+            *Coming soon*
+          </Text> */}
           <Text className="text-base text-gray-700 mb-2">
             {details?.address}
           </Text>
           <View className="flex-row items-center">
-            <View className="w-2 h-2 bg-green-500 rounded-full mr-2" />
-            <Text className="text-base text-gray-700">Open</Text>
+            <View className={cn("w-2 h-2 rounded-full mr-2", details?.status === "Online" ? "bg-green-500" : "bg-red-500")}/>
+            <Text className="text-base text-gray-700">{details?.status}</Text>
           </View>
         </View>
 
@@ -63,7 +69,7 @@ export default function MarkerDetails() {
         <View className="flex-row gap-3 px-4 py-4">
           <View className="flex-1 bg-gray-50 rounded-2xl p-4 items-center">
             <View className="flex-row items-center justify-end mt-2">
-              <Text className="text-4xl font-bold text-gray-900 baseline mb-2 h-full">{details?.availability.take}</Text>
+              <Text className="text-4xl font-bold text-gray-900 baseline mb-2 h-full">{details?.occupiedSlots}</Text>
               <View className="h-full">
                 <SmartphoneCharging size={30} color="#FFCC00" />
               </View>
@@ -72,7 +78,7 @@ export default function MarkerDetails() {
           </View>
           <View className="flex-1 bg-gray-50 rounded-2xl p-4 items-center">
             <View className="flex-row items-center justify-end mt-2">
-              <Text className="text-4xl font-bold text-gray-900 baseline mb-2 h-full">{details?.availability.return}</Text>
+              <Text className="text-4xl font-bold text-gray-900 baseline mb-2 h-full">{details?.availableSlots}</Text>
               <View className="h-full">
                 <Smartphone size={30} color="#000000" />
               </View>
@@ -82,14 +88,14 @@ export default function MarkerDetails() {
         </View>
 
         {/* Конкретное место */}
-        <View className="px-4 pb-4">
-          <Text className="text-base text-gray-600">{details?.powerbankPosition}</Text>
-        </View>
+        {/* <View className="px-4 pb-4">
+          <Text className="text-base text-gray-600">*Coming soon*</Text>
+        </View> */}
 
         {/* Таблица цен */}
         <View className="px-4 pb-4">
           <Card variant="elevated" className="bg-gray-50">
-            <CardContent className="p-0">
+            <CardContent>
               <CardRow withBorder>
                 <View className="flex-row items-center gap-2">
                   <View className="w-6 h-6 bg-primary rounded-full items-center justify-center">
@@ -99,7 +105,7 @@ export default function MarkerDetails() {
                     First hour
                   </Text>
                 </View>
-                <CurrencyAmount amount={details?.price.firstHour || 0} size="sm" />
+                <CurrencyAmount amount={PRICE.firstHour} size="sm" />
               </CardRow>
               <CardRow withBorder>
                 <View className="flex-row items-center gap-2">
@@ -110,7 +116,7 @@ export default function MarkerDetails() {
                     Remaining 23 hours
                   </Text>
                 </View>
-                <CurrencyAmount amount={details?.price.remaining23Hours || 0} size="sm" />
+                <CurrencyAmount amount={PRICE.remaining23Hours} size="sm" />
               </CardRow>
               <CardRow>
                 <View className="flex-row items-center gap-2">
@@ -121,7 +127,7 @@ export default function MarkerDetails() {
                     Next day
                   </Text>
                 </View>
-                <CurrencyAmount amount={details?.price.nextDay || 0} size="sm" />
+                <CurrencyAmount amount={PRICE.nextDay} size="sm" />
               </CardRow>
             </CardContent>
           </Card>

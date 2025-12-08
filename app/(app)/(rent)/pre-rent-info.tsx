@@ -1,4 +1,4 @@
-import {PaymentMethodSelectorButton} from "@/features/payment-methods";
+import { PaymentMethodSelectorButton } from "@/features/payment-methods";
 import { PRICE } from "@/shared/lib/mocks";
 import { useNewRentStore } from "@/shared/stores/new-rent-store";
 import { Button } from "@/shared/ui/button";
@@ -83,6 +83,21 @@ export default function PreRentInfo() {
               </View>
             </CardContent>
           </Card>
+        </View>
+        {/* Deposit information */}
+        <View className="px-6 pb-6">
+          <View className="flex-row flex-wrap items-center">
+            <Text className="text-sm text-gray-600 leading-6">
+              Initially{" "}
+            </Text>
+            <CurrencyAmount amount={PRICE.nextDay.toLocaleString()} size="sm" />
+            <Text className="text-sm text-gray-600 leading-6">
+              {" "}will be frozen — this is a deposit.
+            </Text>
+          </View>
+          <Text className="text-sm text-gray-600 leading-6 mt-2">
+            After returning the power bank, excess money will be returned.
+          </Text>
         </View>
 
         {/* Как это работает */}
