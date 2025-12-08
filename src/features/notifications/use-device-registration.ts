@@ -32,8 +32,8 @@ export const useDeviceRegistration = () => {
             });
 
             // Сохраняем deviceId локально
-            setDeviceId(response.deviceId);
-            console.log("Device registered successfully:", response.deviceId);
+            setDeviceId(response.id);
+            console.log("Device registered successfully:", response.id);
         } catch (error) {
             console.error("Failed to register device:", error);
             throw error;

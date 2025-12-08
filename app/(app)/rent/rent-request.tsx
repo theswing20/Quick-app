@@ -22,8 +22,9 @@ export default function RentRequest() {
         console.log('paymentMethodId', paymentMethodId);
         console.log('cabinetInfo', cabinetInfo);
 
-        if (!paymentMethodId || !cabinetInfo?.qrCode) {
+        if (!cabinetInfo?.qrCode) {
             return;
+            router.back();
         }
         try {
             setIsLoading(true);
@@ -49,8 +50,9 @@ export default function RentRequest() {
             if (rentalResponse.rental.status === "Active") {
                 // TODO: Redirect to active rental screen
                 setRental(rentalResponse.rental);
-                router.dismissAll();
-                router.push("/(app)/rental-info");
+                if(router.canGoBack()){
+                    router.back();
+                }
             }
         } catch (error) {
             console.log("error", error);

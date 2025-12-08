@@ -20,13 +20,15 @@ export default function RentLayout() {
         headerShown: false,
       }}
     >
-      <Stack.Screen
+      {/* <Stack.Screen
         name="pre-rent-info"
         options={{
+          presentation: "modal",
+          animation: "slide_from_bottom",
           headerShown: false,
           gestureEnabled: true,
         }}
-      />
+      /> */}
       <Stack.Screen
         name="rent-request"
         options={{

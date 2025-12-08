@@ -42,7 +42,7 @@ export default function QRScanner() {
             if (cabinetInfo.id) {
                 setCabinetInfo(cabinetInfo);
                 router.dismissAll();
-                router.push("/(app)/(rent)/pre-rent-info");
+                router.push("/(app)/pre-rent-info");
             }
         } catch (error) {
             if (error instanceof AxiosError) {

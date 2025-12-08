@@ -116,17 +116,19 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
-        name="(rent)"
-        options={{
-          headerShown: false,
-          gestureEnabled: true,
-        }}
-      />
-      <Stack.Screen
         name="(history)"
         options={{
           headerShown: false,
           gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="pre-rent-info"
+        options={{
+          headerShown: false,
+          gestureEnabled: true,
+          presentation: "modal",
+          animation: "slide_from_bottom",
         }}
       />
     </Stack>

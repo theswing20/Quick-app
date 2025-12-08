@@ -1,22 +1,30 @@
 import { PaymentMethodSelectorButton } from "@/features/payment-methods";
 import { PRICE } from "@/shared/lib/mocks";
 import { useNewRentStore } from "@/shared/stores/new-rent-store";
+import { useRentStore } from "@/shared/stores/rent-store";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardRow } from "@/shared/ui/card";
 import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { ScreenTitle } from "@/shared/ui/screen-title";
 import { useRouter } from "expo-router";
 import { Clock, Home, QrCode, Zap } from "lucide-react-native";
-import { ScrollView, Text, View } from "react-native";
+import { Alert, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PreRentInfo() {
   const router = useRouter();
   const cabinetInfo = useNewRentStore((state) => state.cabinetInfo);
+  const activeRental = useRentStore((state) => state.rental);
 
   const startRent = () => {
     console.log("startRent");
-    router.push("/(app)/(rent)/rent-request");
+    if (activeRental) {
+      Alert.alert("You have an active rental", "Please finish the current rental before starting a new one", [
+        { text: "OK", style: "default", onPress: () => { } },
+      ]);
+      return;
+    }
+    router.push("/(app)/rent/rent-request");
   };
 
   return (
@@ -31,7 +39,7 @@ export default function PreRentInfo() {
             <QrCode /><Text className="text-xl font-bold text-gray-900 mb-1">{cabinetInfo?.qrCode}</Text>
           </View>
         </View>
-        {/* Название места */}
+
         <View className="px-4 py-2">
           <Text className="text-2xl font-bold text-gray-900 mb-1">
             {cabinetInfo?.modelName}
@@ -41,7 +49,6 @@ export default function PreRentInfo() {
           </Text>
         </View>
 
-        {/* Таблица цен */}
         <View className="px-4 pb-4">
           <Card variant="elevated" className="bg-gray-50">
             <CardContent className="p-0">
@@ -100,7 +107,6 @@ export default function PreRentInfo() {
           </Text>
         </View>
 
-        {/* Как это работает */}
         <View className="px-4 pb-4">
           <Text className="text-lg font-semibold text-gray-900 mb-4">
             How to return?

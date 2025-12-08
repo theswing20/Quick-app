@@ -8,7 +8,11 @@ export interface RegisterDeviceRequest {
 }
 
 export interface RegisterDeviceResponse {
-    deviceId: string;
+    id: string;
+    deviceType: "ios" | "android";
+    deviceName: string;
+    lastActiveAt: string;
+    createdAt: string;
 }
 
 export const useDevicesService = () => {

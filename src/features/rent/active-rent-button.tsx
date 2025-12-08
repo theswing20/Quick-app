@@ -5,6 +5,8 @@ import { router } from "expo-router";
 import { useCallback, useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
+const RENTAL_CHECK_INTERVAL = 20 * 1000;
+
 export default function ActiveRentButton() {
     const rental = useRentStore((state) => state.rental);
     const setRental = useRentStore((state) => state.setRental);
@@ -40,7 +42,7 @@ export default function ActiveRentButton() {
     }, []);
 
     useEffect(() => {
-        const interval = setInterval(checkActiveRental, 20000);
+        const interval = setInterval(checkActiveRental, RENTAL_CHECK_INTERVAL);
         return () => clearInterval(interval);
     }, [checkActiveRental]);
 

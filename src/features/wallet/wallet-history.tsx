@@ -1,5 +1,6 @@
 import { useWalletService, WalletHistory, WalletHistoryItem } from "@/app/api/wallet-service";
 import { cn } from "@/shared/lib/utils";
+import { useWalletStore } from "@/shared/stores/wallet-store";
 import { Button } from "@/shared/ui/button";
 import HistoryItem from "@/shared/ui/wallet/history-item";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -26,6 +27,7 @@ export default function WalletHistoryComponent() {
         replenishment: false,
         writeOff: false,
     });
+    const balance = useWalletStore((state) => state.balance);
     const walletService = useWalletService();
     const isLoadingRef = useRef(false);
 
@@ -113,7 +115,7 @@ export default function WalletHistoryComponent() {
         }
 
         void getHistory(direction, currentPage + 1, true);
-    }, [history?.hasNextPage, isLoading, currentPage, filter, getHistory]);
+    }, [history?.hasNextPage, isLoading, currentPage, filter, getHistory, balance]);
 
     const changeFilter = (filterButton: 'replenishment' | 'writeOff') => {
         setFilter((prev) => {

@@ -5,16 +5,23 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { THEME } from "@/shared/lib/theme";
+import { useUpdateBalance } from "@/shared/hooks/useUpdateBalance";
 
 export default function ReplenishmentSuccess() {
     const router = useRouter();
     const { amount } = useLocalSearchParams<{ amount: string }>();
+    const updateBalance = useUpdateBalance();
 
     const handleDone = () => {
         if (router.canGoBack()) {
             router.back();
         } else {
             router.dismissAll();
+        }
+        try{
+            updateBalance();
+        } catch (error) {
+            console.error('Error updating balance', error);
         }
     };
 

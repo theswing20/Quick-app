@@ -21,7 +21,14 @@ function Home() {
       setPaymentMethods(paymentMethods);
       console.log('paymentMethods', paymentMethods);
     });
-    updateBalance();
+    const interval = setInterval(() => {
+      try {
+        updateBalance();
+      } catch (error) {
+        console.error('Error updating balance', error);
+      }
+    }, 20000);  
+    return () => clearInterval(interval);
   }, []);
 
   const openMenu = () => {
