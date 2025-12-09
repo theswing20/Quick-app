@@ -43,7 +43,7 @@ export default function RentalInfo() {
     }, [rental?.startTime]);
 
     useEffect(() => {
-        if (activeRental) {
+        if (activeRental?.id === rentalId) {
             setRental(activeRental);
             setIsLoading(false);
             return;

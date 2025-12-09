@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../global.css";
+import { useRentStore } from "@/shared/stores/rent-store";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -45,7 +46,8 @@ export default function RootLayout() {
   const [notification, setNotification] = useState<
     Notifications.Notification | undefined
   >(undefined);
-
+  const setRental = useRentStore((state) => state.setRental);
+  
   useEffect(() => {
     registerForPushNotificationsAsync()
       .then((token) => setExpoPushToken(token ?? ""))
@@ -54,6 +56,7 @@ export default function RootLayout() {
     const notificationListener = Notifications.addNotificationReceivedListener(
       (notification) => {
         setNotification(notification);
+        setRental(null);
       }
     );
 

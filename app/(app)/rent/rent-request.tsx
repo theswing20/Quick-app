@@ -1,13 +1,13 @@
 import { useRentalsService } from "@/app/api/rentals-service";
 import { useNewRentStore } from "@/shared/stores/new-rent-store";
 import { Loader } from "@/shared/ui/loader";
-import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PaymentIntent, useStripe } from "@stripe/stripe-react-native";
 import { usePaymentMethodsStore } from "@/shared/stores/payment-methods-store";
 import { useRentStore } from "@/shared/stores/rent-store";
+import { useRouter } from "expo-router";
 
 export default function RentRequest() {
     const { cabinetInfo, reset } = useNewRentStore();
@@ -17,14 +17,15 @@ export default function RentRequest() {
     const stripe = useStripe();
     const { confirmPayment } = stripe;
     const setRental = useRentStore(state => state.setRental);
+    const router = useRouter();
 
     const startRent = async () => {
         console.log('paymentMethodId', paymentMethodId);
         console.log('cabinetInfo', cabinetInfo);
 
         if (!cabinetInfo?.qrCode) {
-            return;
             router.back();
+            return;
         }
         try {
             setIsLoading(true);
@@ -39,8 +40,13 @@ export default function RentRequest() {
                 console.log("confirmResult", confirmResult);
                 if (confirmResult.paymentIntent?.status === PaymentIntent.Status.Succeeded) {
                     setRental(rentalResponse.rental);
-                    router.dismissAll();
-                    router.push("/(app)/rental-info");
+                    if (router.canDismiss()) {
+                        router.dismissAll();
+                    }
+                    router.push({
+                        pathname: `/(app)/rental-info`,
+                        params: { rentalId: rentalResponse.rental.id }
+                    });
                     return;
                 }
                 if (confirmResult.error) {
@@ -48,11 +54,15 @@ export default function RentRequest() {
                 }
             }
             if (rentalResponse.rental.status === "Active") {
-                // TODO: Redirect to active rental screen
                 setRental(rentalResponse.rental);
-                if(router.canGoBack()){
-                    router.back();
+                if (router.canDismiss()) {
+                    router.dismissAll();
                 }
+                router.push({
+                    pathname: `/(app)/rental-info`,
+                    params: { rentalId: rentalResponse.rental.id }
+                });
+
             }
         } catch (error) {
             console.log("error", error);

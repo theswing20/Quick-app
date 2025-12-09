@@ -1,8 +1,8 @@
-import { useRentalsService } from "@/app/api/rentals-service";
+import { Rental, useRentalsService } from "@/app/api/rentals-service";
 import { useRentStore } from "@/shared/stores/rent-store";
 import { AxiosError } from "axios";
 import { router } from "expo-router";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const RENTAL_CHECK_INTERVAL = 20 * 1000;
@@ -21,6 +21,7 @@ export default function ActiveRentButton() {
         } catch (error) {
             if (error instanceof AxiosError) {
                 if (error.response?.status === 404) {
+                    
                     if (rental) {
                         router.push({
                             pathname: "/(app)/rental-finished",
@@ -35,7 +36,7 @@ export default function ActiveRentButton() {
             }
             console.error('Error checking active rental', error);
         }
-    }, [rentalsService, setRental]);
+    }, [rentalsService, setRental, rental]);
 
     useEffect(() => {
         checkActiveRental();
