@@ -49,7 +49,7 @@
       "package": "com.theswing20.quickapp",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyB3grj8kuAcPHjuFd2Caw0BWe_OPWbr3ks"
+          "apiKey": "process.env.GOOGLE_MAPS_API_KEY"
         }
       },
       "permissions": [
@@ -98,12 +98,12 @@
           "locationWhenInUsePermission": "We need access to your location to show you on the map and provide location-based services"
         }
       ],
-      [
-        "react-native-maps",
-        {
-          "googleMapsApiKey": "AIzaSyBYrczSLTuX-Dj_K06LSa92Qs7EuBujhvA"
-        }
-      ],
+      // [
+      //   "react-native-maps",
+      //   {
+      //     "googleMapsApiKey": "process.env.GOOGLE_MAPS_API_KEY"
+      //   }
+      // ],
       [
         "expo-camera",
         {
