@@ -30,11 +30,6 @@
       },
       "entitlements": {
         "aps-environment": "production"
-      },
-      "config": {
-        "googleMaps": {
-          "apiKey": "process.env.GOOGLE_MAPS_API_KEY"
-        }
       }
     },
     "android": {
@@ -47,11 +42,6 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.theswing20.quickapp",
-      "config": {
-        "googleMaps": {
-          "apiKey": "process.env.GOOGLE_MAPS_API_KEY"
-        }
-      },
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
@@ -98,12 +88,13 @@
           "locationWhenInUsePermission": "We need access to your location to show you on the map and provide location-based services"
         }
       ],
-      // [
-      //   "react-native-maps",
-      //   {
-      //     "googleMapsApiKey": "process.env.GOOGLE_MAPS_API_KEY"
-      //   }
-      // ],
+      [
+        "react-native-maps",
+        {
+          "androidGoogleMapsApiKey": "AIzaSyB3grj8kuAcPHjuFd2Caw0BWe_OPWbr3ks",
+          "iosGoogleMapsApiKey": "AIzaSyB3grj8kuAcPHjuFd2Caw0BWe_OPWbr3ks"
+        }
+      ],
       [
         "expo-camera",
         {

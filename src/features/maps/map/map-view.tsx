@@ -4,7 +4,7 @@ import { Text } from "@/shared/ui/text";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { Pressable, StyleSheet, View, Image } from "react-native";
+import { Pressable, StyleSheet, View, Image, Platform } from "react-native";
 import MapView, { Marker as MapMarker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region } from "react-native-maps";
 
 // const INITIAL_REGION: Region = {
@@ -194,7 +194,7 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
       <MapView
         ref={mapRef}
         style={styles.map}
-        // provider={PROVIDER_GOOGLE}
+        provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
         region={region}
         showsUserLocation={true}
         showsMyLocationButton={false}
