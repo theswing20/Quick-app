@@ -4,7 +4,7 @@
     "slug": "quick-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/shared/assets/images/icon.png",
+    "icon": "./src/shared/assets/app-icons/app-icon.png",
     "scheme": "quickapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -30,14 +30,13 @@
       },
       "entitlements": {
         "aps-environment": "production"
-      }
+      },
+      "appleTeamId": "5CX5962FS7"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./src/shared/assets/images/android-icon-foreground.png",
-        "backgroundImage": "./src/shared/assets/images/android-icon-background.png",
-        "monochromeImage": "./src/shared/assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#FAD00E",
+        "foregroundImage": "./src/shared/assets/app-icons/app-icon.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -46,7 +45,8 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.POST_NOTIFICATIONS",
-        "android.permission.CAMERA"
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -70,17 +70,22 @@
       [
         "expo-splash-screen",
         {
-          "image": "./src/shared/assets/images/splash-icon.png",
+          "image": "./src/shared/assets/app-icons/app-splash-screen.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#FAD00E",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#FAD00E"
           }
         }
       ],
       [
-        "expo-notifications"
+        "expo-notifications",
+        {
+          "icon": "./src/shared/assets/app-icons/app-icon.png",
+          "color": "#FAD00E",
+          "sounds": []
+        }
       ],
       [
         "expo-location",
