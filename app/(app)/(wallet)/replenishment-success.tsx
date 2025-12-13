@@ -1,5 +1,4 @@
 import { Button } from "@/shared/ui/button";
-import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { CheckCircle } from "lucide-react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Text, View } from "react-native";
@@ -35,12 +34,9 @@ export default function ReplenishmentSuccess() {
 
                 {/* Amount Text */}
                 <View className="flex-row items-center justify-center mb-2">
-                    <CurrencyAmount
-                        amount={parseFloat(amount || "0")}
-                        size="xl"
-                        variant="bold"
-                        className="text-3xl"
-                    />
+                    <Text className="text-3xl font-bold text-gray-900">
+                        {parseFloat(amount || "0")} AED
+                    </Text>
                 </View>
 
                 {/* Subtitle */}

@@ -3,7 +3,6 @@ import { PRICE } from "@/shared/lib/mocks";
 import { THEME } from "@/shared/lib/theme";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardRow } from "@/shared/ui/card";
-import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { Loader } from "@/shared/ui/loader";
 import { router, useLocalSearchParams } from "expo-router";
 import { Zap } from "lucide-react-native";
@@ -137,12 +136,9 @@ export default function HistoryDetails() {
                                 </View>
 
                                 {/* Amount */}
-                                <CurrencyAmount
-                                    amount={totalCost}
-                                    size="md"
-                                    variant="bold"
-                                    className="ml-4"
-                                />
+                                <Text className="text-base font-bold text-gray-900 ml-4">
+                                    {totalCost} AED
+                                </Text>
                             </View>
                         </CardContent>
                     </Card>
@@ -176,13 +172,17 @@ export default function HistoryDetails() {
                                     <Text className="text-base font-medium text-gray-700">
                                         First hour
                                     </Text>
-                                    <CurrencyAmount amount={firstHourCost} size="sm" />
+                                    <Text className="text-sm font-medium text-gray-900">
+                                        {firstHourCost} AED
+                                    </Text>
                                 </CardRow>
                                 <CardRow className="py-2 px-0 border-0">
                                     <Text className="text-base font-medium text-gray-700">
                                         Remaining 23 hours
                                     </Text>
-                                    <CurrencyAmount amount={remainingHoursCost} size="sm" />
+                                    <Text className="text-sm font-medium text-gray-900">
+                                        {remainingHoursCost} AED
+                                    </Text>
                                 </CardRow>
                             </View>
 
@@ -192,7 +192,9 @@ export default function HistoryDetails() {
                                     <Text className="text-base font-bold text-gray-900">
                                         Total
                                     </Text>
-                                    <CurrencyAmount amount={totalCost} size="md" variant="bold" />
+                                    <Text className="text-base font-bold text-gray-900">
+                                        {totalCost} AED
+                                    </Text>
                                 </CardRow>
                             </View>
 
@@ -202,13 +204,17 @@ export default function HistoryDetails() {
                                     <Text className="text-base font-medium text-gray-700">
                                         Paid with bonuses
                                     </Text>
-                                    <CurrencyAmount amount={paidWithBonuses} size="sm" />
+                                    <Text className="text-sm font-medium text-gray-900">
+                                        {paidWithBonuses} AED
+                                    </Text>
                                 </CardRow>
                                 <CardRow className="py-2 px-0 border-0">
                                     <Text className="text-base font-medium text-gray-700">
                                         Paid with card
                                     </Text>
-                                    <CurrencyAmount amount={paidWithCard} size="sm" />
+                                    <Text className="text-sm font-medium text-gray-900">
+                                        {paidWithCard} AED
+                                    </Text>
                                 </CardRow>
                             </View>
                         </CardContent>

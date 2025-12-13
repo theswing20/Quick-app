@@ -3,7 +3,6 @@ import { cn } from "@/shared/lib/utils";
 import { useCabinetStore } from "@/shared/stores/cabinet-store";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardRow } from "@/shared/ui/card";
-import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Home, QrCode, Smartphone, SmartphoneCharging, X, Zap } from "lucide-react-native";
 import { ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
@@ -105,7 +104,9 @@ export default function MarkerDetails() {
                     First hour
                   </Text>
                 </View>
-                <CurrencyAmount amount={PRICE.firstHour} size="sm" />
+                <Text className="text-sm font-medium text-gray-900">
+                    {PRICE.firstHour} AED
+                </Text>
               </CardRow>
               <CardRow withBorder>
                 <View className="flex-row items-center gap-2">
@@ -116,7 +117,9 @@ export default function MarkerDetails() {
                     Remaining 23 hours
                   </Text>
                 </View>
-                <CurrencyAmount amount={PRICE.remaining23Hours} size="sm" />
+                <Text className="text-sm font-medium text-gray-900">
+                    {PRICE.remaining23Hours} AED
+                </Text>
               </CardRow>
               <CardRow>
                 <View className="flex-row items-center gap-2">
@@ -127,7 +130,9 @@ export default function MarkerDetails() {
                     Next day
                   </Text>
                 </View>
-                <CurrencyAmount amount={PRICE.nextDay} size="sm" />
+                <Text className="text-sm font-medium text-gray-900">
+                    {PRICE.nextDay} AED
+                </Text>
               </CardRow>
             </CardContent>
           </Card>

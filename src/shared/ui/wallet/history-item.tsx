@@ -1,5 +1,4 @@
 import { WalletHistoryItem } from "@/app/api/wallet-service";
-import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { Zap } from "lucide-react-native";
 import { Text, View } from "react-native";
 
@@ -14,7 +13,9 @@ export default function HistoryItem({ item }: { item: WalletHistoryItem }) {
             <Text className={"text-sm text-gray-500"}>{item.description}</Text>
         </View>
         <View className={"flex-row items-center justify-center"}>
-            <CurrencyAmount amount={item.amount} size="md" />
+            <Text className="text-base font-medium text-gray-900">
+                {item.amount} AED
+            </Text>
         </View>
     </View>
     )

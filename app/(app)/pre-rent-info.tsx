@@ -4,7 +4,6 @@ import { useNewRentStore } from "@/shared/stores/new-rent-store";
 import { useRentStore } from "@/shared/stores/rent-store";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardRow } from "@/shared/ui/card";
-import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { ScreenTitle } from "@/shared/ui/screen-title";
 import { useRouter } from "expo-router";
 import { Clock, Home, QrCode, Zap } from "lucide-react-native";
@@ -61,7 +60,9 @@ export default function PreRentInfo() {
                     First hour
                   </Text>
                 </View>
-                <CurrencyAmount amount={PRICE.firstHour} size="sm" />
+                <Text className="text-sm font-medium text-gray-900">
+                    {PRICE.firstHour} AED
+                </Text>
               </CardRow>
               <CardRow withBorder>
                 <View className="flex-row items-center gap-2">
@@ -72,7 +73,9 @@ export default function PreRentInfo() {
                     Remaining 23 hours
                   </Text>
                 </View>
-                <CurrencyAmount amount={PRICE.remaining23Hours} size="sm" />
+                <Text className="text-sm font-medium text-gray-900">
+                    {PRICE.remaining23Hours} AED
+                </Text>
               </CardRow>
               <CardRow>
                 <View className="flex-row items-center gap-2">
@@ -83,7 +86,9 @@ export default function PreRentInfo() {
                     Next day
                   </Text>
                 </View>
-                <CurrencyAmount amount={PRICE.nextDay} size="sm" />
+                <Text className="text-sm font-medium text-gray-900">
+                    {PRICE.nextDay} AED
+                </Text>
               </CardRow>
               <View className="px-4 pb-4 pt-2">
                 <PaymentMethodSelectorButton />
@@ -97,7 +102,9 @@ export default function PreRentInfo() {
             <Text className="text-sm text-gray-600 leading-6">
               Initially{" "}
             </Text>
-            <CurrencyAmount amount={PRICE.nextDay.toLocaleString()} size="sm" />
+            <Text className="text-sm text-gray-600 leading-6">
+                {PRICE.nextDay.toLocaleString()} AED
+            </Text>
             <Text className="text-sm text-gray-600 leading-6">
               {" "}will be frozen — this is a deposit.
             </Text>

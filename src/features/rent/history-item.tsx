@@ -1,7 +1,6 @@
 import { RentalHistoryItem } from "@/app/api/rentals-service";
 import { THEME } from "@/shared/lib/theme";
 import { formatDateTime } from "@/shared/lib/utils";
-import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { Zap } from "lucide-react-native";
 import { Text, View } from "react-native";
 
@@ -18,7 +17,9 @@ export default function HistoryItem({ item }: { item: RentalHistoryItem }) {
                 </View>
             </View>
             <View className="flex-row items-center">
-                <CurrencyAmount amount={item.cost} size="sm" />
+                <Text className="text-sm font-medium text-gray-900">
+                    {item.cost} AED
+                </Text>
             </View>
         </View>
     )

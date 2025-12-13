@@ -3,7 +3,6 @@ import { THEME } from "@/shared/lib/theme";
 import { Loader } from "@/shared/ui/loader";
 import { ScreenTitle } from "@/shared/ui/screen-title";
 import { Card, CardContent } from "@/shared/ui/card";
-import { CurrencyAmount } from "@/shared/ui/currency-amount";
 import { router } from "expo-router";
 import { QrCode, Zap } from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -163,11 +162,9 @@ export default function History() {
                             </View>
 
                             {/* Amount */}
-                            <CurrencyAmount
-                                amount={item.cost}
-                                size="sm"
-                                className="ml-4"
-                            />
+                            <Text className="text-sm font-medium text-gray-900 ml-4">
+                                {item.cost} AED
+                            </Text>
                         </View>
                     </CardContent>
                 </Card>
