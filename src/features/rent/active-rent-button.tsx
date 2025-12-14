@@ -95,7 +95,7 @@ export default function ActiveRentButton() {
         <View className="p-2 rounded-2xl bg-amber-200/40">
           <Image
             source={require("@/shared/assets/icons/lightning.svg")}
-            style={{ width: 24, height: 24, tintColor: "#FAD00E" }}
+            style={{ width: 24, height: 24, tintColor: "#FACA16" }}
             contentFit="contain"
           />
         </View>

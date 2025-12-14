@@ -149,10 +149,10 @@ export default function Index() {
 
   return (
     <View className="flex-1">
-      <StatusBar barStyle="dark-content" backgroundColor="#F5D800" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FACA16" />
 
       {/* Yellow background */}
-      <View className="flex-1 bg-primary">
+      <View className="flex-1 bg-[#FACA16]">
         {/* Large QUICK logo */}
         <Animated.View
           style={[
