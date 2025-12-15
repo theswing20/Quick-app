@@ -152,7 +152,7 @@ export default function MarkerDetails() {
                 </View>
                 <View className="flex-1">
                   <Text className="text-base text-gray-700 leading-6">
-                    You scan the station's QR code and take a powerbank
+                    You scan the station&apos;s QR code and take a powerbank
                   </Text>
                 </View>
               </View>
@@ -163,7 +163,7 @@ export default function MarkerDetails() {
                 </View>
                 <View className="flex-1">
                   <Text className="text-base text-gray-700 leading-6">
-                    Charge up — cables are built-in. There's Type-C, micro-USB and Lightning for iPhone
+                    Charge up — cables are built-in. There&apos;s Type-C, micro-USB and Lightning for iPhone
                   </Text>
                 </View>
               </View>
@@ -183,7 +183,7 @@ export default function MarkerDetails() {
         </View>
         <View className="h-10"></View>
       </ScrollView>
-      <View className="px-4 pb-4 absolute bottom-4 left-0 right-0">
+      <SafeAreaView edges={['bottom']} className="px-4 pb-4 absolute bottom-4 left-0 right-0">
         <Button
           className="w-full h-14 rounded-2xl bg-primary"
           onPress={handleScanQr}
@@ -192,7 +192,7 @@ export default function MarkerDetails() {
             Take via QR
           </Text>
         </Button>
-      </View>
+      </SafeAreaView>
     </SafeAreaView>
   );
 }

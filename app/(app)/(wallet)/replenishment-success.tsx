@@ -5,11 +5,20 @@ import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { THEME } from "@/shared/lib/theme";
 import { useUpdateBalance } from "@/shared/hooks/useUpdateBalance";
+import { usePaymentMethodsStore } from "@/shared/stores/payment-methods-store";
+import { useEffect } from "react";
 
 export default function ReplenishmentSuccess() {
     const router = useRouter();
     const { amount } = useLocalSearchParams<{ amount: string }>();
     const updateBalance = useUpdateBalance();
+    const paymentMethods = usePaymentMethodsStore((state) => state.paymentMethods);
+
+    useEffect(() => {
+        if (paymentMethods.filter((method) => method.id !== null).length === 0) {
+            router.push("/(app)/(wallet)/add-card");
+        }
+    }, [paymentMethods, router]);
 
     const handleDone = () => {
         if (router.canGoBack()) {

@@ -18,7 +18,7 @@ export default function AddPaymentMethodScreen() {
     const [isLoading, setLoading] = useState(false);
     const [setupIntentClientSecret, setSetupIntentClientSecret] = useState('');
     const stripe = useStripe();
-    const { createPaymentMethod, confirmSetupIntent } = stripe;
+    const { confirmSetupIntent } = stripe;
     const paymentMethodsService = usePaymentMethodsService();
     const router = useRouter();
     const setPaymentMethods = usePaymentMethodsStore(state => state.setPaymentMethods);

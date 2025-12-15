@@ -29,6 +29,10 @@ export default function PaymentMethodSelectorButton({ hideBalanceButton = false 
     }, [defaultPaymentMethod, selectedPaymentMethod]);
 
     const openPaymentMethods = () => {
+        if(hideBalanceButton && paymentMethods.filter((method) => method.id !== null).length === 0){
+            router.push("/(app)/(wallet)/add-card");
+            return;
+        }
         router.push({
             pathname: '/(app)/(wallet)/payment-method-selector',
             params: {
@@ -42,7 +46,8 @@ export default function PaymentMethodSelectorButton({ hideBalanceButton = false 
             <View className="w-full bg-primary-foreground text-primary p-4 rounded-2xl flex-row items-center justify-between">
                 <View className="flex-row items-center gap-3">
                     <CreditCard size={20} color={THEME.light.primary} />
-                    <Text className="text-base text-primary font-medium">{capitalizeFirstLetter(selectedPaymentMethod?.displayName ?? '')}</Text>
+                    {selectedPaymentMethod ? <Text className="text-base text-primary font-medium">{capitalizeFirstLetter(selectedPaymentMethod?.displayName ?? '')}</Text> :
+                    <Text className="text-base text-primary">Select payment method</Text>}
                 </View>
                 <ChevronRight size={20} color={THEME.light.primary} />
             </View>

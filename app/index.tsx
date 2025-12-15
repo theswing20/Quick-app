@@ -12,6 +12,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { height } = Dimensions.get("window");
 
@@ -258,12 +259,12 @@ export default function Index() {
           </Link>
           {/* <SignOutButton /> */}
           {/* Legal text */}
-          <View className="mt-6">
-            <Text className="text-xs leading-tight text-center text-gray-400">
+          <SafeAreaView edges={['bottom']}>
+            <Text className="text-xs leading-tight text-center text-gray-400 mt-0">
               By tapping &ldquo;Let&apos;s go!&rdquo;, you accept Terms of
               Service, Privacy Policy and confirm that you are 18 years old
             </Text>
-          </View>
+          </SafeAreaView>
         </Animated.View>
       </View>
     </View>

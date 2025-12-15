@@ -8,7 +8,7 @@ import QuickAmountButton from "@/shared/ui/quick-amount-button";
 import { ScreenSection } from "@/shared/ui/screen-section";
 import { ScreenTitle } from "@/shared/ui/screen-title";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -22,6 +22,14 @@ export default function AccountReplenishment() {
     const selectedPaymentMethod = usePaymentMethodsStore((state) => state.selectedPaymentMethod);
     const router = useRouter();
     const updateBalance = useUpdateBalance();
+    const paymentMethods = usePaymentMethodsStore((state) => state.paymentMethods);
+
+useEffect(() => {
+    if (paymentMethods.filter((method) => method.id !== null).length === 0) {
+        router.push("/(app)/(wallet)/add-card");
+    }
+}, [paymentMethods, router]);
+
     const handleChange = (text: string) => {
         let cleaned = text.replace(/[^0-9.,]/g, "");
         cleaned = cleaned.replace(",", ".");

@@ -4,7 +4,7 @@ import { Text } from "@/shared/ui/text";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { Pressable, StyleSheet, View, Image, Platform } from "react-native";
+import { Image, Platform, Pressable, StyleSheet, View } from "react-native";
 import MapView, { Marker as MapMarker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region } from "react-native-maps";
 
 // const INITIAL_REGION: Region = {
@@ -43,6 +43,15 @@ interface MapViewProps {
   ref?: React.Ref<MapViewRef>;
 }
 
+const hasSignificantMove = (prev: Region, next: Region) => {
+  const centerThreshold = 0.01; 
+
+  const latDiff = Math.abs(prev.latitude - next.latitude);
+  const lngDiff = Math.abs(prev.longitude - next.longitude);
+
+  return latDiff > centerThreshold || lngDiff > centerThreshold;
+};
+
 const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref) => {
   const mapRef = useRef<MapView>(null);
   const [region, setRegion] = useState<Region>(INITIAL_REGION);
@@ -50,21 +59,27 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
   const cabinetsService = useCabinetsService();
   const { nearestCabinets, setNearestCabinets } = useCabinetStore();
 
-  const getMarkers = async () =>{
+  const getMarkers = useCallback(async () => {
     const markers = await cabinetsService.getNearestCabinets({
       latitude: region.latitude,
       longitude: region.longitude,
       radiusKm: 50,
     });
     return markers;
-  }
+  }, [cabinetsService, region.latitude, region.longitude]);
 
-  useEffect(()=>{
-    getMarkers().then((cabinets) => {
-      console.log('markers', cabinets);
-      setNearestCabinets(cabinets);
-    });
-  },[region.latitude, region.longitude]);
+console.log('Region', region);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      getMarkers().then((cabinets) => {
+        console.log("markers", cabinets);
+        setNearestCabinets(cabinets);
+      });
+    }, 200);
+
+    return () => clearTimeout(timeoutId);
+  }, [getMarkers, setNearestCabinets]);
 
   const clampZoom = useCallback((delta: number) => {
     const currentDelta = region.latitudeDelta;
@@ -154,7 +169,12 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
   }, []);
 
   const handleRegionChangeComplete = useCallback((newRegion: Region) => {
-    setRegion(newRegion);
+    setRegion((prevRegion) => {
+      if (!hasSignificantMove(prevRegion, newRegion)) {
+        return prevRegion;
+      }
+      return newRegion;
+    });
   }, []);
 
   const centerOnUserLocation = useCallback(async () => {

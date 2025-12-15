@@ -127,7 +127,7 @@ export default function PreRentInfo() {
                 </View>
                 <View className="flex-1">
                   <Text className="text-base text-gray-700 leading-6">
-                    Find any nearby station on the map - they're marked with special icons
+                    Find any nearby station on the map - they&apos;re marked with special icons
                   </Text>
                 </View>
               </View>
@@ -157,7 +157,7 @@ export default function PreRentInfo() {
           </Card>
           <View className="mt-6">
             <Text className="text-gray-500 text-sm">
-              By tapping "Take", you agree to the <Text className="underline">Terms of Use</Text> and the <Text className="underline">Adhesion Agreement</Text>.
+              By tapping &quot;Take&quot;, you agree to the <Text className="underline">Terms of Use</Text> and the <Text className="underline">Adhesion Agreement</Text>.
             </Text>
           </View>
         </View>

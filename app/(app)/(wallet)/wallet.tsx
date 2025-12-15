@@ -1,5 +1,6 @@
 import { WalletHistoryComponent } from "@/features/wallet";
 import { useUpdateBalance } from "@/shared/hooks/useUpdateBalance";
+import { usePaymentMethodsStore } from "@/shared/stores/payment-methods-store";
 import { useWalletStore } from "@/shared/stores/wallet-store";
 import { Button } from "@/shared/ui/button";
 import { ScreenSection } from "@/shared/ui/screen-section";
@@ -18,6 +19,11 @@ export default function Wallet() {
         updateBalance();    
     }, []);
 
+    const handleAddMoney = () => {
+            router.push("/(app)/(wallet)/account-replenishment");
+
+    }
+
     return (
         <SafeAreaView className="bg-white flex-1">
             <ScreenTitle title="Wallet" />
@@ -28,7 +34,7 @@ export default function Wallet() {
                             {balance} AED
                         </Text>
                     </View>
-                    <Button className="h-14 rounded-2xl" onPress={() => { router.push("/(app)/(wallet)/account-replenishment") }}>
+                    <Button className="h-14 rounded-2xl" onPress={handleAddMoney}>
                         <Text className="text-lg font-semibold text-primary-foreground">Add money</Text>
                     </Button>
                 </ScreenSection>
