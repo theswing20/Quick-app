@@ -79,6 +79,8 @@ export default function Menu() {
   ];
 
   return (
+    <View className="flex-1">
+      <View className="absolute bottom-0 bg-gray-50 flex-1 w-full h-[100px]"></View>
     <SafeAreaView className="flex-1 justify-end">
       <Animated.View
         style={{
@@ -95,5 +97,6 @@ export default function Menu() {
         </View>
       </Animated.View>
     </SafeAreaView>
+    </View>
   );
 }
