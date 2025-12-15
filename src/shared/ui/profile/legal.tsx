@@ -1,5 +1,6 @@
 import { useDeviceRegistration } from "@/features/notifications/use-device-registration";
 import { useAuth } from "@clerk/clerk-expo";
+import * as WebBrowser from "expo-web-browser";
 import { ChevronRight, LogOut, Trash2 } from "lucide-react-native";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { ScreenSection } from "../screen-section";
@@ -37,17 +38,34 @@ export const ProfileLegal = () => {
     );
   };
 
+  const openUrl = async (url: string) => {
+    try {
+      await WebBrowser.openBrowserAsync(url);
+    } catch (error) {
+      console.error("Failed to open url:", error);
+      Alert.alert("Error", "Something went wrong while opening the link.");
+    }
+  };
+
   return (
     <ScreenSection roundedBottom={false}>
       <Text className="text-xl font-medium flex-1 mb-4 text-gray-900">Legal</Text>
       <View className="flex-col items-start justify-between bg-gray-50 rounded-2xl overflow-hidden mb-4">
-        <TouchableOpacity className="w-full flex-row items-center justify-between border-b border-gray-200 p-4" activeOpacity={0.7}>
+        <TouchableOpacity
+          className="w-full flex-row items-center justify-between border-b border-gray-200 p-4"
+          activeOpacity={0.7}
+          onPress={() => openUrl("https://quickcharge.ae/terms")}
+        >
           <Text className="text-base font-medium text-gray-900">Terms of Service</Text>
           <View className="w-8 h-8 flex items-center justify-center rounded-full">
             <ChevronRight size={20} color="#000000" />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity className="w-full flex-row items-center justify-between p-4" activeOpacity={0.7}>
+        <TouchableOpacity
+          className="w-full flex-row items-center justify-between p-4"
+          activeOpacity={0.7}
+          onPress={() => openUrl("https://quickcharge.ae/privacy")}
+        >
           <Text className="text-base font-medium text-gray-900">Privacy Policy</Text>
           <View className="w-8 h-8 flex items-center justify-center rounded-full">
             <ChevronRight size={20} color="#000000" />
