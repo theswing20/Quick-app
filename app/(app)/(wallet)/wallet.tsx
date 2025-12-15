@@ -1,6 +1,5 @@
 import { WalletHistoryComponent } from "@/features/wallet";
 import { useUpdateBalance } from "@/shared/hooks/useUpdateBalance";
-import { usePaymentMethodsStore } from "@/shared/stores/payment-methods-store";
 import { useWalletStore } from "@/shared/stores/wallet-store";
 import { Button } from "@/shared/ui/button";
 import { ScreenSection } from "@/shared/ui/screen-section";

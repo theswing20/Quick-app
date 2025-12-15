@@ -41,7 +41,7 @@ export default function AppLayout() {
       <Stack.Screen
         name="menu"
         options={{
-          presentation: "modal",
+          presentation: "transparentModal",
           headerShown: false,
           animation: "slide_from_bottom",
           gestureEnabled: true,
