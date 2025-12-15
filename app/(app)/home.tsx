@@ -20,7 +20,6 @@ function Home() {
   useEffect(() => {
     paymentMethodsService.getAllPaymentMethods().then((paymentMethods) => {
       setPaymentMethods(paymentMethods);
-      console.log('paymentMethods', paymentMethods);
       if (!isPaymentMethodNotificationShown.current && paymentMethods.filter((method) => method.id !== null).length === 0) {
         isPaymentMethodNotificationShown.current = true;
         router.push({ pathname: '/(app)/(wallet)/add-card' });

@@ -33,7 +33,6 @@ export const useDeviceRegistration = () => {
 
             // Сохраняем deviceId локально
             setDeviceId(response.id);
-            console.log("Device registered successfully:", response.id);
         } catch (error) {
             console.error("Failed to register device:", error);
             throw error;
@@ -45,7 +44,6 @@ export const useDeviceRegistration = () => {
             if (deviceId) {
                 await devicesService.deleteDevice(deviceId);
                 setDeviceId(null);
-                console.log("Device unregistered successfully");
             }
         } catch (error) {
             console.error("Failed to unregister device:", error);

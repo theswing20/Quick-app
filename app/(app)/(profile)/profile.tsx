@@ -1,21 +1,17 @@
 import { ProfileLegal, ProfileNotificationsToggle, ProfilePersonal } from "@/shared/ui/profile";
 import { ScreenTitle } from "@/shared/ui/screen-title";
-import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Dimensions, ScrollView, Text, View } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import {  ScrollView, View } from "react-native";
+import { SafeAreaView,  } from "react-native-safe-area-context";
 
 export default function Index() {
-  const screenHeight = Dimensions.get('window').height;
-  const screenWidth = Dimensions.get('window').width;
-  const router = useRouter();
+
   const [scrollY, setScrollY] = useState(0);
 
   const handleScroll = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     setScrollY(offsetY);
   };
-  const insets = useSafeAreaInsets();
 
   return (
     <SafeAreaView

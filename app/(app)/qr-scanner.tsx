@@ -38,7 +38,6 @@ export default function QRScanner() {
         setIsLoading(true);
         try {
             const cabinetInfo = await cabinetsService.getCabinetInfo(data);
-            console.log("cabinetInfo", cabinetInfo);
             if (cabinetInfo.id) {
                 setCabinetInfo(cabinetInfo);
                 router.dismissAll();
@@ -58,7 +57,6 @@ export default function QRScanner() {
     const handleBarCodeScanned = ({ data }: { data: string }) => {
         if (scannedRef.current) return;
         scannedRef.current = true;
-        console.log("Scanned QR code:", data);
         handleSave(data);
     };
 

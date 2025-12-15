@@ -56,7 +56,6 @@ useEffect(() => {
                 paymentMethodId: selectedPaymentMethod?.id,
             });
 
-            console.log("response", response);
             if (response.paymentIntentId) {
                 await updateBalance();
                 router.replace({

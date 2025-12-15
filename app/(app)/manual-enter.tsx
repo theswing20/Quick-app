@@ -21,11 +21,10 @@ export default function ManualEnter() {
         setIsLoading(true);
         try {
             const cabinetInfo = await cabinetsService.getCabinetInfo(value);
-            console.log("cabinetInfo", cabinetInfo);
             if(cabinetInfo.id){
                 setCabinetInfo(cabinetInfo);
                 router.dismissAll();
-                router.push("/(app)/(rent)/pre-rent-info");
+                router.push("/(app)/pre-rent-info");
             }
         } catch (error) {
             if(error instanceof AxiosError) {

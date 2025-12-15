@@ -41,20 +41,16 @@ function PhoneVerificationCode() {
 
         // Attempt phone verification for sign-up
         const result = await signUp.attemptPhoneNumberVerification({ code });
-        console.log("result status", result?.status);
         if (result?.status === "complete") {
           let sessionId: string | null = null;
 
           // Check if session already exists before creating
           if (signUp.createdSessionId) {
-            console.log("Session already exists, using existing session");
             sessionId = signUp.createdSessionId;
           } else {
             // Try to create the account and session
             try {
               const completeResult = await signUp.create({});
-              console.log("createdSessionId", completeResult?.createdSessionId);
-              console.log("signUp.status", signUp.status);
               sessionId =
                 completeResult?.createdSessionId || signUp.createdSessionId;
             } catch (createError: any) {
@@ -68,9 +64,6 @@ function PhoneVerificationCode() {
                 errorMessage.includes("session already exists") ||
                 errorMessage.includes("session exists")
               ) {
-                console.log(
-                  "Session already exists error caught, using signUp.createdSessionId"
-                );
                 sessionId = signUp.createdSessionId;
               } else {
                 throw createError;
@@ -78,7 +71,6 @@ function PhoneVerificationCode() {
             }
           }
 
-          console.log("Final sessionId", sessionId);
 
           if (sessionId && setActive) {
             // Set the active session with navigate callback
@@ -87,7 +79,6 @@ function PhoneVerificationCode() {
               navigate: async ({ session }: { session: any }) => {
                 // Check for tasks and navigate to custom UI to help users resolve them
                 if (session?.currentTask) {
-                  console.log("currentTask", session?.currentTask);
                   return;
                 }
 
@@ -113,7 +104,6 @@ function PhoneVerificationCode() {
           } else {
             // If no session ID available, redirect anyway
             // The index.tsx will handle authentication state check
-            console.log("no createdSessionId, redirecting anyway");
             // Wait a bit for state to update
             setTimeout(() => {
               router.replace("/");
@@ -180,7 +170,6 @@ function PhoneVerificationCode() {
         errorMessage.includes("session exists")
       ) {
         // Session already exists - try to use it and redirect
-        console.log("Session exists error, checking for existing session");
         if (signUp?.createdSessionId && setActive) {
           try {
             await setActive({

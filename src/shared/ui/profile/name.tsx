@@ -5,7 +5,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 export const ProfileName = ({ name }: { name: string }) => {
     const router = useRouter();
     const onPress = () => {
-        router.push(`/(profile)/edit/name`);
+        router.push(`/(app)/(profile)/edit/name`);
     };
     return (
         <TouchableOpacity

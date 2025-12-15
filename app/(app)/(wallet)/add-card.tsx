@@ -79,7 +79,6 @@ export default function AddPaymentMethodScreen() {
               const response =await paymentMethodsService.confirmPaymentMethod({
                 paymentMethodId: setupIntent.paymentMethod.id,
               });
-              console.log('response', response);
               if(response.success) {
                 void updatePamentMethods();
                 router.back();

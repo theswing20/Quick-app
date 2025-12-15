@@ -99,7 +99,7 @@ export default function HistoryDetails() {
     const paidWithCard = 0;
 
     const displayDate = formatDate(rental.endTime || rental.startTime);
-    const identifier = rental.orderNumber || `# ${rental.powerBankDeviceId}`;
+    const identifier = `# ${rental.powerBankDeviceId}`;
     const startTime = formatTime(rental.startTime);
     const endTime = formatTime(rental.endTime || rental.startTime);
 

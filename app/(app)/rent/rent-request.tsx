@@ -20,24 +20,18 @@ export default function RentRequest() {
     const router = useRouter();
 
     const startRent = async () => {
-        console.log('paymentMethodId', paymentMethodId);
-        console.log('cabinetInfo', cabinetInfo);
-
         if (!cabinetInfo?.qrCode) {
             router.back();
             return;
         }
         try {
             setIsLoading(true);
-            console.log("startRent", cabinetInfo?.qrCode, paymentMethodId);
             const rentalResponse = await rentalsService.startRental({
                 cabinetQRCode: cabinetInfo?.qrCode,
                 paymentMethodId: paymentMethodId,
             });
-            console.log("rentalResponse", rentalResponse);
             if (rentalResponse.requiresPaymentConfirmation && rentalResponse.clientSecret) {
                 const confirmResult = await confirmPayment(rentalResponse.clientSecret);
-                console.log("confirmResult", confirmResult);
                 if (confirmResult.paymentIntent?.status === PaymentIntent.Status.Succeeded) {
                     setRental(rentalResponse.rental);
                     if (router.canDismiss()) {

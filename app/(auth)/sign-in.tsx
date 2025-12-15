@@ -11,7 +11,6 @@ import {
 
 export default function SignIn() {
   const { isSignedIn } = useUser();
-  console.log("isSignedIn", isSignedIn);
   if (isSignedIn) {
     return <Redirect href="/" />;
   }

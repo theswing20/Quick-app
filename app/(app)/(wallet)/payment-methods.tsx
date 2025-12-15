@@ -15,7 +15,6 @@ export default function PaymentMethods() {
     const setDefaultPaymentMethod = async (method: PaymentMethod) => {
         try {
             const response = await paymentMethodsService.setDefaultPaymentMethod({ paymentMethodId: method.id });
-            console.log('response', response);
             if (response.success) {
                 updatePamentMethods();
             }
@@ -46,7 +45,6 @@ export default function PaymentMethods() {
         }
         try {
             const response = await paymentMethodsService.deletePaymentMethod(method.id);
-            console.log('response', response);
             if (response.success) {
                 updatePamentMethods();
             }

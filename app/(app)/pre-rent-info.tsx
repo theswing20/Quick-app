@@ -16,7 +16,6 @@ export default function PreRentInfo() {
   const activeRental = useRentStore((state) => state.rental);
 
   const startRent = () => {
-    console.log("startRent");
     if (activeRental) {
       Alert.alert("You have an active rental", "Please finish the current rental before starting a new one", [
         { text: "OK", style: "default", onPress: () => { } },

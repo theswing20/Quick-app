@@ -68,12 +68,9 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
     return markers;
   }, [cabinetsService, region.latitude, region.longitude]);
 
-console.log('Region', region);
-
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       getMarkers().then((cabinets) => {
-        console.log("markers", cabinets);
         setNearestCabinets(cabinets);
       });
     }, 200);
@@ -140,10 +137,6 @@ console.log('Region', region);
     }
 
     getCurrentLocation();
-  }, []);
-
-  const handleMapPress = useCallback((event: any) => {
-    console.log("Map pressed", event.nativeEvent.coordinate);
   }, []);
 
   const handleMarkerPress = useCallback((cabinetId: string) => (event: any) => {
@@ -218,7 +211,6 @@ console.log('Region', region);
         region={region}
         showsUserLocation={true}
         showsMyLocationButton={false}
-        onPress={handleMapPress}
         onRegionChangeComplete={handleRegionChangeComplete}
       >
         {nearestCabinets.map((marker) => (

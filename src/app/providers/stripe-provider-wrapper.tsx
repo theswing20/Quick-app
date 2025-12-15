@@ -18,7 +18,6 @@ function StripeProviderWrapper({ children }: { children: ReactNode }) {
         const fetchPublishableKey = async () => {
             try {
                 const config = await paymentsService.getPaymentsConfig();
-                console.log('payment config', config);
                 
                 if (config?.publishableKey && typeof config.publishableKey === 'string' && config.publishableKey.trim().length > 0) {
                     setPublishableKey(config.publishableKey);

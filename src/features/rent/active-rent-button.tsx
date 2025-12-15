@@ -70,7 +70,6 @@ export default function ActiveRentButton() {
   }, [checkActiveRental]);
 
   const handlePress = () => {
-    console.log("handlePress", rental);
     if (rental) {
       router.push({
         pathname: `/(app)/rental-info`,

@@ -7,7 +7,6 @@ export const ProfileButton = () => {
     const router = useRouter();
     const { user } = useUser();
     const onPress = () => {
-        console.log("Profile pressed");
         router.dismiss(1);
         setTimeout(() => {
             router.push("/(app)/(profile)/profile");

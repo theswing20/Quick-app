@@ -21,7 +21,6 @@ export default function PaymentMethodSelectorButton({ hideBalanceButton = false 
     useEffect(() => {
         if (!selectedPaymentMethod) {
             const isDefaultBalance = defaultPaymentMethod?.id === null;
-            console.log('isDefaultBalance', isDefaultBalance);
             
             const selectedPaymentMethod = isDefaultBalance && hideBalanceButton ? paymentMethods.filter((method) => method.id !== null)[0] : defaultPaymentMethod;
             setSelectedPaymentMethod(selectedPaymentMethod);

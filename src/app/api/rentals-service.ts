@@ -23,7 +23,6 @@ export const useRentalsService = () => {
             cabinetQRCode: string;
             paymentMethodId?: string | null;
         }) => {
-            console.log('startRental payload', payload);            
             const response = await api.post<StartRentalResponse>('/rentals/start', payload);
             return response.data;
         },

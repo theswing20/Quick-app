@@ -3,6 +3,7 @@ import { cn } from "@/shared/lib/utils";
 import { useWalletStore } from "@/shared/stores/wallet-store";
 import { Button } from "@/shared/ui/button";
 import HistoryItem from "@/shared/ui/wallet/history-item";
+import HistoryItemSkeleton from "@/shared/ui/wallet/history-item-skeleton";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SectionList, Text, View } from "react-native";
 
@@ -179,12 +180,12 @@ export default function WalletHistoryComponent() {
                 <Button className={cn('flex-1 h-12 rounded-2xl bg-primary/25', filter.replenishment && 'bg-primary')} onPress={() => {
                     changeFilter('replenishment')
                 }}>
-                    <Text className={cn('text-base font-semibold', filter.replenishment ? 'text-primary-foreground' : 'text-gray-900')}>Replenishment</Text>
+                    <Text className={cn('text-[14px] font-semibold', filter.replenishment ? 'text-primary-foreground' : 'text-gray-900')}>Replenishment</Text>
                 </Button>
                 <Button className={cn('flex-1 h-12 rounded-2xl bg-primary/25', filter.writeOff && 'bg-primary')} onPress={() => {
                     changeFilter('writeOff')
                 }}>
-                    <Text className={cn('text-base font-semibold', filter.writeOff ? 'text-primary-foreground' : 'text-gray-900')}>Write-off</Text>
+                    <Text className={cn('text-[14px] font-semibold', filter.writeOff ? 'text-primary-foreground' : 'text-gray-900')}>Write-off</Text>
                 </Button>
             </View>
 
@@ -196,7 +197,14 @@ export default function WalletHistoryComponent() {
                         </Text>
                     </View>
                 )}
-                {!!allItems.length && !isLoading && <SectionList
+                {isLoading && !allItems.length && (
+                    <View className="flex-1 px-4">
+                        {Array.from({ length: 5 }).map((_, index) => (
+                            <HistoryItemSkeleton key={index} />
+                        ))}
+                    </View>
+                )}
+                {!!allItems.length && <SectionList
                     sections={groupedSections}
                     renderItem={renderItem}
                     renderSectionHeader={renderSectionHeader}
@@ -204,12 +212,14 @@ export default function WalletHistoryComponent() {
                     onEndReached={loadMore}
                     onEndReachedThreshold={0.5}
                     showsVerticalScrollIndicator={false}
-                    ListEmptyComponent={
+                    ListFooterComponent={
                         isLoading ? (
-                            <View className="py-8">
-                                <Text className="text-center text-gray-500">Loading...</Text>
+                            <View className="px-4 py-2">
+                                {Array.from({ length: 3 }).map((_, index) => (
+                                    <HistoryItemSkeleton key={`footer-${index}`} />
+                                ))}
                             </View>
-                        ) : <Text></Text>
+                        ) : null
                     }
                 />}
             </View>

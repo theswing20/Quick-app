@@ -1,8 +1,8 @@
 import { RentalHistoryItem, useRentalsService } from "@/app/api/rentals-service";
 import { THEME } from "@/shared/lib/theme";
-import { Loader } from "@/shared/ui/loader";
-import { ScreenTitle } from "@/shared/ui/screen-title";
 import { Card, CardContent } from "@/shared/ui/card";
+import HistoryItemSkeleton, { HistorySectionHeaderSkeleton } from "@/shared/ui/history/history-item-skeleton";
+import { ScreenTitle } from "@/shared/ui/screen-title";
 import { router } from "expo-router";
 import { QrCode, Zap } from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -125,7 +125,7 @@ export default function History() {
 
     const renderHistoryItem = ({ item }: { item: RentalHistoryItem }) => {
         const displayDate = formatHistoryDate(item.endTime || item.startTime);
-        const identifier = item.orderNumber || `# ${item.powerBankDeviceId}`;
+        const identifier = `# ${item.powerBankDeviceId}`;
 
         return (
             <TouchableOpacity
@@ -203,7 +203,7 @@ export default function History() {
 
     // Flatten grouped data for FlatList
     const flatData = useMemo(() => {
-        const result: Array<{ type: 'header' | 'item'; section?: GroupedHistorySection; item?: RentalHistoryItem }> = [];
+        const result: { type: 'header' | 'item'; section?: GroupedHistorySection; item?: RentalHistoryItem }[] = [];
 
         groupedHistory.forEach(section => {
             result.push({ type: 'header', section });
@@ -241,8 +241,16 @@ export default function History() {
             </View>
 
             {isLoading && history.length === 0 ? (
-                <View className="flex-1 items-center justify-center">
-                    <Loader />
+                <View className="flex-1 px-4">
+                    {/* Skeleton sections */}
+                    <HistorySectionHeaderSkeleton />
+                    {Array.from({ length: 5 }).map((_, index) => (
+                        <HistoryItemSkeleton key={index} />
+                    ))}
+                    <HistorySectionHeaderSkeleton />
+                    {Array.from({ length: 4 }).map((_, index) => (
+                        <HistoryItemSkeleton key={`section2-${index}`} />
+                    ))}
                 </View>
             ) : (
                 <View className="flex-1 px-4">
