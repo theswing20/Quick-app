@@ -39,6 +39,7 @@
         "foregroundImage": "./src/shared/assets/app-icons/app-icon.png"
       },
       "edgeToEdgeEnabled": true,
+      "googleServicesFile": "./google-services.json",
       "predictiveBackGestureEnabled": false,
       "package": "com.theswing20.quickapp",
       "permissions": [

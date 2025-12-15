@@ -1,0 +1,31 @@
+{
+  "project_info": {
+    "project_number": "313778795663",
+    "project_id": "quick-cbb92",
+    "storage_bucket": "quick-cbb92.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313778795663:android:41a1262c09bd8b6ac0ecfa",
+        "android_client_info": {
+          "package_name": "com.theswing20.quickapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCR8QsUmMJzbGOG3VI_IPXi03WY0XYGq9o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+
+
