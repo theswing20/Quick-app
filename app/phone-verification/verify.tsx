@@ -1,22 +1,24 @@
+import { useDeviceRegistration } from "@/features/notifications/use-device-registration";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Text } from "@/shared/ui/text";
-import { useClerk, useSignUp, useUser } from "@clerk/clerk-expo";
+import { useClerk, useSignIn, useSignUp, useUser } from "@clerk/clerk-expo";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { Alert, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useDeviceRegistration } from "@/features/notifications/use-device-registration";
 
 function PhoneVerificationCode() {
   const router = useRouter();
-  const { phone, phoneId, isSignUp } = useLocalSearchParams<{
+  const { phone, phoneId, isSignUp, isSignIn } = useLocalSearchParams<{
     phone?: string;
     phoneId?: string;
     isSignUp?: string;
+    isSignIn?: string;
   }>();
   const { user, isLoaded } = useUser();
   const { signUp, isLoaded: isSignUpLoaded } = useSignUp();
+  const { signIn, isLoaded: isSignInLoaded } = useSignIn();
   const { setActive } = useClerk();
   const { registerDevice } = useDeviceRegistration();
 
@@ -32,6 +34,65 @@ function PhoneVerificationCode() {
 
     setIsSubmitting(true);
     try {
+      // Check if we're in sign-in flow
+      if (isSignIn === "true" && signIn) {
+        if (!isSignInLoaded) {
+          Alert.alert("Error", "Please wait...");
+          return;
+        }
+
+        // Attempt phone verification for sign-in
+        const result = await signIn.attemptFirstFactor({
+          strategy: "phone_code",
+          code,
+        });
+
+        if (result?.status === "complete") {
+          const sessionId = signIn.createdSessionId;
+
+          if (sessionId && setActive) {
+            // Set the active session with navigate callback
+            await setActive({
+              session: sessionId,
+              navigate: async ({ session }: { session: any }) => {
+                // Check for tasks and navigate to custom UI to help users resolve them
+                if (session?.currentTask) {
+                  return;
+                }
+
+                const hasPhoneNumber =
+                  (session?.user?.phoneNumbers?.length ?? 0) > 0;
+
+                if (!hasPhoneNumber) {
+                  router.replace("/phone-verification");
+                  return;
+                }
+
+                // Регистрируем устройство после успешной авторизации
+                try {
+                  await registerDevice();
+                } catch (error) {
+                  console.error("Failed to register device:", error);
+                }
+
+                router.replace("/(app)/home");
+              },
+            });
+          } else {
+            // If no session ID available, redirect anyway
+            setTimeout(() => {
+              router.replace("/");
+            }, 500);
+          }
+        } else {
+          Alert.alert(
+            "Verification",
+            "The code you entered is invalid. Please try again."
+          );
+        }
+        return;
+      }
+
       // Check if we're in sign-up flow
       if (isSignUp === "true" && signUp) {
         if (!isSignUpLoaded) {
@@ -100,7 +161,6 @@ function PhoneVerificationCode() {
                 router.replace("/(app)/home");
               },
             });
-            Alert.alert("Success", "Account created successfully!");
           } else {
             // If no session ID available, redirect anyway
             // The index.tsx will handle authentication state check
@@ -216,6 +276,25 @@ function PhoneVerificationCode() {
     try {
       setIsSubmitting(true);
 
+      // Check if we're in sign-in flow
+      if (isSignIn === "true" && signIn) {
+        if (!isSignInLoaded) {
+          Alert.alert("Error", "Please wait...");
+          return;
+        }
+
+        // Получаем phoneNumberId из signIn объекта
+        // Когда используется телефон как identifier, Clerk автоматически определяет phoneNumberId
+        const phoneNumberId = (signIn as any).supportedFirstFactors?.[0]?.phoneNumberId;
+        
+        await signIn.prepareFirstFactor({
+          strategy: "phone_code",
+          ...(phoneNumberId && { phoneNumberId }),
+        } as any);
+        Alert.alert("Verification", "A new code has been sent.");
+        return;
+      }
+
       // Check if we're in sign-up flow
       if (isSignUp === "true" && signUp) {
         if (!isSignUpLoaded) {
@@ -285,7 +364,7 @@ function PhoneVerificationCode() {
 
           <Button
             disabled={
-              !canSubmit || (!isLoaded && !isSignUpLoaded) || isSubmitting
+              !canSubmit || (!isLoaded && !isSignUpLoaded && !isSignInLoaded) || isSubmitting
             }
             onPress={handleVerify}
             className="mb-3 bg-primary active:bg-primary/90"
@@ -297,7 +376,7 @@ function PhoneVerificationCode() {
 
           <Button
             variant="ghost"
-            disabled={isSubmitting || (!isLoaded && !isSignUpLoaded)}
+            disabled={isSubmitting || (!isLoaded && !isSignUpLoaded && !isSignInLoaded)}
             onPress={handleResend}
           >
             <Text className="text-base font-semibold text-primary">

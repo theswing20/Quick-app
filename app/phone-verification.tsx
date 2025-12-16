@@ -2,7 +2,7 @@ import { Button } from "@/shared/ui/button";
 import type { PhoneNumberValue } from "@/shared/ui/phone-number";
 import { PhoneNumber } from "@/shared/ui/phone-number";
 import { Text } from "@/shared/ui/text";
-import { useSignUp, useUser } from "@clerk/clerk-expo";
+import { useSignIn, useSignUp, useUser } from "@clerk/clerk-expo";
 import countries from "countries-phone-masks";
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
@@ -21,6 +21,7 @@ function PhoneVerification() {
   const router = useRouter();
   const { user, isLoaded: isUserLoaded } = useUser();
   const { signUp, isLoaded: isSignUpLoaded } = useSignUp();
+  const { signIn, isLoaded: isSignInLoaded } = useSignIn();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { control, handleSubmit, watch } = useForm<PhoneVerificationForm>({
@@ -41,10 +42,92 @@ function PhoneVerification() {
 
     setIsSubmitting(true);
     try {
-      // Check if we're in sign-up flow (user doesn't exist yet)
-      if (signUp && signUp.missingFields?.includes("phone_number") && !user) {
+      // Если пользователь уже авторизован, добавляем/верифицируем номер телефона
+      if (isUserLoaded && user) {
+        const existingPhone = user.phoneNumbers.find(
+          (phoneNumber) => phoneNumber.phoneNumber === normalizedPhone
+        );
+
+        if (existingPhone?.verification?.status === "verified") {
+          Alert.alert("Verification", "This phone number is already verified.");
+          router.replace("/");
+          return;
+        }
+
+        const phoneResource =
+          existingPhone ??
+          (await user.createPhoneNumber({ phoneNumber: normalizedPhone }));
+
+        await (phoneResource as any).prepareVerification({
+          strategy: "phone_code",
+        });
+
+        router.push({
+          pathname: "/phone-verification/verify",
+          params: { phone: normalizedPhone, phoneId: phoneResource.id },
+        });
+        return;
+      }
+      console.log("signIn user", user, signIn);
+      // Попытка входа через телефон (sign-in flow)
+      const phoneNumberId = signIn?.supportedFirstFactors?.find((factor) => factor.strategy === "phone_code")?.phoneNumberId;
+      console.log("phoneNumberId", phoneNumberId);
+      console.log("signIn", signIn);
+      console.log("isSignInLoaded", isSignInLoaded);
+      if (signIn && isSignInLoaded && phoneNumberId) {
+
+        try {
+          // Создаем sign-in с номером телефона
+          await signIn.create({ identifier: normalizedPhone });
+          console.log("signIn.create");
+          
+          // Подготавливаем верификацию телефона для входа
+          await signIn.prepareFirstFactor({
+            strategy: "phone_code",
+            phoneNumberId,
+          });
+
+          router.push({
+            pathname: "/phone-verification/verify",
+            params: { 
+              phone: normalizedPhone, 
+              isSignIn: "true" 
+            },
+          });
+          return;
+        } catch (signInError: any) {
+          // Если пользователь не найден, переходим к регистрации
+          const errorCode = signInError?.errors?.[0]?.code;
+          const errorMessage = signInError?.errors?.[0]?.message?.toLowerCase() || "";
+          
+          if (
+            errorCode === "form_identifier_not_found" ||
+            errorMessage.includes("not found") ||
+            errorMessage.includes("doesn't exist")
+          ) {
+            // Пользователь не найден - переходим к регистрации
+            if (signUp && isSignUpLoaded) {
+              await signUp.create({ phoneNumber: normalizedPhone });
+              await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
+
+              router.push({
+                pathname: "/phone-verification/verify",
+                params: { 
+                  phone: normalizedPhone, 
+                  isSignUp: "true" 
+                },
+              });
+              return;
+            }
+          }
+          throw signInError;
+        }
+      }
+
+      // Регистрация нового пользователя (sign-up flow)
+      if (signUp && isSignUpLoaded && !user) {
         // Update signUp with phone number
-        await signUp.update({ phoneNumber: normalizedPhone });
+        await signUp.create({ phoneNumber: normalizedPhone });
         
         // Prepare phone verification
         await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
@@ -59,34 +142,7 @@ function PhoneVerification() {
         return;
       }
 
-      // Existing user flow
-      if (!isUserLoaded || !user) {
-        Alert.alert("Error", "Please try signing in again.");
-        return;
-      }
-
-      const existingPhone = user.phoneNumbers.find(
-        (phoneNumber) => phoneNumber.phoneNumber === normalizedPhone
-      );
-
-      if (existingPhone?.verification?.status === "verified") {
-        Alert.alert("Verification", "This phone number is already verified.");
-        router.replace("/");
-        return;
-      }
-
-      const phoneResource =
-        existingPhone ??
-        (await user.createPhoneNumber({ phoneNumber: normalizedPhone }));
-
-      await (phoneResource as any).prepareVerification({
-        strategy: "phone_code",
-      });
-
-      router.push({
-        pathname: "/phone-verification/verify",
-        params: { phone: normalizedPhone, phoneId: phoneResource.id },
-      });
+      Alert.alert("Error", "Please try again.");
     } catch (error: any) {
       const message =
         error?.errors?.[0]?.message ?? "Failed to send verification code.";
@@ -151,7 +207,7 @@ function PhoneVerification() {
 
           {/* Желтая кнопка */}
           <Button
-            disabled={!canSubmit || (!isUserLoaded && !isSignUpLoaded) || isSubmitting}
+            disabled={!canSubmit || (!isUserLoaded && !isSignUpLoaded && !isSignInLoaded) || isSubmitting}
             onPress={handleSubmit(onSubmit)}
             className="bg-primary active:bg-primary/90"
           >

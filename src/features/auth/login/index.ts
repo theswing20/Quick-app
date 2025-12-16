@@ -1,3 +1,4 @@
-export { default as AppleSignInButton } from "./apple-sign-in-button";
-export { default as GoogleSignInButton } from "./google-sign-in-button";
+// Социальная авторизация отключена - используется только авторизация через телефон
+// export { default as AppleSignInButton } from "./apple-sign-in-button";
+// export { default as GoogleSignInButton } from "./google-sign-in-button";
 export { default as SignOutButton } from "./sign-out-button";

@@ -13,6 +13,6 @@ export const ProfilePersonal = () => {
         <Text className="text-xl font-medium mb-4 text-gray-900">Personal information</Text>
         <ProfilePhoneNumber phoneNumber={user?.phoneNumbers?.[0]?.phoneNumber ?? ""} />
         <ProfileName name={user?.fullName ?? ""} />
-        <ProfileEmail email={user?.emailAddresses[0].emailAddress ?? ""} />
+        {/* <ProfileEmail email={user?.emailAddresses[0].emailAddress ?? ""} /> */}
     </ScreenSection>)
 };
