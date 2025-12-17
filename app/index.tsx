@@ -226,14 +226,6 @@ export default function Index() {
                   style={{ marginTop: -4, marginLeft: -10 }}
                 />
               </View>
-
-              {/* Lightning effect with animation */}
-              <Animated.View
-                style={lightningAnimatedStyle}
-                className="absolute -top-4 -right-4"
-              >
-                <Text className="text-4xl">⚡</Text>
-              </Animated.View>
             </View>
           </Animated.View>
         </View>
@@ -259,8 +251,8 @@ export default function Index() {
           </Link>
           {/* <SignOutButton /> */}
           {/* Legal text */}
-          <SafeAreaView edges={['bottom']}>
-            <Text className="text-xs leading-tight text-center text-gray-400 mt-0">
+          <SafeAreaView edges={["bottom"]}>
+            <Text className="mt-0 text-xs leading-tight text-center text-gray-400">
               By tapping &ldquo;Let&apos;s go!&rdquo;, you accept Terms of
               Service, Privacy Policy and confirm that you are 18 years old
             </Text>
