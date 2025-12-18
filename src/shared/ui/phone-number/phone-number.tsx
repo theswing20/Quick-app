@@ -27,6 +27,7 @@ function PhoneNumber({ value, onChange }: PhoneNumberProps) {
       return;
     }
 
+    // Find country by exact code match (e.g., user typed just "+7")
     let country = findCountryByCode(text);
 
     if (country) {
@@ -34,14 +35,34 @@ function PhoneNumber({ value, onChange }: PhoneNumberProps) {
       return;
     }
 
+    // Find country by prefix (e.g., user typed "+77081360670")
+    const countryByPrefix = findCountryByPrefix(text);
+    
     onChange({
-      country: value.country,
+      country: countryByPrefix || value.country,
       phoneNumber: text,
     });
   };
 
   const findCountryByCode = (code: string) => {
     return countries.find((country: Country) => country.code === code);
+  };
+
+  const findCountryByPrefix = (phoneNumber: string) => {
+    // Find all countries whose code matches the start of the phone number
+    const matchingCountries = countries.filter((country: Country) => 
+      phoneNumber.startsWith(country.code)
+    );
+    
+    if (matchingCountries.length === 0) {
+      return null;
+    }
+    
+    // Return the country with the longest matching code (most specific match)
+    // e.g., +1 vs +1242 for Bahamas numbers
+    return matchingCountries.reduce((best: Country, current: Country) => 
+      current.code.length > best.code.length ? current : best
+    );
   };
 
   return (

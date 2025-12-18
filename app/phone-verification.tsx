@@ -69,14 +69,15 @@ function PhoneVerification() {
         return;
       }
       // Попытка входа через телефон (sign-in flow)
-      const phoneNumberId = signIn?.supportedFirstFactors?.find((factor) => factor.strategy === "phone_code")?.phoneNumberId;
+      const phoneNumberId = signIn?.supportedFirstFactors?.find(
+        (factor) => factor.strategy === "phone_code"
+      )?.phoneNumberId;
 
       if (signIn && isSignInLoaded && phoneNumberId) {
-
         try {
           // Создаем sign-in с номером телефона
           await signIn.create({ identifier: normalizedPhone });
-          
+
           // Подготавливаем верификацию телефона для входа
           await signIn.prepareFirstFactor({
             strategy: "phone_code",
@@ -85,17 +86,18 @@ function PhoneVerification() {
 
           router.push({
             pathname: "/phone-verification/verify",
-            params: { 
-              phone: normalizedPhone, 
-              isSignIn: "true" 
+            params: {
+              phone: normalizedPhone,
+              isSignIn: "true",
             },
           });
           return;
         } catch (signInError: any) {
           // Если пользователь не найден, переходим к регистрации
           const errorCode = signInError?.errors?.[0]?.code;
-          const errorMessage = signInError?.errors?.[0]?.message?.toLowerCase() || "";
-          
+          const errorMessage =
+            signInError?.errors?.[0]?.message?.toLowerCase() || "";
+
           if (
             errorCode === "form_identifier_not_found" ||
             errorMessage.includes("not found") ||
@@ -104,13 +106,15 @@ function PhoneVerification() {
             // Пользователь не найден - переходим к регистрации
             if (signUp && isSignUpLoaded) {
               await signUp.create({ phoneNumber: normalizedPhone });
-              await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
+              await signUp.preparePhoneNumberVerification({
+                strategy: "phone_code",
+              });
 
               router.push({
                 pathname: "/phone-verification/verify",
-                params: { 
-                  phone: normalizedPhone, 
-                  isSignUp: "true" 
+                params: {
+                  phone: normalizedPhone,
+                  isSignUp: "true",
                 },
               });
               return;
@@ -124,15 +128,15 @@ function PhoneVerification() {
       if (signUp && isSignUpLoaded && !user) {
         // Update signUp with phone number
         await signUp.create({ phoneNumber: normalizedPhone });
-        
+
         // Prepare phone verification
         await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
 
         router.push({
           pathname: "/phone-verification/verify",
-          params: { 
-            phone: normalizedPhone, 
-            isSignUp: "true" 
+          params: {
+            phone: normalizedPhone,
+            isSignUp: "true",
           },
         });
         return;
@@ -155,24 +159,36 @@ function PhoneVerification() {
       return false;
     }
 
+    const digitsOnly = phone.phoneNumber.replace(/[^\d]/g, "");
+
+    // Минимальная длина международного номера (код страны + номер абонента)
+    // Большинство номеров имеют минимум 8 цифр (например, +7 XXX XX XX)
+    const MIN_PHONE_LENGTH = 8;
+
+    if (digitsOnly.length < MIN_PHONE_LENGTH) {
+      return false;
+    }
+
     const rawMask = phone.country.mask;
     const maskTemplate = Array.isArray(rawMask) ? rawMask[0] : rawMask;
     const maskDigitCount = maskTemplate
       ? (maskTemplate.match(/[#\d]/g) || []).length
       : 0;
 
-    const digitsOnly = phone.phoneNumber.replace(/[^\d]/g, "");
-    const countryDigits = phone.country.code.replace(/[^\d]/g, "");
-
-    if (digitsOnly.length <= countryDigits.length) {
-      return false;
-    }
-
+    // Если маска не задана, просто проверяем минимальную длину
     if (maskDigitCount === 0) {
       return true;
     }
 
-    return digitsOnly.length >= countryDigits.length + maskDigitCount;
+    // Получаем цифры кода страны
+    const countryDigits = phone.country.code.replace(/[^\d]/g, "");
+
+    // Проверяем, что введено достаточно цифр
+    // Допускаем погрешность в 1 цифру из-за особенностей некоторых стран (например, Казахстан +77 vs +7)
+    const expectedLength = countryDigits.length + maskDigitCount;
+    const tolerance = 1;
+
+    return digitsOnly.length >= expectedLength - tolerance;
   }, [phone]);
 
   return (
@@ -203,7 +219,11 @@ function PhoneVerification() {
 
           {/* Желтая кнопка */}
           <Button
-            disabled={!canSubmit || (!isUserLoaded && !isSignUpLoaded && !isSignInLoaded) || isSubmitting}
+            disabled={
+              !canSubmit ||
+              (!isUserLoaded && !isSignUpLoaded && !isSignInLoaded) ||
+              isSubmitting
+            }
             onPress={handleSubmit(onSubmit)}
             className="bg-primary active:bg-primary/90"
           >
