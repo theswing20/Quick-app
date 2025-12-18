@@ -13,7 +13,7 @@ export const useApi = () => {
 
   const api = useMemo(() => {
     const instance = axios.create({
-      baseURL: 'https://quick.runasp.net/api',
+      baseURL: 'https://quick-development.up.railway.app/api',
       timeout: 30_000,
       headers: {
         'Content-Type': 'application/json',

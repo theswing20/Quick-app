@@ -68,18 +68,14 @@ function PhoneVerification() {
         });
         return;
       }
-      console.log("signIn user", user, signIn);
       // Попытка входа через телефон (sign-in flow)
       const phoneNumberId = signIn?.supportedFirstFactors?.find((factor) => factor.strategy === "phone_code")?.phoneNumberId;
-      console.log("phoneNumberId", phoneNumberId);
-      console.log("signIn", signIn);
-      console.log("isSignInLoaded", isSignInLoaded);
+
       if (signIn && isSignInLoaded && phoneNumberId) {
 
         try {
           // Создаем sign-in с номером телефона
           await signIn.create({ identifier: normalizedPhone });
-          console.log("signIn.create");
           
           // Подготавливаем верификацию телефона для входа
           await signIn.prepareFirstFactor({

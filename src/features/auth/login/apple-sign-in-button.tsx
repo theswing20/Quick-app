@@ -36,8 +36,6 @@ export const AppleSignInButton = () => {
           redirectUrl: AuthSession.makeRedirectUri(),
         });
 
-      console.log("createdSessionId", createdSessionId);
-
       // If sign in was successful, set the active session
       if (createdSessionId) {
         setActive!({
@@ -46,7 +44,6 @@ export const AppleSignInButton = () => {
             // Check for tasks and navigate to custom UI to help users resolve them
             // See https://clerk.com/docs/custom-flows/overview#session-tasks
             if (session?.currentTask) {
-              console.log(session?.currentTask);
               return;
             }
 
@@ -93,8 +90,6 @@ export const AppleSignInButton = () => {
         // to handle next steps
       }
     } catch (err) {
-      console.log("error");
-
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));

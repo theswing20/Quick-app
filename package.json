@@ -5,10 +5,12 @@
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo run:android",
+    "android": "npx expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "d-a": "npx expo run:android --device",
+    "d-i": "npx expo run:ios --device"
   },
   "dependencies": {
     "@clerk/clerk-expo": "^2.15.0",

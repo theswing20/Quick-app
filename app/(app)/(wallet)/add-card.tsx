@@ -44,7 +44,7 @@ export default function AddPaymentMethodScreen() {
             const { clientSecret } = await paymentMethodsService.setupPaymentMethod();
             setSetupIntentClientSecret(clientSecret);
         } catch (error) {
-            Alert.alert('Ошибка', 'Не удалось подготовить добавление карты');
+            Alert.alert('Error', 'Failed to prepare card addition');
             console.error(error);
         } finally {
             setLoading(false);
@@ -53,18 +53,18 @@ export default function AddPaymentMethodScreen() {
 
     const handleSaveCard = async () => {
         if (!setupIntentClientSecret) {
-          Alert.alert('Ошибка', 'Не удалось получить данные для сохранения карты');
+          Alert.alert('Error', 'Failed to get data to save card');
           return;
         }
         
         if (!cardDetails?.complete) {
-          Alert.alert('Ошибка', 'Пожалуйста, введите полные данные карты');
+          Alert.alert('Error', 'Please enter complete card data');
           return;
         }
     
         setLoading(true);
         try {
-          // Подтверждаем SetupIntent
+          // Confirm SetupIntent
           const { setupIntent, error } = await confirmSetupIntent(
             setupIntentClientSecret,
             { 
@@ -73,7 +73,7 @@ export default function AddPaymentMethodScreen() {
           );
     
           if (error) {
-            Alert.alert('Ошибка', error.message);
+            Alert.alert('Error', error.message);
           } else if (setupIntent) {
             if(setupIntent.paymentMethod?.id) {
               const response =await paymentMethodsService.confirmPaymentMethod({
@@ -86,7 +86,7 @@ export default function AddPaymentMethodScreen() {
             }
           }
         } catch (error) {
-          Alert.alert('Ошибка', 'Не удалось сохранить карту');
+          Alert.alert('Error', 'Failed to save card');
           console.error(error);
         } finally {
           setLoading(false);

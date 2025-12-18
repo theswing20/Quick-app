@@ -35,8 +35,6 @@ export const GoogleSignInButton = () => {
           // For more info, see https://docs.expo.dev/versions/latest/sdk/auth-session/#authsessionmakeredirecturioptions
           redirectUrl: AuthSession.makeRedirectUri(),
         });
-      console.log("signIn:", signIn);
-      console.log("signUp:", signUp);
 
       // If sign in was successful, set the active session
       if (createdSessionId) {
@@ -46,7 +44,6 @@ export const GoogleSignInButton = () => {
             if (session?.currentTask) {
               // Check for tasks and navigate to custom UI to help users resolve them
               // See https://clerk.com/docs/custom-flows/overview#session-tasks
-              console.log(session?.currentTask);
               return;
             }
 
@@ -89,8 +86,6 @@ export const GoogleSignInButton = () => {
         });
       }
     } catch (err) {
-      console.log("error");
-
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
