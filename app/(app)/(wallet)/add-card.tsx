@@ -98,7 +98,7 @@ export default function AddPaymentMethodScreen() {
             <ScreenTitle title="Add Payment Method" />
         </View>
         <View className="bg-gray-50 flex-1">
-            <ScreenSection roundedTop={false} className="mt-2 flex-1 flex-col justify-between">
+            <ScreenSection roundedTop={false} className="mt-2 flex-1 flex-col justify-start">
                 <View className="mb-6 px-4">
                     <Text className="text-base font-medium mb-4 text-gray-900">Card Information</Text>
                     <View className="border border-gray-200 rounded-xl overflow-hidden bg-white">

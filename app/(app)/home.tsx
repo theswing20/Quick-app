@@ -14,14 +14,15 @@ function Home() {
   const paymentMethodsService = usePaymentMethodsService();
   const setPaymentMethods = usePaymentMethodsStore((state) => state.setPaymentMethods);
   const updateBalance = useUpdateBalance();
-  const isPaymentMethodNotificationShown = useRef(false);
+  const isPaymentMethodNotificationShown = usePaymentMethodsStore((state) => state.isPaymentMethodNotificationShown);
+  const setIsPaymentMethodNotificationShown = usePaymentMethodsStore((state) => state.setIsPaymentMethodNotificationShown);
 
  
   useEffect(() => {
     paymentMethodsService.getAllPaymentMethods().then((paymentMethods) => {
       setPaymentMethods(paymentMethods);
-      if (!isPaymentMethodNotificationShown.current && paymentMethods.filter((method) => method.id !== null).length === 0) {
-        isPaymentMethodNotificationShown.current = true;
+      if (!isPaymentMethodNotificationShown && paymentMethods.filter((method) => method.id !== null).length === 0) {
+        setIsPaymentMethodNotificationShown(true);
         router.push({ pathname: '/(app)/(wallet)/add-card' });
       }
     });
