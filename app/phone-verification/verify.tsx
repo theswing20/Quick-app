@@ -4,8 +4,9 @@ import { Input } from "@/shared/ui/input";
 import { Text } from "@/shared/ui/text";
 import { useClerk, useSignIn, useSignUp, useUser } from "@clerk/clerk-expo";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { ArrowLeft } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
-import { Alert, View } from "react-native";
+import { Alert, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function PhoneVerificationCode() {
@@ -162,7 +163,6 @@ function PhoneVerificationCode() {
               }
             }
           }
-
 
           if (sessionId && setActive) {
             // Set the active session with navigate callback
@@ -321,18 +321,19 @@ function PhoneVerificationCode() {
 
         // Получаем phoneNumberId из signIn объекта
         // Когда используется телефон как identifier, Clerk автоматически определяет phoneNumberId
-        const phoneNumberId = (signIn as any).supportedFirstFactors?.[0]?.phoneNumberId;
-        
+        const phoneNumberId = (signIn as any).supportedFirstFactors?.[0]
+          ?.phoneNumberId;
+
         await signIn.prepareFirstFactor({
           strategy: "phone_code",
           ...(phoneNumberId && { phoneNumberId }),
         } as any);
-        
+
         // Увеличиваем счетчик попыток и запускаем таймер
         const newAttempts = resendAttempts + 1;
         setResendAttempts(newAttempts);
         setTimer(getTimerDuration(newAttempts));
-        
+
         Alert.alert("Verification", "A new code has been sent.");
         return;
       }
@@ -345,12 +346,12 @@ function PhoneVerificationCode() {
         }
 
         await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
-        
+
         // Увеличиваем счетчик попыток и запускаем таймер
         const newAttempts = resendAttempts + 1;
         setResendAttempts(newAttempts);
         setTimer(getTimerDuration(newAttempts));
-        
+
         Alert.alert("Verification", "A new code has been sent.");
         return;
       }
@@ -376,12 +377,12 @@ function PhoneVerificationCode() {
       await (phoneResource as any).prepareVerification({
         strategy: "phone_code",
       });
-      
+
       // Увеличиваем счетчик попыток и запускаем таймер
       const newAttempts = resendAttempts + 1;
       setResendAttempts(newAttempts);
       setTimer(getTimerDuration(newAttempts));
-      
+
       Alert.alert("Verification", "A new code has been sent.");
     } catch (error: any) {
       const message =
@@ -403,10 +404,23 @@ function PhoneVerificationCode() {
     return `${secs}s`;
   };
 
+  const handleGoBack = () => {
+    router.back();
+  };
+
   return (
     <SafeAreaView className="flex-1">
       <View className="justify-center flex-1 px-6">
         <View className="p-6 bg-white rounded-3xl">
+          {/* Кнопка возврата */}
+          <TouchableOpacity
+            onPress={handleGoBack}
+            className="self-start mb-4"
+            activeOpacity={0.7}
+          >
+            <ArrowLeft size={24} color="#000000" />
+          </TouchableOpacity>
+
           <Text className="mb-2 text-2xl font-bold text-center text-foreground">
             Enter verification code
           </Text>
@@ -428,7 +442,9 @@ function PhoneVerificationCode() {
 
           <Button
             disabled={
-              !canSubmit || (!isLoaded && !isSignUpLoaded && !isSignInLoaded) || isSubmitting
+              !canSubmit ||
+              (!isLoaded && !isSignUpLoaded && !isSignInLoaded) ||
+              isSubmitting
             }
             onPress={handleVerify}
             className="mb-3 bg-primary active:bg-primary/90"
