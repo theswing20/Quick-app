@@ -1,6 +1,7 @@
 import { Button } from "@/shared/ui/button";
 import { Text } from "@/shared/ui/text";
 import { useUser } from "@clerk/clerk-expo";
+import { Image } from "expo-image";
 import { Link, Redirect } from "expo-router";
 import { useEffect } from "react";
 import { Dimensions, StatusBar, View } from "react-native";
@@ -179,9 +180,9 @@ export default function Index() {
           <Animated.View style={powerbankAnimatedStyle} className="mb-12">
             <View className="relative">
               {/* Main powerbank body */}
-              <View className="items-center justify-center w-32 h-48 bg-white border-2 border-gray-100 shadow-xl rounded-3xl">
+              <View className="items-center justify-center w-40 h-56 bg-white border-2 border-gray-100 shadow-xl rounded-3xl">
                 {/* LED indicators with animation */}
-                <View className="flex-row mb-4" style={{ gap: 8 }}>
+                <View className="flex-row mb-3" style={{ gap: 8 }}>
                   <Animated.View
                     style={led1AnimatedStyle}
                     className="w-3 h-3 bg-green-500 rounded-full"
@@ -196,21 +197,25 @@ export default function Index() {
                   />
                   <Animated.View
                     style={led4AnimatedStyle}
-                    className="w-3 h-3 bg-gray-300 rounded-full"
+                    className="w-3 h-3 bg-green-500 rounded-full"
                   />
                 </View>
 
                 {/* QUICK logo on powerbank */}
-                <Text className="mb-4 text-2xl font-black text-gray-800">
-                  QUICK
-                </Text>
+                <View className="items-center justify-center mb-2">
+                  <Image
+                    source={require("@/shared/assets/app-icons/logo-short.svg")}
+                    style={{ width: 56, height: 56 }}
+                    contentFit="contain"
+                  />
+                </View>
 
                 {/* USB ports */}
-                <View className="w-24 h-3 mb-2 bg-gray-800 rounded-sm" />
-                <View className="w-20 h-3 bg-gray-800 rounded-sm" />
+                <View className="h-3 mb-2 bg-gray-800 rounded-sm w-28" />
+                <View className="w-24 h-3 bg-gray-800 rounded-sm" />
 
                 {/* Power button */}
-                <View className="items-center justify-center w-8 h-8 mt-4 bg-gray-700 rounded-full">
+                <View className="items-center justify-center w-8 h-8 mt-2 bg-gray-700 rounded-full">
                   <View className="w-4 h-4 border-2 border-white rounded-full" />
                 </View>
               </View>
