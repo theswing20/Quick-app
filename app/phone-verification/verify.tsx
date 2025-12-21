@@ -4,7 +4,7 @@ import { Input } from "@/shared/ui/input";
 import { Text } from "@/shared/ui/text";
 import { useClerk, useSignIn, useSignUp, useUser } from "@clerk/clerk-expo";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Alert, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -24,8 +24,39 @@ function PhoneVerificationCode() {
 
   const [code, setCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [resendAttempts, setResendAttempts] = useState(0);
+  const [timer, setTimer] = useState(0);
 
   const canSubmit = useMemo(() => code.trim().length >= 6, [code]);
+
+  // Определяем время таймера в зависимости от попытки
+  const getTimerDuration = (attempt: number): number => {
+    if (attempt === 0) return 60; // Первая отправка SMS при переходе на страницу
+    if (attempt === 1) return 180; // Вторая попытка
+    return 3000; // Третья и последующие попытки
+  };
+
+  // Запускаем таймер при монтировании компонента (когда SMS уже отправлено)
+  useEffect(() => {
+    const initialDuration = getTimerDuration(0);
+    setTimer(initialDuration);
+  }, []);
+
+  // Таймер обратного отсчета
+  useEffect(() => {
+    if (timer <= 0) return;
+
+    const interval = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timer]);
 
   const handleVerify = async () => {
     if (!canSubmit) {
@@ -273,6 +304,11 @@ function PhoneVerificationCode() {
   };
 
   const handleResend = async () => {
+    // Проверяем, не истек ли таймер
+    if (timer > 0) {
+      return;
+    }
+
     try {
       setIsSubmitting(true);
 
@@ -291,6 +327,12 @@ function PhoneVerificationCode() {
           strategy: "phone_code",
           ...(phoneNumberId && { phoneNumberId }),
         } as any);
+        
+        // Увеличиваем счетчик попыток и запускаем таймер
+        const newAttempts = resendAttempts + 1;
+        setResendAttempts(newAttempts);
+        setTimer(getTimerDuration(newAttempts));
+        
         Alert.alert("Verification", "A new code has been sent.");
         return;
       }
@@ -303,6 +345,12 @@ function PhoneVerificationCode() {
         }
 
         await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
+        
+        // Увеличиваем счетчик попыток и запускаем таймер
+        const newAttempts = resendAttempts + 1;
+        setResendAttempts(newAttempts);
+        setTimer(getTimerDuration(newAttempts));
+        
         Alert.alert("Verification", "A new code has been sent.");
         return;
       }
@@ -328,6 +376,12 @@ function PhoneVerificationCode() {
       await (phoneResource as any).prepareVerification({
         strategy: "phone_code",
       });
+      
+      // Увеличиваем счетчик попыток и запускаем таймер
+      const newAttempts = resendAttempts + 1;
+      setResendAttempts(newAttempts);
+      setTimer(getTimerDuration(newAttempts));
+      
       Alert.alert("Verification", "A new code has been sent.");
     } catch (error: any) {
       const message =
@@ -337,6 +391,16 @@ function PhoneVerificationCode() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // Форматируем время для отображения
+  const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    if (minutes > 0) {
+      return `${minutes}:${secs.toString().padStart(2, "0")}`;
+    }
+    return `${secs}s`;
   };
 
   return (
@@ -376,11 +440,15 @@ function PhoneVerificationCode() {
 
           <Button
             variant="ghost"
-            disabled={isSubmitting || (!isLoaded && !isSignUpLoaded && !isSignInLoaded)}
+            disabled={
+              isSubmitting ||
+              timer > 0 ||
+              (!isLoaded && !isSignUpLoaded && !isSignInLoaded)
+            }
             onPress={handleResend}
           >
             <Text className="text-base font-semibold text-primary">
-              Resend code
+              {timer > 0 ? `Resend code (${formatTime(timer)})` : "Resend code"}
             </Text>
           </Button>
         </View>
