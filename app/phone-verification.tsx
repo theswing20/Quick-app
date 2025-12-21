@@ -68,30 +68,33 @@ function PhoneVerification() {
         });
         return;
       }
-      // Попытка входа через телефон (sign-in flow)
-      const phoneNumberId = signIn?.supportedFirstFactors?.find(
-        (factor) => factor.strategy === "phone_code"
-      )?.phoneNumberId;
-
-      if (signIn && isSignInLoaded && phoneNumberId) {
+      // Сначала всегда пытаемся войти (sign-in flow)
+      if (signIn && isSignInLoaded) {
         try {
           // Создаем sign-in с номером телефона
           await signIn.create({ identifier: normalizedPhone });
 
-          // Подготавливаем верификацию телефона для входа
-          await signIn.prepareFirstFactor({
-            strategy: "phone_code",
-            phoneNumberId,
-          });
+          // Получаем phoneNumberId после создания signIn
+          const phoneNumberId = signIn.supportedFirstFactors?.find(
+            (factor) => factor.strategy === "phone_code"
+          )?.phoneNumberId;
 
-          router.push({
-            pathname: "/phone-verification/verify",
-            params: {
-              phone: normalizedPhone,
-              isSignIn: "true",
-            },
-          });
-          return;
+          if (phoneNumberId) {
+            // Подготавливаем верификацию телефона для входа
+            await signIn.prepareFirstFactor({
+              strategy: "phone_code",
+              phoneNumberId,
+            });
+
+            router.push({
+              pathname: "/phone-verification/verify",
+              params: {
+                phone: normalizedPhone,
+                isSignIn: "true",
+              },
+            });
+            return;
+          }
         } catch (signInError: any) {
           // Если пользователь не найден, переходим к регистрации
           const errorCode = signInError?.errors?.[0]?.code;
@@ -105,31 +108,71 @@ function PhoneVerification() {
           ) {
             // Пользователь не найден - переходим к регистрации
             if (signUp && isSignUpLoaded) {
-              await signUp.create({ phoneNumber: normalizedPhone });
-              await signUp.preparePhoneNumberVerification({
-                strategy: "phone_code",
-              });
+              try {
+                await signUp.create({ phoneNumber: normalizedPhone });
+                await signUp.preparePhoneNumberVerification({
+                  strategy: "phone_code",
+                });
 
-              router.push({
-                pathname: "/phone-verification/verify",
-                params: {
-                  phone: normalizedPhone,
-                  isSignUp: "true",
-                },
-              });
-              return;
+                router.push({
+                  pathname: "/phone-verification/verify",
+                  params: {
+                    phone: normalizedPhone,
+                    isSignUp: "true",
+                  },
+                });
+                return;
+              } catch (signUpError: any) {
+                // Если номер уже занят при регистрации, значит пользователь существует - пробуем снова signIn
+                const signUpErrorCode = signUpError?.errors?.[0]?.code;
+                const signUpErrorMessage =
+                  signUpError?.errors?.[0]?.message?.toLowerCase() || "";
+
+                if (
+                  signUpErrorCode === "form_phone_number_exists" ||
+                  signUpErrorMessage.includes("taken") ||
+                  signUpErrorMessage.includes("exists") ||
+                  signUpErrorMessage.includes("already")
+                ) {
+                  // Номер занят - значит пользователь существует, пробуем signIn еще раз
+                  try {
+                    await signIn.create({ identifier: normalizedPhone });
+                    const phoneNumberId = signIn.supportedFirstFactors?.find(
+                      (factor) => factor.strategy === "phone_code"
+                    )?.phoneNumberId;
+
+                    if (phoneNumberId) {
+                      await signIn.prepareFirstFactor({
+                        strategy: "phone_code",
+                        phoneNumberId,
+                      });
+
+                      router.push({
+                        pathname: "/phone-verification/verify",
+                        params: {
+                          phone: normalizedPhone,
+                          isSignIn: "true",
+                        },
+                      });
+                      return;
+                    }
+                  } catch (retrySignInError) {
+                    // Если и повторный signIn не сработал, показываем ошибку
+                    throw retrySignInError;
+                  }
+                }
+                throw signUpError;
+              }
             }
           }
+          // Если это не ошибка "not found", пробрасываем ошибку дальше
           throw signInError;
         }
       }
 
-      // Регистрация нового пользователя (sign-up flow)
+      // Если signIn не доступен, пробуем регистрацию (fallback)
       if (signUp && isSignUpLoaded && !user) {
-        // Update signUp with phone number
         await signUp.create({ phoneNumber: normalizedPhone });
-
-        // Prepare phone verification
         await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
 
         router.push({
