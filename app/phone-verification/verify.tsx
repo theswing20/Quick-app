@@ -6,7 +6,7 @@ import { useClerk, useSignIn, useSignUp, useUser } from "@clerk/clerk-expo";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ArrowLeft } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
-import { Alert, TouchableOpacity, View } from "react-native";
+import { Alert, KeyboardAvoidingView, Platform, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function PhoneVerificationCode() {
@@ -409,7 +409,10 @@ function PhoneVerificationCode() {
   };
 
   return (
-    <SafeAreaView className="flex-1">
+    <KeyboardAvoidingView
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // 'height' для Android, 'padding' для iOS
+    style={{ flex: 1 }}
+  >
       <View className="justify-center flex-1 px-6">
         <View className="p-6 bg-white rounded-3xl">
           {/* Кнопка возврата */}
@@ -469,7 +472,7 @@ function PhoneVerificationCode() {
           </Button>
         </View>
       </View>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
