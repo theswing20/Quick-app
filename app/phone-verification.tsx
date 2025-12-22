@@ -7,7 +7,7 @@ import countries from "countries-phone-masks";
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, View } from "react-native";
+import { Alert, View, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 interface PhoneVerificationForm {
@@ -235,7 +235,10 @@ function PhoneVerification() {
   }, [phone]);
 
   return (
-    <SafeAreaView className="flex-1">
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // 'height' для Android, 'padding' для iOS
+      style={{ flex: 1 }}
+    >
       <View className="justify-center flex-1 px-6">
         {/* Белая карточка с закругленными углами */}
         <View className="p-6 bg-white rounded-3xl">
@@ -276,7 +279,7 @@ function PhoneVerification() {
           </Button>
         </View>
       </View>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
