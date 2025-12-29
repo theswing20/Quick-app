@@ -79,7 +79,7 @@ useEffect(() => {
                         <PaymentMethodSelectorButton hideBalanceButton={true} />
                         <Input
                             placeholder="Enter amount"
-                            className="border-0 border-b-[1px] bordfer-b-yellow-500 shadow-none text-center text-2xl font-bold mt-10 mb-10"
+                            className="border-0 border-b-[1px] bordfer-b-yellow-500 shadow-none text-center text-xl mt-10 mb-10"
                             style={{ textAlign: 'center' }}
                             value={value}
                             onChangeText={handleChange}

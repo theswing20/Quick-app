@@ -220,7 +220,9 @@ const MapViewComponent = React.forwardRef<MapViewRef, MapViewProps>((props, ref)
             onPress={handleMarkerPress(marker.id)}
             pinColor={"#000000"}
           ><Image
-          source={require('../../../shared/assets/images/bolt-icon.png')}
+          source={marker.status.toLowerCase() === 'offline' 
+            ? require('../../../shared/assets/images/bolt-gray-icon.png') 
+            : require('../../../shared/assets/images/bolt-icon.png')}
           style={{ width: 40, height: 40 }}
           resizeMode="contain"
         /></MapMarker>

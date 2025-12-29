@@ -1,5 +1,6 @@
 import { PaymentMethodSelectorButton } from "@/features/payment-methods";
 import { PRICE } from "@/shared/lib/mocks";
+import { cn } from "@/shared/lib/utils";
 import { useNewRentStore } from "@/shared/stores/new-rent-store";
 import { useRentStore } from "@/shared/stores/rent-store";
 import { Button } from "@/shared/ui/button";
@@ -45,6 +46,10 @@ export default function PreRentInfo() {
           <Text className="text-base text-gray-700 mb-2">
             {cabinetInfo?.address}
           </Text>
+          <View className="flex-row items-center">
+            <View className={cn("w-2 h-2 rounded-full mr-2", cabinetInfo?.status === "Online" ? "bg-green-500" : "bg-red-500")}/>
+            <Text className="text-base text-gray-700">{cabinetInfo?.status}</Text>
+          </View>
         </View>
 
         <View className="px-4 pb-4">
@@ -162,16 +167,17 @@ export default function PreRentInfo() {
         </View>
         <View className="h-10"></View>
       </ScrollView>
-      <View className="px-4 pb-4 absolute bottom-4 left-0 right-0">
+      {cabinetInfo?.status.toLowerCase() === 'online' && <View className="px-4 pb-4 absolute bottom-4 left-0 right-0">
         <Button
           className="w-full h-14 rounded-2xl bg-primary"
           onPress={startRent}
+          disabled={cabinetInfo?.status.toLowerCase() !== 'online'}
         >
           <Text className="text-lg font-semibold text-secondary-foreground">
             Take
           </Text>
         </Button>
-      </View>
+      </View>}
     </SafeAreaView>
   );
 }

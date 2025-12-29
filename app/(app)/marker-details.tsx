@@ -64,8 +64,7 @@ export default function MarkerDetails() {
           </View>
         </View>
 
-        {/* Блоки доступности */}
-        <View className="flex-row gap-3 px-4 py-4">
+        {details?.status.toLowerCase() === 'online' && <View className="flex-row gap-3 px-4 py-4">
           <View className="flex-1 bg-gray-50 rounded-2xl p-4 items-center">
             <View className="flex-row items-center justify-end mt-2">
               <Text className="text-4xl font-bold text-gray-900 baseline mb-2 h-full">{details?.occupiedSlots}</Text>
@@ -84,7 +83,7 @@ export default function MarkerDetails() {
             </View>
             <Text className="text-base font-medium text-gray-700">Return</Text>
           </View>
-        </View>
+        </View>}
 
         {/* Конкретное место */}
         {/* <View className="px-4 pb-4">
@@ -183,7 +182,7 @@ export default function MarkerDetails() {
         </View>
         <View className="h-10"></View>
       </ScrollView>
-      <SafeAreaView edges={['bottom']} className="px-4 pb-4 absolute bottom-4 left-0 right-0">
+      {details?.status.toLowerCase() === 'online' && <SafeAreaView edges={['bottom']} className="px-4 pb-4 absolute bottom-4 left-0 right-0">
         <Button
           className="w-full h-14 rounded-2xl bg-primary"
           onPress={handleScanQr}
@@ -192,7 +191,7 @@ export default function MarkerDetails() {
             Take via QR
           </Text>
         </Button>
-      </SafeAreaView>
+      </SafeAreaView>}
     </SafeAreaView>
   );
 }

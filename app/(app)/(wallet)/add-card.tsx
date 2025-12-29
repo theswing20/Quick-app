@@ -105,12 +105,13 @@ export default function AddPaymentMethodScreen() {
                         <CardField
                             postalCodeEnabled={false}
                             placeholders={{
-                                number: "4242 4242 4242 4242",
+                                number: "4000 0000 0000 0002",
                             }}
                             cardStyle={{
                                 backgroundColor: "#FFFFFF",
                                 textColor: "#000000",
                                 borderWidth: 0,
+                                placeholderColor: "#9CA3AF",
                             }}
                             style={{
                                 width: "100%",
